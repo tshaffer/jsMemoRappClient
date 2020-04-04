@@ -11,11 +11,9 @@ import {
 
 // import { createHashHistory } from 'history';
 
-// import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 export interface AppProps {
   onShowActivities: () => any;
@@ -27,6 +25,9 @@ class App extends React.Component<AppProps> {
   constructor(props: any) {
 
     super(props);
+
+    (this as any).userName = React.createRef();
+    // (this as any).password = React.createRef();
 
     console.log('pizza69');
 
@@ -48,10 +49,19 @@ class App extends React.Component<AppProps> {
   //   hashHistory.push('/activities');
   // }
 
+  flibbet(e: any) {
+    console.log(e);
+    console.log('userName');
+    console.log((this as any).userName);
+    console.log((this as any).userName.current);
+    console.log('password');
+    console.log((this as any).password.current);
+  }
+
+  // <TextField ref={(this as any).userName} required id="standard-required" label="User name" />
+  // <TextField inputRef={(this as any).userName} required id="standard-required" label="User name" />
+
   render() {
-
-
-
     return (
       <HashRouter>
         <div>
@@ -59,10 +69,11 @@ class App extends React.Component<AppProps> {
           <h3>Login</h3>
           <form noValidate autoComplete="off">
             <div>
-              <TextField required id="standard-required" label="User name" />
+            <TextField ref={(this as any).userName} required id="standard-required" label="User name" />
             </div>
             <div>
               <TextField
+                inputRef={(this as any).password}
                 id="standard-password-input"
                 label="Password"
                 type="password"
@@ -70,6 +81,12 @@ class App extends React.Component<AppProps> {
               />
             </div>
           </form>
+          <Button
+            variant="contained"
+            onClick={e => this.flibbet(e)}
+          >
+            Sign In
+          </Button>
         </div>
       </HashRouter>
     );
