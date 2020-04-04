@@ -14,6 +14,9 @@ import {
 // import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+
 export interface AppProps {
   onShowActivities: () => any;
   onLoadTags: () => any;
@@ -46,12 +49,23 @@ class App extends React.Component<AppProps> {
   // }
 
   render() {
+
+    
+
     return (
       <HashRouter>
         <div>
           <h2>MemoRapp</h2>
+          <h3>Login</h3>
+          <form noValidate autoComplete="off">
+            <TextField id="standard-basic" label="Standard" />
+            <TextField id="filled-basic" label="Filled" variant="filled" />
+            <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+          </form>
+
           <Link component={RouterLink} to='/base'>
             Old Man Shaffer
+            #1
           </Link>
         </div>
       </HashRouter>
