@@ -12,10 +12,13 @@ import { createHashHistory } from 'history';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { validateUser } from '../controllers/user';
+import { setUser } from '../models/user';
+import { User } from '../types';
 
 export interface AppProps {
-  onShowActivities: () => any;
   onLoadTags: () => any;
+  onSetUser: (user: User) => any;
 }
 
 interface AppStateProps {
@@ -50,11 +53,19 @@ class App extends React.Component<AppProps, AppStateProps> {
   }
 
   handleSignIn(e: any) {
+
     console.log(this.state.userName);
     console.log(this.state.password);
 
-    const hashHistory = createHashHistory();
-    hashHistory.push('/home');
+    validateUser(this.state.userName, this.state.password)
+      .then((user: User) => {
+        console.log('validation successful: ', user);
+        this.props.onSetUser(user);
+        const hashHistory = createHashHistory();
+        hashHistory.push('/home');
+      }).catch((err: Error) => {
+        alert('Login unsuccessful');
+      });
   }
 
   handleUserNameChange(e: any) {
@@ -108,8 +119,9 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    // onShowActivities: loadSummaryActivities,
     onLoadTags: loadTags,
+    onValidateUser: validateUser,
+    onSetUser: setUser,
   }, dispatch);
 };
 
