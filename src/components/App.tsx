@@ -50,7 +50,7 @@ class App extends React.Component<AppProps> {
 
   render() {
 
-    
+
 
     return (
       <HashRouter>
@@ -58,15 +58,14 @@ class App extends React.Component<AppProps> {
           <h2>MemoRapp</h2>
           <h3>Login</h3>
           <form noValidate autoComplete="off">
-            <TextField id="standard-basic" label="Standard" />
-            <TextField id="filled-basic" label="Filled" variant="filled" />
-            <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+            <TextField required id="standard-required" label="User name" />
+            <TextField
+              id="standard-password-input"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+            />
           </form>
-
-          <Link component={RouterLink} to='/base'>
-            Old Man Shaffer
-            #1
-          </Link>
         </div>
       </HashRouter>
     );
