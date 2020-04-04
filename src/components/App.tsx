@@ -9,9 +9,8 @@ import {
   loadTags
 } from '../controllers/tags';
 
-// import { createHashHistory } from 'history';
+import { createHashHistory } from 'history';
 
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -38,7 +37,7 @@ class App extends React.Component<AppProps, AppStateProps> {
 
     console.log('pizza69');
 
-    // this.handleShowActivities = this.handleShowActivities.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
     this.handleUserNameChange = this.handleUserNameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
@@ -51,16 +50,12 @@ class App extends React.Component<AppProps, AppStateProps> {
     this.props.onLoadTags();
   }
 
-  // handleShowActivities() {
-  //   // console.log('handleShowActivities');
-  //   // this.props.onShowActivities();
-  //   const hashHistory = createHashHistory();
-  //   hashHistory.push('/activities');
-  // }
-
   handleSignIn(e: any) {
     console.log(this.state.userName);
     console.log(this.state.password);
+
+    const hashHistory = createHashHistory();
+    hashHistory.push('/home');
   }
 
   handleUserNameChange(e: any) {
