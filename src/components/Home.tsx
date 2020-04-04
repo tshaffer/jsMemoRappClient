@@ -8,6 +8,7 @@ import { createHashHistory } from 'history';
 
 import { HashRouter } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -42,13 +43,42 @@ export interface HomeProps {
 }
 
 const Home = (props: HomeProps) => {
-  
+
   const classes = useStyles();
 
+  const handleFindRestaurant = () => {
+    console.log('handleFindRestaurant');
+  }
+
+  const handleAddReview = () => {
+    console.log('handleAddReview');
+  }
+
   return (
-    <div>
-      Loading...
-    </div>
+    <HashRouter>
+      <div>
+        <h2>MemoRapp</h2>
+      </div>
+      <div>
+        <Button
+          variant="contained"
+          onClick={e => handleFindRestaurant()}
+        >
+          Find Restaurant
+        </Button>
+      </div>
+      <div>
+        <Button
+          variant="contained"
+          onClick={e => handleAddReview()}
+        >
+          Add Review
+        </Button>
+      </div>
+      <div>
+
+      </div>
+    </HashRouter>
   );
 }
 

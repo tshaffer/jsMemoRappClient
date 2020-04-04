@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { HashRouter } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
 
 import {
   loadTags
