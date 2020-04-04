@@ -1,11 +1,14 @@
+import { isNil } from 'lodash';
+
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { HashRouter } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
+import { createHashHistory } from 'history';
 
+import { HashRouter } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
@@ -36,10 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export interface HomeProps {
+export interface RestaurantFinderProps {
 }
 
-const Home = (props: HomeProps) => {
+const RestaurantFinder = (props: RestaurantFinderProps) => {
 
   const classes = useStyles();
 
@@ -47,16 +50,7 @@ const Home = (props: HomeProps) => {
     <HashRouter>
       <div>
         <h2>MemoRapp</h2>
-      </div>
-      <div>
-      <Link component={RouterLink} to='/restaurantFinder'>
-        Find Restaurant
-      </Link>
-      </div>
-      <div>
-      <Link component={RouterLink} to='/restaurantReview'>
-        Add Review
-      </Link>
+        <h3>RestaurantFinder</h3>
       </div>
     </HashRouter>
   );
@@ -72,4 +66,4 @@ const mapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(RestaurantFinder);
