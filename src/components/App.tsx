@@ -20,18 +20,27 @@ export interface AppProps {
   onLoadTags: () => any;
 }
 
-class App extends React.Component<AppProps> {
+interface AppStateProps {
+  userName: string;
+  password: string;
+}
+
+class App extends React.Component<AppProps, AppStateProps> {
 
   constructor(props: any) {
 
     super(props);
 
-    (this as any).userName = React.createRef();
-    // (this as any).password = React.createRef();
+    this.state = {
+      userName: '',
+      password: '',
+    };
 
     console.log('pizza69');
 
     // this.handleShowActivities = this.handleShowActivities.bind(this);
+    this.handleUserNameChange = this.handleUserNameChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
 
   componentDidMount() {
@@ -49,17 +58,18 @@ class App extends React.Component<AppProps> {
   //   hashHistory.push('/activities');
   // }
 
-  flibbet(e: any) {
-    console.log(e);
-    console.log('userName');
-    console.log((this as any).userName);
-    console.log((this as any).userName.current);
-    console.log('password');
-    console.log((this as any).password.current);
+  handleSignIn(e: any) {
+    console.log(this.state.userName);
+    console.log(this.state.password);
   }
 
-  // <TextField ref={(this as any).userName} required id="standard-required" label="User name" />
-  // <TextField inputRef={(this as any).userName} required id="standard-required" label="User name" />
+  handleUserNameChange(e: any) {
+    this.setState({userName: e.target.value});
+  }
+
+  handlePasswordChange(e: any) {
+    this.setState({password: e.target.value});
+  }
 
   render() {
     return (
@@ -69,21 +79,25 @@ class App extends React.Component<AppProps> {
           <h3>Login</h3>
           <form noValidate autoComplete="off">
             <div>
-            <TextField ref={(this as any).userName} required id="standard-required" label="User name" />
+              <TextField
+                required id="standard-required"
+                label="User name"
+                onChange={this.handleUserNameChange}
+              />
             </div>
             <div>
               <TextField
-                inputRef={(this as any).password}
                 id="standard-password-input"
                 label="Password"
                 type="password"
                 autoComplete="current-password"
+                onChange={this.handlePasswordChange}
               />
             </div>
           </form>
           <Button
             variant="contained"
-            onClick={e => this.flibbet(e)}
+            onClick={e => this.handleSignIn(e)}
           >
             Sign In
           </Button>
