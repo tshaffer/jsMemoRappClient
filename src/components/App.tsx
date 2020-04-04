@@ -58,13 +58,17 @@ class App extends React.Component<AppProps> {
           <h2>MemoRapp</h2>
           <h3>Login</h3>
           <form noValidate autoComplete="off">
-            <TextField required id="standard-required" label="User name" />
-            <TextField
-              id="standard-password-input"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-            />
+            <div>
+              <TextField required id="standard-required" label="User name" />
+            </div>
+            <div>
+              <TextField
+                id="standard-password-input"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+              />
+            </div>
           </form>
         </div>
       </HashRouter>
