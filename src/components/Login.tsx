@@ -27,34 +27,7 @@ import { validateUser } from '../controllers/user';
 import { setUser } from '../models/user';
 import { User } from '../types';
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
-// const useStyles = makeStyles((theme: Theme) =>
-//   createStyles({
-//     root: {
-//       width: '100%',
-//     },
-//     paper: {
-//       width: '100%',
-//       marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//       minWidth: 750,
-//     },
-//     tableColumnNarrowWidth: {
-//       width: '32px',
-//     },
-//     tableColumnMediumWidth: {
-//       width: '64px',
-//     },
-//     tableColumnWideWidth: {
-//       width: '192px',
-//     },
-//     tableButtonColumnWidth: {
-//       width: '48px',
-//     },
-//   }),
-// );
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,7 +54,7 @@ const Login = (props: LoginProps) => {
 
   const [userNameState, setUserName] = useState('');
   const [passwordState, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
 
   const classes = useStyles();
 
@@ -128,13 +101,14 @@ const Login = (props: LoginProps) => {
   return (
     <HashRouter>
       <div>
-        <h2>MemoRapp</h2>
-        <h3>Login</h3>
+        <h2 className={clsx(classes.margin)}>MemoRapp</h2>
+        <h3 className={clsx(classes.margin)}>Login</h3>
         <form noValidate autoComplete='off'>
           <div>
             <TextField
               required id='standard-required'
               label='User name'
+              className={clsx(classes.margin, classes.textField)}
               onChange={handleUserNameChange}
             />
           </div>
@@ -158,19 +132,11 @@ const Login = (props: LoginProps) => {
               }
             />
           </FormControl>
-          <div>
-            <TextField
-              id='standard-password-input'
-              label='Password'
-              type='password'
-              autoComplete='current-password'
-              onChange={handlePasswordChange}
-            />
-          </div>
         </form>
         <Button
           variant='contained'
           onClick={e => handleSignIn(e)}
+          className={clsx(classes.margin)}
         >
           Sign In
           </Button>
