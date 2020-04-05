@@ -15,12 +15,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import { useState, useEffect } from 'react';
-import clsx from 'clsx';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
-import { HashRouter } from 'react-router-dom';
 
 import {
   loadTags
@@ -30,7 +27,6 @@ import { createHashHistory } from 'history';
 
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
-import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -46,7 +42,7 @@ function Copyright() {
     <Typography variant='body2' color='textSecondary' align='center'>
       {'Copyright © '}
       <Link color='inherit' href='https://material-ui.com/'>
-        Your Website
+        MemoRappAtronics
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -72,6 +68,16 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  margin: {
+    marginLeft: '0px',
+  },
+  padding: {
+    paddingLeft: '14px',
+  },
+  withoutLabel: {
+    marginTop: theme.spacing(3),
+  },
+
 }));
 
 interface LoginProps {
@@ -132,7 +138,6 @@ const SignIn = (props: LoginProps) => {
     handleSignIn(e);
   };
 
-
   return (
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
@@ -156,12 +161,13 @@ const SignIn = (props: LoginProps) => {
             autoFocus
             onChange={handleUserNameChange}
           />
-          <FormControl>
-            <InputLabel htmlFor='standard-adornment-password'>Password</InputLabel>
+          
+          <FormControl className={'MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl'}>
+            <InputLabel htmlFor='standard-adornment-password' className={classes.padding}>Password *</InputLabel>
             <OutlinedInput
               id='standard-adornment-password'
               type={showPassword ? 'text' : 'password'}
-              value={passwordState}
+              value={passwordState} 
               onChange={handlePasswordChange}
               required
               fullWidth
@@ -180,17 +186,6 @@ const SignIn = (props: LoginProps) => {
               }
             />
           </FormControl>
-          <TextField
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            autoComplete='current-password'
-          />
           <FormControlLabel
             control={<Checkbox value='remember' color='primary' />}
             label='Remember me'
