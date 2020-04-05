@@ -89,8 +89,8 @@ const SignIn = (props: LoginProps) => {
 
   const classes = useStyles();
 
-  const [userNameState, setUserName] = useState('');
-  const [passwordState, setPassword] = useState('');
+  const [userNameState, setUserName] = useState('ted');
+  const [passwordState, setPassword] = useState('letTedIn');
   const [showPassword, setShowPassword] = useState(true);
 
   const { onLoadTags, onSetUser } = props;
@@ -146,7 +146,7 @@ const SignIn = (props: LoginProps) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Sign in
+          MemoRapp Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={onFormSubmit}>
           <TextField
