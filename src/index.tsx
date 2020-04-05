@@ -11,6 +11,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import { rootReducer } from './models';
 
 import Login from './components/Login';
+import SignIn from './components/SignIn';
 import Home from './components/home';
 import RestaurantFinder from './components/RestaurantFinder';
 import RestaurantReview from './components/RestaurantReview';
@@ -25,7 +26,7 @@ ReactDOM.render(
   <Provider store={store}>
     <HashRouter>
       <Switch>
-        <Route exact path='/' component={Login} />
+        <Route exact path='/' component={SignIn} />
         <Route exact path='/home' component={Home} />
         <Route exact path='/restaurantFinder' component={RestaurantFinder} />
         <Route exact path='/restaurantReview' component={RestaurantReview} />
