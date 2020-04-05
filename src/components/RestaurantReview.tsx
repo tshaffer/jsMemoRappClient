@@ -5,8 +5,13 @@ import { connect } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import TextField from '@material-ui/core/TextField';
+
+import {
+  findRestaurantsByLocation,
+} from '../controllers/restaurants';
 
 const useStyles = makeStyles({
   root: {
@@ -17,6 +22,9 @@ const useStyles = makeStyles({
   margin: {
     marginLeft: '42px',
   },
+  quarterWidth: {
+    width: '25%',
+  }
 });
 
 export interface RestaurantReviewProps {
@@ -27,8 +35,8 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   const classes = useStyles();
 
   const [restaurantLocation, setRestaurantLocation] = React.useState('currentLocation');
-  const [longitude, setLongitude] = React.useState('');
-  const [latitude, setLatitude] = React.useState('');
+  const [longitude, setLongitude] = React.useState(0);
+  const [latitude, setLatitude] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRestaurantLocation(event.target.value);
@@ -42,19 +50,36 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
     setLatitude(e.target.value);
   };
 
+  const handleFindRestaurant = () => {
+    console.log('handleFindRestaurant');
+
+    console.log('restaurant location: ', restaurantLocation);
+    if (restaurantLocation === 'specifyLocation') {
+      console.log('Latitude: ', latitude);
+      console.log('Longitude: ', longitude);
+
+      findRestaurantsByLocation(latitude, longitude)
+        .then( (restaurants: any[]) => {
+          console.log(restaurants);
+        }).catch( (err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <HashRouter>
       <div>
         <h2>MemoRapp</h2>
         <h3>Add Restaurant Review</h3>
-        <div>
+        <div className={classes.quarterWidth}>
           <div>Location of restaurant</div>
           <div>
             <Radio
               checked={restaurantLocation === 'currentLocation'}
               onChange={handleChange}
               value='currentLocation'
-              name='radio-button-demo'
+              name='currentLocationRadioButton'
             />
             Current Location
           </div>
@@ -63,7 +88,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
               checked={restaurantLocation === 'specifyLocation'}
               onChange={handleChange}
               value='specifyLocation'
-              name='radio-button-demo'
+              name='specifyLocationRadioButton'
             />
             Specify Location
           </div>
@@ -77,17 +102,6 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                   <TextField
                     variant='outlined'
                     margin='normal'
-                    id='longitude'
-                    label='Longitude'
-                    name='longitude'
-                    autoComplete='longitude'
-                    onChange={handleLongitudeChange}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    variant='outlined'
-                    margin='normal'
                     id='latitude'
                     label='Latitude'
                     name='latitude'
@@ -95,9 +109,29 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                     onChange={handleLatitudeChange}
                   />
                 </div>
+                <div>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    id='longitude'
+                    label='Longitude'
+                    name='longitude'
+                    autoComplete='longitude'
+                    onChange={handleLongitudeChange}
+                  />
+                </div>
               </div>
             }
           </div>
+          <Button
+            type='button'
+            fullWidth
+            variant='contained'
+            color='primary'
+            onClick={handleFindRestaurant}
+          >
+            Find Restaurant
+          </Button>
         </div>
       </div>
     </HashRouter>
