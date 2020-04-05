@@ -88,22 +88,27 @@ const Login = (props: LoginProps) => {
       }).catch((err: Error) => {
         alert('Login unsuccessful');
       });
-  }
+  };
 
   const handleUserNameChange = (e: any) => {
     setUserName(e.target.value);
-  }
+  };
 
   const handlePasswordChange = (e: any) => {
     setPassword(e.target.value);
-  }
+  };
+
+  const onFormSubmit = (e: any) => {
+    e.preventDefault();
+    handleSignIn(e);
+  };
 
   return (
     <HashRouter>
       <div>
         <h2 className={clsx(classes.margin)}>MemoRapp</h2>
         <h3 className={clsx(classes.margin)}>Login</h3>
-        <form noValidate autoComplete='off'>
+        <form noValidate autoComplete='off' onSubmit={onFormSubmit}>
           <div>
             <TextField
               required id='standard-required'
@@ -132,18 +137,20 @@ const Login = (props: LoginProps) => {
               }
             />
           </FormControl>
-        </form>
-        <Button
-          variant='contained'
-          onClick={e => handleSignIn(e)}
-          className={clsx(classes.margin)}
-        >
-          Sign In
+          <div>
+            <Button
+              type='submit'
+              variant='contained'
+              className={clsx(classes.margin)}
+            >
+              Sign In
           </Button>
+          </div>
+        </form>
       </div>
     </HashRouter>
   );
-}
+};
 
 function mapStateToProps(state: any) {
   return {
