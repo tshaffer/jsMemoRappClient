@@ -156,13 +156,6 @@ const SignIn = (props: LoginProps) => {
             autoFocus
             onChange={handleUserNameChange}
           />
-          <div>
-            <TextField
-              required id='standard-required'
-              label='User name'
-              onChange={handleUserNameChange}
-            />
-          </div>
           <FormControl>
             <InputLabel htmlFor='standard-adornment-password'>Password</InputLabel>
             <OutlinedInput
@@ -170,6 +163,10 @@ const SignIn = (props: LoginProps) => {
               type={showPassword ? 'text' : 'password'}
               value={passwordState}
               onChange={handlePasswordChange}
+              required
+              fullWidth
+              name='password'
+              autoComplete='current-password'
               endAdornment={
                 <InputAdornment position='end'>
                   <IconButton
