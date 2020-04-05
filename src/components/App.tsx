@@ -54,8 +54,8 @@ interface AppProps {
 
 const App = (props: AppProps) => {
 
-  const [userNameState, setUserName] = React.useState('');
-  const [passwordState, setPassword] = React.useState('');
+  const [userNameState, setUserName] = useState('');
+  const [passwordState, setPassword] = useState('');
 
   const classes = useStyles();
 
