@@ -4,8 +4,6 @@ const serverUrl = 'http://localhost:8000';
 const apiUrlFragment = '/api/v1/';
 
 export const findRestaurantsByLocation = (latitude: number, longitude: number): Promise<any> => {
-  console.log('findRestaurantsByLocation invoked');
-  console.log('findRestaurantsByLocation dispatched');
   const path = serverUrl + apiUrlFragment + '/restaurantsByLocation?latitude=' + latitude.toString() + '&longitude=' + longitude.toString();
   return axios.get(path)
     .then((response) => {

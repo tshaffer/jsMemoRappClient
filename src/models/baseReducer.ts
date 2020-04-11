@@ -7,6 +7,7 @@ import { MemoRappModelState } from '../types';
 
 import { tagsReducer } from './tags';
 import { userReducer } from './user';
+import { restaurantsReducer} from './restaurants';
 
 // -----------------------------------------------------------------------
 // Reducers
@@ -14,6 +15,7 @@ import { userReducer } from './user';
 export const rootReducer = combineReducers<MemoRappModelState>({
   tags: tagsReducer,
   user: userReducer,
+  restaurants: restaurantsReducer,
 });
 
 // -----------------------------------------------------------------------

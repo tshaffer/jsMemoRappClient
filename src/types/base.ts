@@ -1,4 +1,5 @@
 export interface MemoRappModelState {
+  restaurants: any[];
   tags: string[];
   user: User;
 }

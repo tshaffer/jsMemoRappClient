@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import {
   findRestaurantsByLocation,
 } from '../controllers/restaurants';
+import { addRestaurant } from '../models/restaurants';
 
 const useStyles = makeStyles({
   root: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles({
 });
 
 export interface RestaurantReviewProps {
+  onAddRestaurant: (name: string, data: any) => any;
 }
 
 const RestaurantReview = (props: RestaurantReviewProps) => {
@@ -37,6 +39,8 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   const [restaurantLocation, setRestaurantLocation] = React.useState('currentLocation');
   const [longitude, setLongitude] = React.useState(0);
   const [latitude, setLatitude] = React.useState(0);
+
+  const { onAddRestaurant } = props;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRestaurantLocation(event.target.value);
@@ -59,9 +63,33 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
       console.log('Longitude: ', longitude);
 
       findRestaurantsByLocation(latitude, longitude)
-        .then( (restaurants: any[]) => {
+        .then((restaurants: any) => {
           console.log(restaurants);
-        }).catch( (err) => {
+          
+          // check restaurants.success
+
+          const addedRestaurantNames: string[] = [];
+
+          debugger;
+
+          // add memoRappRestaurants
+          for (const memoRappRestaurant of restaurants.memoRappRestaurantData.restaurants) {
+            const restaurantName = memoRappRestaurant.restaurantName;
+            onAddRestaurant(restaurantName, memoRappRestaurant);
+            addedRestaurantNames.push(restaurantName);
+          }
+          // add yelpRestaurants
+          for (const yelpRestaurant of restaurants.yelpRestaurantData.businesses) {
+            const restaurantName = yelpRestaurant.name;
+            if (addedRestaurantNames.indexOf(restaurantName) < 0) {
+              onAddRestaurant(restaurantName, yelpRestaurant);
+              addedRestaurantNames.push(restaurantName);
+            }
+          }
+
+          console.log('all added');
+
+        }).catch((err) => {
           console.log(err);
         });
     }
@@ -145,6 +173,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onAddRestaurant: addRestaurant,
   }, dispatch);
 };
 
