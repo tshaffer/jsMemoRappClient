@@ -1,6 +1,6 @@
 import { MemoRappModelState } from '../types';
 
 export const getRestaurants = (state: MemoRappModelState): any[] => {
-  return state.restaurants;
+  return state.restaurantsState.restaurants;
 };
 

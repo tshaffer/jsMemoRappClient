@@ -15,7 +15,7 @@ import { restaurantsReducer} from './restaurants';
 export const rootReducer = combineReducers<MemoRappModelState>({
   tags: tagsReducer,
   user: userReducer,
-  restaurants: restaurantsReducer,
+  restaurantsState: restaurantsReducer,
 });
 
 // -----------------------------------------------------------------------

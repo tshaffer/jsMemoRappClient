@@ -1,11 +1,13 @@
 import { cloneDeep } from 'lodash';
+import { MemoRappModelBaseAction } from './baseAction';
+import { RestaurantsState } from '../types/base';
 
 // ------------------------------------
 // Constants
-
-import {  MemoRappModelBaseAction } from './baseAction';
+// ------------------------------------
 
 export const ADD_RESTAURANT = 'ADD_RESTAURANT';
+export const SET_SELECTED_RESTAURANT = 'SET_SELECTED_RESTAURANT';
 
 // ------------------------------------
 // Actions
@@ -30,21 +32,40 @@ export const addRestaurant = (
   };
 };
 
+export const setSelectedRestaurant = (restaurant: any) => {
+  return {
+    type: SET_SELECTED_RESTAURANT,
+    payload: restaurant,
+  };
+};
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
 
-const initialState: any[] = [];
+const initialState: RestaurantsState = {
+  selectedRestaurant: null,
+  restaurants: [],
+};
 
 export const restaurantsReducer = (
-  state: any[] = initialState,
+  state: RestaurantsState = initialState,
   action: MemoRappModelBaseAction<AddRestaurantPayload>
-): string[] => {
+): RestaurantsState => {
   switch (action.type) {
     case ADD_RESTAURANT: {
-      const newState = cloneDeep(state);
-      newState.push(action.payload);
-      return newState;
+      const newRestaurants = cloneDeep(state.restaurants);
+      newRestaurants.push(action.payload.data);
+      return {
+        ...state,
+        restaurants: newRestaurants,
+      };
+    }
+    case SET_SELECTED_RESTAURANT: {
+      return {
+        ...state,
+        selectedRestaurant: action.payload,
+      };
     }
     default:
       return state;

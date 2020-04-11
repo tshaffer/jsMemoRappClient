@@ -17,8 +17,9 @@ import FormControl from '@material-ui/core/FormControl';
 import {
   findRestaurantsByLocation,
 } from '../controllers/restaurants';
-import { addRestaurant } from '../models/restaurants';
+import { addRestaurant, setSelectedRestaurant} from '../models/restaurants';
 import { getRestaurants } from '../selectors';
+import { isString } from 'util';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface RestaurantReviewProps {
   restaurants: any[];
   onAddRestaurant: (name: string, data: any) => any;
+  onSetSelectedRestaurant: (selectedRestaurant: any) => any;
 }
 
 const RestaurantReview = (props: RestaurantReviewProps) => {
@@ -57,6 +59,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   const classes = useStyles();
 
   const [restaurant, setRestaurant] = React.useState('');
+  // const [selectedRestaurant, setSelectedRestaurant] = React.useState({});
   const [restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
   const [longitude, setLongitude] = React.useState(-122.115733);
   const [latitude, setLatitude] = React.useState(37.380557);
@@ -79,6 +82,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
     console.log('handleSelectRestaurant');
     console.log(e.target.value);
     setRestaurant(e.target.value);
+    props.onSetSelectedRestaurant(e.target.value);
   };
 
   const handleFindRestaurant = () => {
@@ -115,7 +119,14 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const getRestaurantMenuItems = () => {
     return props.restaurants.map((restaurantItem) => {
-      return <MenuItem value={restaurantItem} key={restaurantItem.name}>{restaurantItem.name}</MenuItem>;
+      let name = '';
+      if (isString(restaurantItem.name) && restaurantItem.name.length > 0) {
+        name = restaurantItem.name;
+      } else {
+        name = restaurantItem.restaurantName;
+      }
+
+      return <MenuItem value={restaurantItem} key={name}>{name}</MenuItem>;
     });
   };
 
@@ -221,6 +232,7 @@ function mapStateToProps(state: any) {
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onAddRestaurant: addRestaurant,
+    onSetSelectedRestaurant: setSelectedRestaurant,
   }, dispatch);
 };
 
