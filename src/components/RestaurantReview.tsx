@@ -195,7 +195,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
               null
               :
               <FormControl className={classes.formControl}>
-                <InputLabel id='demo-simple-select-label'>Nearby Restaurants</InputLabel>
+                <InputLabel id='demo-simple-select-label'>Restaurants</InputLabel>
                 <Select
                   labelId='demo-simple-select-label'
                   id='demo-simple-select'
