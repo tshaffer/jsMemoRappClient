@@ -4,15 +4,21 @@ import { connect } from 'react-redux';
 
 import { HashRouter } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
+import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
+
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 
 import {
   findRestaurantsByLocation,
 } from '../controllers/restaurants';
 import { addRestaurant } from '../models/restaurants';
+import { getRestaurants } from '../selectors';
 
 const useStyles = makeStyles({
   root: {
@@ -25,10 +31,18 @@ const useStyles = makeStyles({
   },
   quarterWidth: {
     width: '25%',
-  }
+  },
+  // formControl: {
+  //   margin: theme.spacing(1),
+  //   minWidth: 120,
+  // },
+  // selectEmpty: {
+  //   marginTop: theme.spacing(2),
+  // },
 });
 
 export interface RestaurantReviewProps {
+  restaurants: any[];
   onAddRestaurant: (name: string, data: any) => any;
 }
 
@@ -36,6 +50,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const classes = useStyles();
 
+  const [restaurant, setRestaurant] = React.useState('');
   const [restaurantLocation, setRestaurantLocation] = React.useState('currentLocation');
   const [longitude, setLongitude] = React.useState(0);
   const [latitude, setLatitude] = React.useState(0);
@@ -54,6 +69,12 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
     setLatitude(e.target.value);
   };
 
+  const handleSelectRestaurant = (e: any) => {
+    console.log('handleSelectRestaurant');
+    console.log(e.target.value);
+    setRestaurant(e.target.value);
+  };
+
   const handleFindRestaurant = () => {
     console.log('handleFindRestaurant');
 
@@ -65,7 +86,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
       findRestaurantsByLocation(latitude, longitude)
         .then((restaurants: any) => {
           console.log(restaurants);
-          
+
           // check restaurants.success
 
           const addedRestaurantNames: string[] = [];
@@ -96,6 +117,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   };
 
   return (
+
     <HashRouter>
       <div>
         <h2>MemoRapp</h2>
@@ -160,6 +182,27 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
           >
             Find Restaurant
           </Button>
+
+          <div>
+            {(props.restaurants.length === 0)
+              ?
+              null
+              :
+              <FormControl>
+                <InputLabel id='demo-simple-select-label'>Restaurants</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='demo-simple-select'
+                  value={restaurant}
+                  onChange={handleSelectRestaurant}
+                >
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
+            }
+          </div>
         </div>
       </div>
     </HashRouter>
@@ -168,6 +211,8 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    restaurants: getRestaurants(state),
+
   };
 }
 
