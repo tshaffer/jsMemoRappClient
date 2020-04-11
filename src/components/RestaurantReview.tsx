@@ -57,9 +57,9 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   const classes = useStyles();
 
   const [restaurant, setRestaurant] = React.useState('');
-  const [restaurantLocation, setRestaurantLocation] = React.useState('currentLocation');
-  const [longitude, setLongitude] = React.useState(0);
-  const [latitude, setLatitude] = React.useState(0);
+  const [restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
+  const [longitude, setLongitude] = React.useState(-122.115733);
+  const [latitude, setLatitude] = React.useState(37.380557);
 
   const { onAddRestaurant } = props;
 
@@ -82,22 +82,15 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   };
 
   const handleFindRestaurant = () => {
-    console.log('handleFindRestaurant');
 
-    console.log('restaurant location: ', restaurantLocation);
     if (restaurantLocation === 'specifyLocation') {
-      console.log('Latitude: ', latitude);
-      console.log('Longitude: ', longitude);
 
       findRestaurantsByLocation(latitude, longitude)
         .then((restaurants: any) => {
-          console.log(restaurants);
 
-          // check restaurants.success
+          // TODO - check restaurants.success before proceeding
 
           const addedRestaurantNames: string[] = [];
-
-          debugger;
 
           // add memoRappRestaurants
           for (const memoRappRestaurant of restaurants.memoRappRestaurantData.restaurants) {
@@ -114,13 +107,19 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
             }
           }
 
-          console.log('all added');
-
         }).catch((err) => {
           console.log(err);
         });
     }
   };
+
+  const getRestaurantMenuItems = () => {
+    return props.restaurants.map((restaurantItem) => {
+      return <MenuItem value={restaurantItem} key={restaurantItem.name}>{restaurantItem.name}</MenuItem>;
+    });
+  };
+
+  const restaurantMenuItems: any[] = getRestaurantMenuItems();
 
   return (
 
@@ -202,9 +201,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                   value={restaurant}
                   onChange={handleSelectRestaurant}
                 >
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {restaurantMenuItems}
                 </Select>
               </FormControl>
             }
@@ -218,7 +215,6 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 function mapStateToProps(state: any) {
   return {
     restaurants: getRestaurants(state),
-
   };
 }
 
