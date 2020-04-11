@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { HashRouter } from 'react-router-dom';
 
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import Select from '@material-ui/core/Select';
@@ -20,26 +20,32 @@ import {
 import { addRestaurant } from '../models/restaurants';
 import { getRestaurants } from '../selectors';
 
-const useStyles = makeStyles({
-  root: {
-    '&:hover': {
-      backgroundColor: 'transparent',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
     },
-  },
-  margin: {
-    marginLeft: '42px',
-  },
-  quarterWidth: {
-    width: '25%',
-  },
-  // formControl: {
-  //   margin: theme.spacing(1),
-  //   minWidth: 120,
-  // },
-  // selectEmpty: {
-  //   marginTop: theme.spacing(2),
-  // },
-});
+    margin: {
+      marginLeft: '42px',
+    },
+    topMargin: {
+      marginTop: '16px',
+    },
+    quarterWidth: {
+      width: '25%',
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      marginTop: '16px',
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  }),
+);
 
 export interface RestaurantReviewProps {
   restaurants: any[];
@@ -188,8 +194,8 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
               ?
               null
               :
-              <FormControl>
-                <InputLabel id='demo-simple-select-label'>Restaurants</InputLabel>
+              <FormControl className={classes.formControl}>
+                <InputLabel id='demo-simple-select-label'>Nearby Restaurants</InputLabel>
                 <Select
                   labelId='demo-simple-select-label'
                   id='demo-simple-select'
