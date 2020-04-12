@@ -78,6 +78,10 @@ const AddReview = (props: AddReviewProps) => {
     console.log('Would return: ' + event.target.checked);
   };
 
+  const handleCommentsChanged = (event: any) => {
+    console.log('Comments: ' + event.target.value);
+  };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value === '' ? '' : Number(event.target.value));
   };
@@ -121,6 +125,7 @@ const AddReview = (props: AddReviewProps) => {
           /> */}
 
           <div className={classes.quarterWidth}>
+
             <Grid container spacing={2} alignItems='center'>
               <Grid item>
                 <span className={classes.margin}>Rating</span>
@@ -152,6 +157,7 @@ const AddReview = (props: AddReviewProps) => {
                 />
               </Grid>
             </Grid>
+
             <div>
               <FormControlLabel
                 value='end'
@@ -168,6 +174,7 @@ const AddReview = (props: AddReviewProps) => {
               multiline
               rows='4'
               variant='outlined'
+              onChange={handleCommentsChanged}
             />
 
           </div>
