@@ -8,9 +8,7 @@ import { HashRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Input from '@material-ui/core/Input';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -23,8 +21,8 @@ import TextField from '@material-ui/core/TextField';
 //   KeyboardDatePicker,
 // } from '@material-ui/pickers';
 
-import { getRestaurantByName } from '../selectors';
-import { Restaurant } from '../types';
+import { getRestaurantByName, getUser } from '../selectors';
+import { Restaurant, User } from '../types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,46 +49,59 @@ const useStyles = makeStyles((theme) => ({
 interface AddReviewProps {
   restaurantName: string;
   restaurant: Restaurant | null;
+  user: User;
 }
 
 const AddReview = (props: AddReviewProps) => {
 
   const classes = useStyles();
 
-  const [value, setValue] = React.useState<number | string | Array<number | string>>(5.0);
+  const [rating, setRating] = React.useState(5.0);
+  const [wouldReturn, setWouldReturn] = React.useState(true);
+  const [comments, setComments] = React.useState('');
 
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date(),
-  );
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-  };
+  // const [value, setValue] = React.useState<number | string | Array<number | string>>(5.0);
+
+  // const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+  //   new Date(),
+  // );
+
+  // const handleDateChange = (date: Date | null) => {
+  //   setSelectedDate(date);
+  // };
 
   const handleAddReview = (e: any) => {
-  }
+    console.log('handleAddReview invoked');
 
-  const handleSliderChange = (event: any, newValue: number | number[]) => {
-    setValue(newValue);
-  };
+    console.log('user: ', props.user);
+    console.log('restuaurant name: ', props.restaurantName);
+    console.log('rating: ', rating);
+    console.log('wouldReturn: ', wouldReturn);
+    console.log('comments: ', comments);
+    console.log('date: ', new Date().toDateString());
+
+  }
 
   const handleWouldReturnChecked = (event: any) => {
     console.log('Would return: ' + event.target.checked);
+    setWouldReturn(event.target.checked);
   };
 
   const handleCommentsChanged = (event: any) => {
     console.log('Comments: ' + event.target.value);
+    setComments(event.target.value);
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value === '' ? '' : Number(event.target.value));
+  const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRating(event.target.value === '' ? 0 : Number(event.target.value));
   };
 
   const handleBlur = () => {
-    if (value < 0) {
-      setValue(0);
-    } else if (value > 10) {
-      setValue(10);
+    if (rating < 0) {
+      setRating(0);
+    } else if (rating > 10) {
+      setRating(10);
     }
   };
 
@@ -133,9 +144,9 @@ const AddReview = (props: AddReviewProps) => {
               <Grid item>
                 <Input
                   className={classes.input}
-                  value={value}
+                  value={rating}
                   margin='dense'
-                  onChange={handleInputChange}
+                  onChange={handleRatingChange}
                   onBlur={handleBlur}
                   inputProps={{
                     'step': .1,
@@ -148,11 +159,11 @@ const AddReview = (props: AddReviewProps) => {
               </Grid>
               <Grid item xs>
                 <Slider
-                  value={typeof value === 'number' ? value : 0}
+                  value={rating}
                   min={0}
                   max={10}
                   step={.1}
-                  onChange={handleSliderChange}
+                  onChange={handleRatingChange}
                   aria-labelledby='input-slider'
                 />
               </Grid>
@@ -161,7 +172,11 @@ const AddReview = (props: AddReviewProps) => {
             <div>
               <FormControlLabel
                 value='end'
-                control={<Checkbox color='primary' />}
+                control={
+                  <Checkbox 
+                    color='primary'
+                    value={wouldReturn}
+                  />}
                 label='Would return'
                 labelPlacement='end'
                 onChange={handleWouldReturnChecked}
@@ -179,17 +194,17 @@ const AddReview = (props: AddReviewProps) => {
 
           </div>
 
-        </form>
-        <div>
-          <Button
-            type='submit'
-            variant='contained'
-            className={clsx(classes.margin)}
-          >
-            Add Review
-          </Button>
+          <div>
+            <Button
+              type='submit'
+              variant='contained'
+              className={clsx(classes.margin)}
+            >
+              Add Review
+            </Button>
+          </div>
 
-        </div>
+        </form>
       </div>
     </HashRouter>
   );
@@ -199,6 +214,7 @@ function mapStateToProps(state: any, ownProps: any) {
   return {
     restaurantName: ownProps.match.params.restaurantName,
     restaurant: getRestaurantByName(state, ownProps.match.params.restaurantName),
+    user: getUser(state),
   };
 }
 
