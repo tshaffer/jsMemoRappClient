@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { MemoRappModelBaseAction } from './baseAction';
-import { RestaurantsState } from '../types/base';
+import { RestaurantsState, Restaurant } from '../types/base';
 
 // ------------------------------------
 // Constants
@@ -14,21 +14,16 @@ export const SET_SELECTED_RESTAURANT = 'SET_SELECTED_RESTAURANT';
 // ------------------------------------
 
 export interface AddRestaurantPayload {
-  name: string;
-  data: any;
+  restaurant: Restaurant;
 }
 
 export const addRestaurant = (
-  name: string,
-  data: any,
+  restaurant: Restaurant,
 ): MemoRappModelBaseAction<AddRestaurantPayload> => {
 
   return {
     type: ADD_RESTAURANT,
-    payload: {
-      name,
-      data,
-    },
+    payload: { restaurant },
   };
 };
 
