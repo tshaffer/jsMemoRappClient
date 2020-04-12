@@ -17,9 +17,10 @@ import FormControl from '@material-ui/core/FormControl';
 import {
   findRestaurantsByLocation,
 } from '../controllers/restaurants';
-import { addRestaurant, setSelectedRestaurant} from '../models/restaurants';
+import { addRestaurant, setSelectedRestaurant } from '../models/restaurants';
 import { getRestaurants } from '../selectors';
 import { isString } from 'util';
+import { RestaurantsResponse, Restaurant } from '../types/base';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,9 +50,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface RestaurantReviewProps {
-  restaurants: any[];
-  onAddRestaurant: (name: string, data: any) => any;
-  onSetSelectedRestaurant: (selectedRestaurant: any) => any;
+  restaurants: Restaurant[];
+  onAddRestaurant: (restaurant: Restaurant) => any;
+  onSetSelectedRestaurant: (selectedRestaurant: Restaurant) => any;
 }
 
 const RestaurantReview = (props: RestaurantReviewProps) => {
@@ -59,7 +60,6 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   const classes = useStyles();
 
   const [restaurant, setRestaurant] = React.useState('');
-  // const [selectedRestaurant, setSelectedRestaurant] = React.useState({});
   const [restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
   const [longitude, setLongitude] = React.useState(-122.115733);
   const [latitude, setLatitude] = React.useState(37.380557);
@@ -90,27 +90,44 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
     if (restaurantLocation === 'specifyLocation') {
 
       findRestaurantsByLocation(latitude, longitude)
-        .then((restaurants: any) => {
+        .then((restaurantsResponse: RestaurantsResponse) => {
 
-          // TODO - check restaurants.success before proceeding
+          if (restaurantsResponse.success) {
+            const addedRestaurantNames: string[] = [];
 
-          const addedRestaurantNames: string[] = [];
-
-          // add memoRappRestaurants
-          for (const memoRappRestaurant of restaurants.memoRappRestaurantData.restaurants) {
-            const restaurantName = memoRappRestaurant.restaurantName;
-            onAddRestaurant(restaurantName, memoRappRestaurant);
-            addedRestaurantNames.push(restaurantName);
-          }
-          // add yelpRestaurants
-          for (const yelpRestaurant of restaurants.yelpRestaurantData.businesses) {
-            const restaurantName = yelpRestaurant.name;
-            if (addedRestaurantNames.indexOf(restaurantName) < 0) {
-              onAddRestaurant(restaurantName, yelpRestaurant);
+            // add memoRappRestaurants
+            for (const memoRappRestaurant of restaurantsResponse.memoRappRestaurants) {
+              const restaurantName = memoRappRestaurant.restaurantName;
+              onAddRestaurant(memoRappRestaurant);
               addedRestaurantNames.push(restaurantName);
             }
+            // add yelpRestaurants
+            for (const yelpRestaurant of restaurantsResponse.yelpRestaurants) {
+              const memoRappRestaurant: Restaurant = {
+                _id: null,
+                restaurantName: yelpRestaurant.name,
+                yelpBusinessDetails: yelpRestaurant,
+                tags: [],
+                reviews: [],
+                location: {
+                  type: 'Point',
+                  coordinates: yelpRestaurant.coordinates as any,
+                },
+                dist: {
+                  calculated: yelpRestaurant.distance,
+                  location: {
+                    type: 'Point',
+                    coordinates: yelpRestaurant.coordinates as any,
+                  }
+                },
+              };
+              const restaurantName = yelpRestaurant.name;
+              if (addedRestaurantNames.indexOf(restaurantName) < 0) {
+                onAddRestaurant(memoRappRestaurant);
+                addedRestaurantNames.push(restaurantName);
+              }
+            }
           }
-
         }).catch((err) => {
           console.log(err);
         });
@@ -119,14 +136,8 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const getRestaurantMenuItems = () => {
     return props.restaurants.map((restaurantItem) => {
-      let name = '';
-      if (isString(restaurantItem.name) && restaurantItem.name.length > 0) {
-        name = restaurantItem.name;
-      } else {
-        name = restaurantItem.restaurantName;
-      }
-
-      return <MenuItem value={restaurantItem} key={name}>{name}</MenuItem>;
+      const name = restaurantItem.restaurantName;
+      return <MenuItem value={restaurantItem as any} key={name}>{name}</MenuItem>;
     });
   };
 

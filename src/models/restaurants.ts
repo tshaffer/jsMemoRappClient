@@ -13,21 +13,16 @@ export const SET_SELECTED_RESTAURANT = 'SET_SELECTED_RESTAURANT';
 // Actions
 // ------------------------------------
 
-export interface AddRestaurantPayload {
-  restaurant: Restaurant;
-}
-
 export const addRestaurant = (
   restaurant: Restaurant,
-): MemoRappModelBaseAction<AddRestaurantPayload> => {
-
+) => {
   return {
     type: ADD_RESTAURANT,
-    payload: { restaurant },
+    payload: restaurant,
   };
 };
 
-export const setSelectedRestaurant = (restaurant: any) => {
+export const setSelectedRestaurant = (restaurant: Restaurant) => {
   return {
     type: SET_SELECTED_RESTAURANT,
     payload: restaurant,
@@ -45,12 +40,12 @@ const initialState: RestaurantsState = {
 
 export const restaurantsReducer = (
   state: RestaurantsState = initialState,
-  action: MemoRappModelBaseAction<AddRestaurantPayload>
+  action: MemoRappModelBaseAction<any>
 ): RestaurantsState => {
   switch (action.type) {
     case ADD_RESTAURANT: {
       const newRestaurants = cloneDeep(state.restaurants);
-      newRestaurants.push(action.payload.data);
+      newRestaurants.push(action.payload);
       return {
         ...state,
         restaurants: newRestaurants,
