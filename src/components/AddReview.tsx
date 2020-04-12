@@ -15,6 +15,7 @@ import Slider from '@material-ui/core/Slider';
 import Input from '@material-ui/core/Input';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import TextField from '@material-ui/core/TextField';
 
 // import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
@@ -160,6 +161,15 @@ const AddReview = (props: AddReviewProps) => {
                 onChange={handleWouldReturnChecked}
               />
             </div>
+
+            <TextField
+              id='outlined-multiline-static'
+              label='Comments'
+              multiline
+              rows='4'
+              variant='outlined'
+            />
+
           </div>
 
         </form>
