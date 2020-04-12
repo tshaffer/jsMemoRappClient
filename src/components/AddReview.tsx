@@ -54,7 +54,7 @@ const AddReview = (props: AddReviewProps) => {
 
   const classes = useStyles();
 
-  const [value, setValue] = React.useState<number | string | Array<number | string>>(5);
+  const [value, setValue] = React.useState<number | string | Array<number | string>>(5.0);
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
     new Date(),
@@ -88,6 +88,12 @@ const AddReview = (props: AddReviewProps) => {
     handleAddReview(e);
   };
 
+  /*
+            <Typography id='input-slider' gutterBottom>
+              Rating
+            </Typography>
+  */
+
   return (
     <HashRouter>
       <div>
@@ -108,10 +114,10 @@ const AddReview = (props: AddReviewProps) => {
           /> */}
 
           <div className={classes.quarterWidth}>
-            <Typography id='input-slider' gutterBottom>
-              Rating
-            </Typography>
             <Grid container spacing={2} alignItems='center'>
+              <Grid item>
+                <span className={classes.margin}>Rating</span>
+              </Grid>
               <Grid item>
                 <Input
                   className={classes.input}
