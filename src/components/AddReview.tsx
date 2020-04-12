@@ -13,6 +13,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Input from '@material-ui/core/Input';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 // import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
@@ -69,6 +71,10 @@ const AddReview = (props: AddReviewProps) => {
 
   const handleSliderChange = (event: any, newValue: number | number[]) => {
     setValue(newValue);
+  };
+
+  const handleWouldReturnChecked = (event: any) => {
+    console.log('Would return: ' + event.target.checked);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,6 +151,15 @@ const AddReview = (props: AddReviewProps) => {
                 />
               </Grid>
             </Grid>
+            <div>
+              <FormControlLabel
+                value='end'
+                control={<Checkbox color='primary' />}
+                label='Would return'
+                labelPlacement='end'
+                onChange={handleWouldReturnChecked}
+              />
+            </div>
           </div>
 
         </form>
