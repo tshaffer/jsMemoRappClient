@@ -1,14 +1,19 @@
+import { isNil } from 'lodash';
+
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { HashRouter } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
+import { Link } from '@material-ui/core';
 
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,8 +23,7 @@ import {
   findRestaurantsByLocation,
 } from '../controllers/restaurants';
 import { addRestaurant, setSelectedRestaurant } from '../models/restaurants';
-import { getRestaurants } from '../selectors';
-import { isString } from 'util';
+import { getRestaurants, getSelectedRestaurant } from '../selectors';
 import { RestaurantsResponse, Restaurant } from '../types/base';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -53,11 +57,14 @@ export interface RestaurantReviewProps {
   restaurants: Restaurant[];
   onAddRestaurant: (restaurant: Restaurant) => any;
   onSetSelectedRestaurant: (selectedRestaurant: Restaurant) => any;
+  selectedRestaurant: Restaurant;
 }
 
 const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const classes = useStyles();
+
+  const [redirect, setRedirect] = React.useState(null);
 
   const [restaurant, setRestaurant] = React.useState('');
   const [restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
@@ -141,7 +148,18 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
     });
   };
 
+  const handleAddReview = () => {
+    setRedirect(props.selectedRestaurant);
+  }
+
   const restaurantMenuItems: any[] = getRestaurantMenuItems();
+
+  console.log(props.selectedRestaurant);
+
+  if (!isNil(redirect)) {
+    debugger;
+    return <Redirect to={'/addReview/' + props.selectedRestaurant.restaurantName} />;
+  }
 
   return (
 
@@ -215,17 +233,29 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
               ?
               null
               :
-              <FormControl className={classes.formControl}>
-                <InputLabel id='demo-simple-select-label'>Restaurants</InputLabel>
-                <Select
-                  labelId='demo-simple-select-label'
-                  id='demo-simple-select'
-                  value={restaurant}
-                  onChange={handleSelectRestaurant}
-                >
-                  {restaurantMenuItems}
-                </Select>
-              </FormControl>
+              <div>
+                <FormControl className={classes.formControl}>
+                  <InputLabel id='demo-simple-select-label'>Restaurants</InputLabel>
+                  <Select
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    value={restaurant}
+                    onChange={handleSelectRestaurant}
+                  >
+                    {restaurantMenuItems}
+                  </Select>
+                </FormControl>
+                {(isNil(props.selectedRestaurant))
+                  ?
+                  null
+                  :
+                  <div>
+                    <Link component={RouterLink} to={'/addReview/' + props.selectedRestaurant.restaurantName}>
+                      Add Review
+                    </Link>
+                  </div>
+                }
+              </div>
             }
           </div>
         </div>
@@ -234,8 +264,28 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   );
 };
 
+/*
+                  <Button
+                    type='button'
+                    fullWidth
+                    variant='contained'
+                    color='primary'
+                    onClick={handleAddReview}
+                  >
+                    Add Review
+                  </Button>
+*/
+/*
+                  <div>
+                    <Link component={RouterLink} to={'/addReview/' + props.selectedRestaurant.restaurantName}>
+                      Add Review
+                    </Link>
+                  </div>
+*/
+
 function mapStateToProps(state: any) {
   return {
+    selectedRestaurant: getSelectedRestaurant(state),
     restaurants: getRestaurants(state),
   };
 }
