@@ -22,7 +22,11 @@ import TextField from '@material-ui/core/TextField';
 // } from '@material-ui/pickers';
 
 import { getRestaurantByName, getUser } from '../selectors';
-import { Restaurant, User } from '../types';
+import { Restaurant, User, RestaurantReview } from '../types';
+import {
+  addRestaurant,
+  addRestaurantReview,
+} from '../controllers';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +54,8 @@ interface AddReviewProps {
   restaurantName: string;
   restaurant: Restaurant | null;
   user: User;
+  onAddRestaurant: (restaurant: Restaurant) => any;
+  onAddRestaurantReview: ( restaurant: Restaurant, restaurantReview: RestaurantReview) => any;
 }
 
 const AddReview = (props: AddReviewProps) => {
@@ -75,13 +81,22 @@ const AddReview = (props: AddReviewProps) => {
     console.log('handleAddReview invoked');
 
     console.log('user: ', props.user);
-    console.log('restuaurant name: ', props.restaurantName);
+    console.log('restaurant name: ', props.restaurantName);
     console.log('rating: ', rating);
     console.log('wouldReturn: ', wouldReturn);
     console.log('comments: ', comments);
     console.log('date: ', new Date().toDateString());
 
-  }
+    props.onAddRestaurantReview(
+      props.restaurant,
+      {
+        rating,
+        wouldReturn,
+        comments,
+        date: new Date(),
+        userName: props.user.userName,
+      });
+  };
 
   const handleWouldReturnChecked = (event: any) => {
     console.log('Would return: ' + event.target.checked);
@@ -220,6 +235,8 @@ function mapStateToProps(state: any, ownProps: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onAddRestaurant: addRestaurant,
+    onAddRestaurantReview: addRestaurantReview,
   }, dispatch);
 };
 
