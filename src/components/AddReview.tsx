@@ -15,12 +15,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 
-// import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-
-// import {
-//   KeyboardDatePicker,
-// } from '@material-ui/pickers';
-
 import { getRestaurantByName, getUser } from '../selectors';
 import { Restaurant, User, RestaurantReview } from '../types';
 import {
@@ -55,7 +49,7 @@ interface AddReviewProps {
   restaurant: Restaurant | null;
   user: User;
   onAddRestaurant: (restaurant: Restaurant) => any;
-  onAddRestaurantReview: ( restaurant: Restaurant, restaurantReview: RestaurantReview) => any;
+  onAddRestaurantReview: (restaurant: Restaurant, restaurantReview: RestaurantReview) => any;
 }
 
 const AddReview = (props: AddReviewProps) => {
@@ -65,17 +59,6 @@ const AddReview = (props: AddReviewProps) => {
   const [rating, setRating] = React.useState(5.0);
   const [wouldReturn, setWouldReturn] = React.useState(true);
   const [comments, setComments] = React.useState('');
-
-
-  // const [value, setValue] = React.useState<number | string | Array<number | string>>(5.0);
-
-  // const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-  //   new Date(),
-  // );
-
-  // const handleDateChange = (date: Date | null) => {
-  //   setSelectedDate(date);
-  // };
 
   const handleAddReview = (e: any) => {
     console.log('handleAddReview invoked');
@@ -120,6 +103,16 @@ const AddReview = (props: AddReviewProps) => {
     }
   };
 
+  const handleTagChanged = (event: any) => {
+    console.log('Tag value: ' + event.target.value);
+    // setComments(event.target.value);
+  };
+
+  const handleAddTag = (event: any) => {
+    console.log('Add new tag');
+    // setComments(event.target.value);
+  };
+
   const onFormSubmit = (e: any) => {
     e.preventDefault();
     handleAddReview(e);
@@ -138,20 +131,24 @@ const AddReview = (props: AddReviewProps) => {
         <h3 className={clsx(classes.margin)}>Add Review</h3>
         <h4>{props.restaurantName}</h4>
         <form noValidate autoComplete='off' onSubmit={onFormSubmit}>
-          {/* <KeyboardDatePicker
-            margin='normal'
-            id='date-picker-dialog'
-            label='Date picker dialog'
-            format='MM/dd/yyyy'
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          /> */}
 
           <div className={classes.quarterWidth}>
 
+            <div>
+              <span className={classes.margin}>Tags</span>
+              <TextField
+                id='outlined-multiline-static'
+                variant='outlined'
+                onChange={handleTagChanged}
+              />
+            <Button
+              variant='contained'
+              className={clsx(classes.margin)}
+              onChange={handleAddTag}
+              >
+              Add Tag
+            </Button>
+            </div>
             <Grid container spacing={2} alignItems='center'>
               <Grid item>
                 <span className={classes.margin}>Rating</span>
@@ -188,7 +185,7 @@ const AddReview = (props: AddReviewProps) => {
               <FormControlLabel
                 value='end'
                 control={
-                  <Checkbox 
+                  <Checkbox
                     color='primary'
                     value={wouldReturn}
                   />}
