@@ -17,33 +17,40 @@ export const findRestaurantsByLocation = (latitude: number, longitude: number): 
     });
 };
 
-export const addRestaurant = (restaurant: Restaurant): Promise<any> => {
-  const path = serverUrl + apiUrlFragment + '/restaurant';
-  return axios.post(
-    path,
-    restaurant,
-  )
-  .then((response) => {
-    console.log(response);
-    return Promise.resolve();
-  })
-  .catch((error) => {
-    console.log(error);
-    return Promise.reject(error);
-  });
+export const addRestaurant = (restaurant: Restaurant): any => {
+  return (dispatch: any) => {
+    const path = serverUrl + apiUrlFragment + '/restaurant';
+    return axios.post(
+      path,
+      restaurant,
+    )
+      .then((response) => {
+        const addedRestaurant: any = response.data.data as Restaurant;
+        console.log(addedRestaurant);
+        return Promise.resolve(addedRestaurant);
+      })
+      .catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  };
 };
 
-export const addRestaurantReview = (restaurant: Restaurant, restaurantReview: RestaurantReview): Promise<any> => {
-  const path = serverUrl + apiUrlFragment + '/restaurantReview/' + restaurant._id;
+export const addRestaurantReview = (restaurant: Restaurant, restaurantReview: RestaurantReview): any => {
 
-  return axios.post(
-    path,
-    restaurantReview,
-  ).then((response) => {
-    console.log(response);
-    return Promise.resolve();
-  }).catch((error) => {
-    console.log(error);
-    return Promise.reject(error);
-  });
+  return (dispatch: any) => {
+
+    const path = serverUrl + apiUrlFragment + '/restaurantReview/' + restaurant._id;
+
+    return axios.post(
+      path,
+      restaurantReview,
+    ).then((response) => {
+      console.log(response);
+      return Promise.resolve();
+    }).catch((error) => {
+      console.log(error);
+      return Promise.reject(error);
+    });
+  }
 };

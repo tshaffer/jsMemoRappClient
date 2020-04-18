@@ -17,7 +17,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 
 import { getRestaurantByName, getUser } from '../selectors';
-import { Restaurant, User, RestaurantReview } from '../types';
+import { Restaurant, User, RestaurantReview, TagEntity } from '../types';
 import {
   addRestaurant,
   addRestaurantReview,
@@ -62,7 +62,7 @@ const AddReview = (props: AddReviewProps) => {
   const [wouldReturn, setWouldReturn] = React.useState(true);
   const [comments, setComments] = React.useState('');
 
-  const isNewRestaurant = (): boolean => {
+  const isRestaurantInDb = (): boolean => {
     console.log('isNewRestaurant: ');
     console.log(props.restaurant);
     if (isNil(props.restaurant) || props.restaurant._id) {
@@ -71,25 +71,60 @@ const AddReview = (props: AddReviewProps) => {
     return false;
   };
 
+  const addNewRestaurant = (existingRestaurant: Restaurant): Promise<any> => {
+
+    if (!isRestaurantInDb()) {
+      console.log('restaurant is not already in db');
+      console.log(props.restaurant);
+      console.log(tags);
+
+      const tagEntities: TagEntity[] = tags.map((tag) => {
+        return {
+          value: tag,
+        };
+      });
+
+      const newRestaurant: Restaurant = {
+        _id: null,
+        restaurantName: props.restaurantName,
+        yelpBusinessDetails: props.restaurant.yelpBusinessDetails,
+        tags: tagEntities,
+        reviews: [],
+        location: props.restaurant.location,
+      };
+      return props.onAddRestaurant(newRestaurant)
+        .then((addedRestaurant) => {
+          console.log('newRestaurant added');
+          console.log(addedRestaurant);
+          return Promise.resolve(addedRestaurant);
+        });
+    }
+    return Promise.resolve(existingRestaurant);
+  }
+
   const handleAddReview = (e: any) => {
     console.log('handleAddReview invoked');
 
-    console.log('user: ', props.user);
-    console.log('restaurant name: ', props.restaurantName);
-    console.log('rating: ', rating);
-    console.log('wouldReturn: ', wouldReturn);
-    console.log('comments: ', comments);
-    console.log('date: ', new Date().toDateString());
+    addNewRestaurant(props.restaurant)
+      .then((addedRestaurant: Restaurant) => {
+        console.log('user: ', props.user);
+        console.log('restaurant name: ', props.restaurantName);
+        console.log('rating: ', rating);
+        console.log('wouldReturn: ', wouldReturn);
+        console.log('comments: ', comments);
+        console.log('date: ', new Date().toDateString());
 
-    props.onAddRestaurantReview(
-      props.restaurant,
-      {
-        rating,
-        wouldReturn,
-        comments,
-        date: new Date(),
-        userName: props.user.userName,
+        props.onAddRestaurantReview(
+          addedRestaurant,
+          {
+            rating,
+            wouldReturn,
+            comments,
+            date: new Date(),
+            userName: props.user.userName,
+          });
       });
+
   };
 
   const handleWouldReturnChecked = (event: any) => {
@@ -164,7 +199,7 @@ const AddReview = (props: AddReviewProps) => {
   };
 
   const getTagsDiv = (allTagsJsx: any) => {
-    if (isNewRestaurant()) {
+    if (isRestaurantInDb()) {
       return null;
     }
     return (

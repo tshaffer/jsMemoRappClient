@@ -264,25 +264,6 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   );
 };
 
-/*
-                  <Button
-                    type='button'
-                    fullWidth
-                    variant='contained'
-                    color='primary'
-                    onClick={handleAddReview}
-                  >
-                    Add Review
-                  </Button>
-*/
-/*
-                  <div>
-                    <Link component={RouterLink} to={'/addReview/' + props.selectedRestaurant.restaurantName}>
-                      Add Review
-                    </Link>
-                  </div>
-*/
-
 function mapStateToProps(state: any) {
   return {
     selectedRestaurant: getSelectedRestaurant(state),
