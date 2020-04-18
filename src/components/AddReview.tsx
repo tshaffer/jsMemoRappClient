@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isNil } from 'lodash';
 
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
@@ -61,6 +61,15 @@ const AddReview = (props: AddReviewProps) => {
   const [rating, setRating] = React.useState(5.0);
   const [wouldReturn, setWouldReturn] = React.useState(true);
   const [comments, setComments] = React.useState('');
+
+  const isNewRestaurant = (): boolean => {
+    console.log('isNewRestaurant: ');
+    console.log(props.restaurant);
+    if (isNil(props.restaurant) || props.restaurant._id) {
+      return true;
+    }
+    return false;
+  };
 
   const handleAddReview = (e: any) => {
     console.log('handleAddReview invoked');
@@ -131,6 +140,11 @@ const AddReview = (props: AddReviewProps) => {
     console.log('number of tags: ', tags.length);
   };
 
+  const onFormSubmit = (e: any) => {
+    e.preventDefault();
+    handleAddReview(e);
+  };
+
   const getTags = () => {
     console.log('invoke getTags');
     const existingTags = tags.map((tag, index) => {
@@ -149,28 +163,28 @@ const AddReview = (props: AddReviewProps) => {
     return existingTags;
   };
 
-  // const getNewTagId = () => {
-  //   return tags.length.toString();
-  // };
-
-  const onFormSubmit = (e: any) => {
-    e.preventDefault();
-    handleAddReview(e);
+  const getTagsDiv = (allTagsJsx: any) => {
+    if (isNewRestaurant()) {
+      return null;
+    }
+    return (
+      <div>
+        <span className={classes.margin}>Tags</span>
+        {allTagsJsx}
+        <Button
+          variant='contained'
+          className={clsx(classes.margin)}
+          onClick={handleAddTag}
+          type='button'
+        >
+          Add Tag
+       </Button>
+      </div>
+    )
   };
 
-  /*
-            <Typography id='input-slider' gutterBottom>
-              Rating
-            </Typography>
-  */
-  /*
-                <TextField
-                  id={getNewTagId()}
-                  variant='outlined'
-                  onChange={handleTagChanged}
-                />
-  */
   const allTags = getTags();
+  const tagsDiv = getTagsDiv(allTags);
 
   return (
     <HashRouter>
@@ -182,18 +196,8 @@ const AddReview = (props: AddReviewProps) => {
 
           <div className={classes.quarterWidth}>
 
-            <div>
-              <span className={classes.margin}>Tags</span>
-              {allTags}
-              <Button
-                variant='contained'
-                className={clsx(classes.margin)}
-                onClick={handleAddTag}
-                type='button'
-              >
-                Add Tag
-            </Button>
-            </div>
+            {tagsDiv}
+
             <Grid container spacing={2} alignItems='center'>
               <Grid item>
                 <span className={classes.margin}>Rating</span>
