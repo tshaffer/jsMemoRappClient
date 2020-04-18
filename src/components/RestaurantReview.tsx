@@ -6,25 +6,30 @@ import { connect } from 'react-redux';
 
 import { HashRouter } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
-import { Redirect } from "react-router-dom";
 
+import { Link } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
-import { Link } from '@material-ui/core';
-
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
+import { 
+  RestaurantsResponse, 
+  Restaurant 
+} from '../types/base';
 import {
-  findRestaurantsByLocation,
-} from '../controllers/restaurants';
-import { addRestaurant, setSelectedRestaurant } from '../models/restaurants';
-import { getRestaurants, getSelectedRestaurant } from '../selectors';
-import { RestaurantsResponse, Restaurant } from '../types/base';
+  addRestaurantToRedux,
+  fetchAllRestaurantsByLocation,
+  setSelectedRestaurantInRedux,
+} from '../controllers';
+import { 
+  getRestaurants, 
+  getSelectedRestaurant 
+} from '../selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,8 +69,6 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const classes = useStyles();
 
-  const [redirect, setRedirect] = React.useState(null);
-
   const [restaurant, setRestaurant] = React.useState('');
   const [restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
   const [longitude, setLongitude] = React.useState(-122.115733);
@@ -96,7 +99,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
     if (restaurantLocation === 'specifyLocation') {
 
-      findRestaurantsByLocation(latitude, longitude)
+      fetchAllRestaurantsByLocation(latitude, longitude)
         .then((restaurantsResponse: RestaurantsResponse) => {
 
           if (restaurantsResponse.success) {
@@ -148,18 +151,9 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
     });
   };
 
-  const handleAddReview = () => {
-    setRedirect(props.selectedRestaurant);
-  }
-
   const restaurantMenuItems: any[] = getRestaurantMenuItems();
 
   console.log(props.selectedRestaurant);
-
-  if (!isNil(redirect)) {
-    debugger;
-    return <Redirect to={'/addReview/' + props.selectedRestaurant.restaurantName} />;
-  }
 
   return (
 
@@ -273,8 +267,8 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onAddRestaurant: addRestaurant,
-    onSetSelectedRestaurant: setSelectedRestaurant,
+    onAddRestaurant: addRestaurantToRedux,
+    onSetSelectedRestaurant: setSelectedRestaurantInRedux,
   }, dispatch);
 };
 

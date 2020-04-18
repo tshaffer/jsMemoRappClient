@@ -16,10 +16,18 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 
-import { getRestaurantByName, getUser } from '../selectors';
-import { Restaurant, User, RestaurantReview, TagEntity } from '../types';
+import { 
+  Restaurant, 
+  User, 
+  RestaurantReview, 
+  TagEntity 
+} from '../types';
+import { 
+  getRestaurantByName, 
+  getUser 
+} from '../selectors';
 import {
-  addRestaurant,
+  createMemoRappRestaurant,
   addRestaurantReview,
 } from '../controllers';
 
@@ -49,7 +57,7 @@ interface AddReviewProps {
   restaurantName: string;
   restaurant: Restaurant | null;
   user: User;
-  onAddRestaurant: (restaurant: Restaurant) => any;
+  onCreateMemoRappRestaurant: (restaurant: Restaurant) => any;
   onAddRestaurantReview: (restaurant: Restaurant, restaurantReview: RestaurantReview) => any;
 }
 
@@ -74,10 +82,7 @@ const AddReview = (props: AddReviewProps) => {
   const addNewRestaurant = (existingRestaurant: Restaurant): Promise<any> => {
 
     if (!isRestaurantInDb()) {
-      console.log('restaurant is not already in db');
-      console.log(props.restaurant);
-      console.log(tags);
-
+      
       const tagEntities: TagEntity[] = tags.map((tag) => {
         return {
           value: tag,
@@ -92,7 +97,7 @@ const AddReview = (props: AddReviewProps) => {
         reviews: [],
         location: props.restaurant.location,
       };
-      return props.onAddRestaurant(newRestaurant)
+      return props.onCreateMemoRappRestaurant(newRestaurant)
         .then((addedRestaurant) => {
           console.log('newRestaurant added');
           console.log(addedRestaurant);
@@ -107,13 +112,6 @@ const AddReview = (props: AddReviewProps) => {
 
     addNewRestaurant(props.restaurant)
       .then((addedRestaurant: Restaurant) => {
-        console.log('user: ', props.user);
-        console.log('restaurant name: ', props.restaurantName);
-        console.log('rating: ', rating);
-        console.log('wouldReturn: ', wouldReturn);
-        console.log('comments: ', comments);
-        console.log('date: ', new Date().toDateString());
-
         props.onAddRestaurantReview(
           addedRestaurant,
           {
@@ -316,7 +314,7 @@ function mapStateToProps(state: any, ownProps: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onAddRestaurant: addRestaurant,
+    onCreateMemoRappRestaurant: createMemoRappRestaurant,
     onAddRestaurantReview: addRestaurantReview,
   }, dispatch);
 };
