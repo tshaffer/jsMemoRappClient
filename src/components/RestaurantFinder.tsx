@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textField: {
       marginTop: '16px',
-      width: '25ch',
+      width: '50ch',
     },
   }),
 );
