@@ -29,6 +29,10 @@ const useStyles = makeStyles((theme: Theme) =>
     quarterWidth: {
       width: '25%',
     },
+    textField: {
+      marginTop: '16px',
+      width: '25ch',
+    },
   }),
 );
 
@@ -74,6 +78,18 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     );
   };
 
+  const getLocation = () => {
+    return (
+      <div className={classes.textField}>
+        <TextField
+          id='location'
+          label='Location'
+          defaultValue='Current Location'
+      />
+      </div>
+    );
+  };
+
   return (
     <HashRouter>
       <div>
@@ -81,6 +97,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
         <h3>RestaurantFinder</h3>
         <div className={classes.quarterWidth}>
           {getTags()}
+          {getLocation()}
         </div>
       </div>
     </HashRouter>
