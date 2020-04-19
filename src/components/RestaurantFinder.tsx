@@ -26,20 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       marginBottom: theme.spacing(2),
     },
-    table: {
-      minWidth: 750,
-    },
-    tableColumnNarrowWidth: {
-      width: '32px',
-    },
-    tableColumnMediumWidth: {
-      width: '64px',
-    },
-    tableColumnWideWidth: {
-      width: '192px',
-    },
-    tableButtonColumnWidth: {
-      width: '48px',
+    quarterWidth: {
+      width: '25%',
     },
   }),
 );
@@ -76,8 +64,8 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
             <TextField
               {...params}
               variant='standard'
-              label='Multiple values'
-              placeholder='Favorites'
+              label='Restaurant tags'
+              placeholder='Tag'
             />
           )}
           onChange={flibbet}
@@ -91,7 +79,9 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
       <div>
         <h2>MemoRapp</h2>
         <h3>RestaurantFinder</h3>
-        {getTags()}
+        <div className={classes.quarterWidth}>
+          {getTags()}
+        </div>
       </div>
     </HashRouter>
   );
