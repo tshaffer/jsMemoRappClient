@@ -75,32 +75,56 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
           )}
         />
   */
-
-  interface FilmOptionType {
-    title: string;
-    year: number;
-  }
-
-  const [value, setValue] = React.useState<FilmOptionType | null>(null);
-
-  const defaultProps = {
-    options: top100Films,
-    getOptionLabel: (option: FilmOptionType) => option.title,
+  /*
+    interface FilmOptionType {
+      title: string;
+      year: number;
+    }
+  
+    const [value, setValue] = React.useState<FilmOptionType | null>(null);
+  
+    const defaultProps = {
+      options: top100Films,
+      getOptionLabel: (option: FilmOptionType) => option.title,
+    };
+  
+            <Autocomplete
+            {...defaultProps}
+            id='controlled-demo'
+            value={value}
+            onChange={(event: any, newValue: FilmOptionType | null) => {
+              console.log('newValue: ');
+              console.log(newValue);
+              setValue(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} label='controlled' margin='normal' />}
+          />
+  */
+  const flibbet = (event: object, value: any, reason: string) => {
+    console.log('flibbet');
+    console.log(event);
+    console.log(value); // array of values
+    console.log(reason);
   };
 
   const getTags = () => {
     return (
       <div>
         <Autocomplete
-          {...defaultProps}
-          id='controlled-demo'
-          value={value}
-          onChange={(event: any, newValue: FilmOptionType | null) => {
-            console.log('newValue: ');
-            console.log(newValue);
-            setValue(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} label='controlled' margin='normal' />}
+          multiple
+          id='tags-standard'
+          options={top100Films}
+          getOptionLabel={(option) => option.title}
+          defaultValue={[top100Films[1]]}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant='standard'
+              label='Multiple values'
+              placeholder='Favorites'
+            />
+          )}
+          onChange={flibbet}
         />
       </div>
     );
