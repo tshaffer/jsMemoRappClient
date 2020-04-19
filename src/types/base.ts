@@ -38,8 +38,9 @@ export interface Distance {
 }
 
 export interface Restaurant {
+  id: string;
   _id: string | null;
-  restaurantName: string;
+  name: string;
   yelpBusinessDetails: any;
   tags: TagEntity[];
   reviews: RestaurantReview[];
@@ -48,6 +49,7 @@ export interface Restaurant {
 }
 
 export interface YelpRestaurant {
+  id: string;
   name: string;
   distance: number;
   coordinates: GeoLocation; // doesn't include type

@@ -84,7 +84,7 @@ export const restaurantsReducer = (
       const newState = cloneDeep(state) as RestaurantsState;
       const restaurants: Restaurant[] = newState.restaurants;
       for (const restaurant of restaurants) {
-        if (restaurant.restaurantName === action.payload.restaurant.restaurantName) {
+        if (restaurant.name === action.payload.restaurant.name) {
           const restaurantReviews = restaurant.reviews;
           restaurantReviews.push(action.payload.review);
         }
@@ -101,7 +101,7 @@ export const restaurantsReducer = (
       const newState = cloneDeep(state) as RestaurantsState;
       const restaurants: Restaurant[] = newState.restaurants;
       for (const restaurant of restaurants) {
-        if (restaurant.restaurantName === action.payload.restaurantName) {
+        if (restaurant.name === action.payload.name) {
           restaurant._id = action.payload._id;
         }
       }

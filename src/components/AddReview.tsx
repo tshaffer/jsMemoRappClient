@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface AddReviewProps {
-  restaurantName: string;
+  name: string;
   restaurant: Restaurant | null;
   user: User;
   onCreateMemoRappRestaurant: (restaurant: Restaurant) => any;
@@ -90,8 +90,9 @@ const AddReview = (props: AddReviewProps) => {
       });
 
       const newRestaurant: Restaurant = {
+        id: props.restaurant.id,
         _id: null,
-        restaurantName: props.restaurantName,
+        name: props.name,
         yelpBusinessDetails: props.restaurant.yelpBusinessDetails,
         tags: tagEntities,
         reviews: [],
@@ -224,7 +225,7 @@ const AddReview = (props: AddReviewProps) => {
       <div>
         <h2 className={clsx(classes.margin)}>MemoRapp</h2>
         <h3 className={clsx(classes.margin)}>Add Review</h3>
-        <h4>{props.restaurantName}</h4>
+        <h4>{props.name}</h4>
         <form noValidate autoComplete='off' onSubmit={onFormSubmit}>
 
           <div className={classes.quarterWidth}>
@@ -306,8 +307,8 @@ const AddReview = (props: AddReviewProps) => {
 
 function mapStateToProps(state: any, ownProps: any) {
   return {
-    restaurantName: ownProps.match.params.restaurantName,
-    restaurant: getRestaurantByName(state, ownProps.match.params.restaurantName),
+    name: ownProps.match.params.name,
+    restaurant: getRestaurantByName(state, ownProps.match.params.name),
     user: getUser(state),
   };
 }

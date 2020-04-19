@@ -30,7 +30,7 @@ ReactDOM.render(
         <Route exact path='/home' component={Home} />
         <Route exact path='/restaurantFinder' component={RestaurantFinder} />
         <Route exact path='/restaurantReview' component={RestaurantReview} />
-        <Route exact path='/addReview/:restaurantName' component={AddReview} />
+        <Route exact path='/addReview/:name' component={AddReview} />
       </Switch>
     </HashRouter>
   </Provider>,

@@ -107,15 +107,16 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
             // add memoRappRestaurants
             for (const memoRappRestaurant of restaurantsResponse.memoRappRestaurants) {
-              const restaurantName = memoRappRestaurant.restaurantName;
+              const name = memoRappRestaurant.name;
               onAddRestaurant(memoRappRestaurant);
-              addedRestaurantNames.push(restaurantName);
+              addedRestaurantNames.push(name);
             }
             // add yelpRestaurants
             for (const yelpRestaurant of restaurantsResponse.yelpRestaurants) {
               const memoRappRestaurant: Restaurant = {
+                id: yelpRestaurant.id,
                 _id: null,
-                restaurantName: yelpRestaurant.name,
+                name: yelpRestaurant.name,
                 yelpBusinessDetails: yelpRestaurant,
                 tags: [],
                 reviews: [],
@@ -131,10 +132,10 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                   }
                 },
               };
-              const restaurantName = yelpRestaurant.name;
-              if (addedRestaurantNames.indexOf(restaurantName) < 0) {
+              const name = yelpRestaurant.name;
+              if (addedRestaurantNames.indexOf(name) < 0) {
                 onAddRestaurant(memoRappRestaurant);
-                addedRestaurantNames.push(restaurantName);
+                addedRestaurantNames.push(name);
               }
             }
           }
@@ -146,7 +147,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const getRestaurantMenuItems = () => {
     return props.restaurants.map((restaurantItem) => {
-      const name = restaurantItem.restaurantName;
+      const name = restaurantItem.name;
       return <MenuItem value={restaurantItem as any} key={name}>{name}</MenuItem>;
     });
   };
@@ -244,7 +245,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                   null
                   :
                   <div>
-                    <Link component={RouterLink} to={'/addReview/' + props.selectedRestaurant.restaurantName}>
+                    <Link component={RouterLink} to={'/addReview/' + props.selectedRestaurant.name}>
                       Add Review
                     </Link>
                   </div>

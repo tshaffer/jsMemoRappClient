@@ -9,10 +9,10 @@ export const getSelectedRestaurant = (state: MemoRappModelState): Restaurant => 
 };
 
 // TEDTODO - current slow method
-export const getRestaurantByName = (state: MemoRappModelState, restaurantName: string): Restaurant | null => {
+export const getRestaurantByName = (state: MemoRappModelState, name: string): Restaurant | null => {
   // state.restaurantsState.restaurants.
   for (const restaurant of state.restaurantsState.restaurants) {
-    if (restaurant.restaurantName === restaurantName) {
+    if (restaurant.name === name) {
       return restaurant;
     }
   }

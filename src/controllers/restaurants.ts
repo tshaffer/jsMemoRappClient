@@ -43,7 +43,7 @@ export const createMemoRappRestaurant = (restaurant: Restaurant): any => {
 
         // update restaurant in redux with db _id
         dispatch(setRestaurantId(addedRestaurant));
-        const updatedRestaurant = getRestaurantByName(getState(), addedRestaurant.restaurantName);
+        const updatedRestaurant = getRestaurantByName(getState(), addedRestaurant.name);
         updatedRestaurant.tags = cloneDeep(restaurant.tags);
         dispatch(setRestaurantTags(updatedRestaurant));
 
