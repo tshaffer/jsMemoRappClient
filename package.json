@@ -16,7 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^4.9.0",
+    "@material-ui/lab": "^4.0.0-alpha.50",
     "@material-ui/pickers": "^3.2.10",
+    "@material-ui/utils": "https://registry.npmjs.org/@material-ui/utils/-/utils-4.7.1.tgz",
     "axios": "^0.19.2",
     "history": "^4.10.1",
     "lodash": "^4.17.15",
