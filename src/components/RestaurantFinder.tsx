@@ -14,6 +14,8 @@ import TextField from '@material-ui/core/TextField';
 
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { getMemoRappTags } from '../selectors';
+import { TagEntity } from '../types';
 
 const top100Films = [
   { title: 'The Shawshank Redemption', year: 1994 },
@@ -52,6 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface RestaurantFinderProps {
+  tags: string[];
 }
 
 const RestaurantFinder = (props: RestaurantFinderProps) => {
@@ -107,15 +110,24 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     console.log(reason);
   };
 
+  const getTagOptions = () => {
+    const tagOptions: TagEntity[] = props.tags.map((tagItem: any) => {
+      return tagItem.tag;
+    });
+    return tagOptions;
+  };
+
   const getTags = () => {
+    debugger;
+    const tagOptions = getTagOptions();
     return (
       <div>
         <Autocomplete
           multiple
           id='tags-standard'
-          options={top100Films}
-          getOptionLabel={(option) => option.title}
-          defaultValue={[top100Films[1]]}
+          options={tagOptions}
+          getOptionLabel={(option) => option.value}
+          defaultValue={[tagOptions[0]]}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -143,6 +155,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
 
 function mapStateToProps(state: any) {
   return {
+    tags: getMemoRappTags(state),
   };
 }
 
