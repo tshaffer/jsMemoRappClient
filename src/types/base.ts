@@ -1,6 +1,6 @@
 export interface MemoRappModelState {
   restaurantsState: RestaurantsState;
-  tags: string[];
+  tags: TagEntity[];
   user: User;
 }
 

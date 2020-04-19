@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface RestaurantFinderProps {
-  tags: string[];
+  tags: TagEntity[];
 }
 
 const RestaurantFinder = (props: RestaurantFinderProps) => {
@@ -111,14 +111,10 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
   };
 
   const getTagOptions = () => {
-    const tagOptions: TagEntity[] = props.tags.map((tagItem: any) => {
-      return tagItem.tag;
-    });
-    return tagOptions;
+    return props.tags;
   };
 
   const getTags = () => {
-    debugger;
     const tagOptions = getTagOptions();
     return (
       <div>

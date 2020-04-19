@@ -1,7 +1,6 @@
 import { cloneDeep } from 'lodash';
 
-// ------------------------------------
-// Constants
+import { TagEntity } from '../types';
 
 import { TagAction, MemoRappModelBaseAction } from './baseAction';
 
@@ -12,19 +11,13 @@ export const ADD_TAG = 'ADD_TAG';
 // Actions
 // ------------------------------------
 
-export interface AddTagPayload {
-  tag: string;
-}
-
 export const addTag = (
-  tag: string,
-): TagAction<AddTagPayload> => {
+  tag: TagEntity,
+): TagAction<TagEntity> => {
 
   return {
     type: ADD_TAG,
-    payload: {
-      tag,
-    },
+    payload: tag,
   };
 };
 
@@ -32,12 +25,12 @@ export const addTag = (
 // Reducer
 // ------------------------------------
 
-const initialState: string[] = [];
+const initialState: TagEntity[] = [];
 
 export const tagsReducer = (
-  state: string[] = initialState,
-  action: MemoRappModelBaseAction<AddTagPayload>
-): string[] => {
+  state: TagEntity[] = initialState,
+  action: MemoRappModelBaseAction<TagEntity>
+): TagEntity[] => {
   switch (action.type) {
     case ADD_TAG: {
       const newState = cloneDeep(state);
