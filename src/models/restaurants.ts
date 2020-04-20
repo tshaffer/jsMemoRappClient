@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { MemoRappModelBaseAction } from './baseAction';
-import { RestaurantsState, Restaurant, RestaurantReview } from '../types/base';
+import { RestaurantsState, Restaurant } from '../types/base';
 
 // ------------------------------------
 // Constants
@@ -25,18 +25,18 @@ export const addRestaurant = (
   };
 };
 
-export const addRestaurantReviewToRedux = (
-  restaurant: Restaurant,
-  review: RestaurantReview,
-) => {
-  return {
-    type: ADD_RESTAURANT_REVIEW,
-    payload: {
-      restaurant,
-      review,
-    },
-  };
-};
+// export const addRestaurantReviewToRedux = (
+//   restaurant: Restaurant,
+//   review: RestaurantReview,
+// ) => {
+//   return {
+//     type: ADD_RESTAURANT_REVIEW,
+//     payload: {
+//       restaurant,
+//       review,
+//     },
+//   };
+// };
 
 export const setSelectedRestaurant = (restaurant: Restaurant) => {
   return {
@@ -80,17 +80,17 @@ export const restaurantsReducer = (
         restaurants: newRestaurants,
       };
     }
-    case ADD_RESTAURANT_REVIEW: {
-      const newState = cloneDeep(state) as RestaurantsState;
-      const restaurants: Restaurant[] = newState.restaurants;
-      for (const restaurant of restaurants) {
-        if (restaurant.name === action.payload.restaurant.name) {
-          const restaurantReviews = restaurant.reviews;
-          restaurantReviews.push(action.payload.review);
-        }
-      }
-      return newState;
-    }
+    // case ADD_RESTAURANT_REVIEW: {
+    //   const newState = cloneDeep(state) as RestaurantsState;
+    //   const restaurants: Restaurant[] = newState.restaurants;
+    //   for (const restaurant of restaurants) {
+    //     if (restaurant.name === action.payload.restaurant.name) {
+    //       const restaurantReviews = restaurant.reviews;
+    //       restaurantReviews.push(action.payload.review);
+    //     }
+    //   }
+    //   return newState;
+    // }
     case SET_SELECTED_RESTAURANT: {
       return {
         ...state,
@@ -107,16 +107,16 @@ export const restaurantsReducer = (
       }
       return newState;
     }
-    case SET_RESTAURANT_TAGS: {
-      const newState = cloneDeep(state) as RestaurantsState;
-      const restaurants: Restaurant[] = newState.restaurants;
-      for (const restaurant of restaurants) {
-        if (restaurant._id === action.payload._id) {
-          restaurant.tags = cloneDeep(action.payload.tags);
-        }
-      }
-      return newState;
-    }
+    // case SET_RESTAURANT_TAGS: {
+    //   const newState = cloneDeep(state) as RestaurantsState;
+    //   const restaurants: Restaurant[] = newState.restaurants;
+    //   for (const restaurant of restaurants) {
+    //     if (restaurant._id === action.payload._id) {
+    //       restaurant.tags = cloneDeep(action.payload.tags);
+    //     }
+    //   }
+    //   return newState;
+    // }
     default:
       return state;
   }

@@ -19,17 +19,17 @@ import TextField from '@material-ui/core/TextField';
 import { 
   Restaurant, 
   User, 
-  RestaurantReview, 
+  // RestaurantReview, 
   TagEntity 
 } from '../types';
 import { 
   getRestaurantByName, 
   getUser 
 } from '../selectors';
-import {
-  createMemoRappRestaurant,
-  addRestaurantReview,
-} from '../controllers';
+// import {
+//   createMemoRappRestaurant,
+//   addRestaurantReview,
+// } from '../controllers';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,7 +58,7 @@ interface AddReviewProps {
   restaurant: Restaurant | null;
   user: User;
   onCreateMemoRappRestaurant: (restaurant: Restaurant) => any;
-  onAddRestaurantReview: (restaurant: Restaurant, restaurantReview: RestaurantReview) => any;
+  // onAddRestaurantReview: (restaurant: Restaurant, restaurantReview: RestaurantReview) => any;
 }
 
 const AddReview = (props: AddReviewProps) => {
@@ -94,8 +94,8 @@ const AddReview = (props: AddReviewProps) => {
         _id: null,
         name: props.name,
         yelpBusinessDetails: props.restaurant.yelpBusinessDetails,
-        tags: tagEntities,
-        reviews: [],
+        // tags: tagEntities,
+        usersReviews: [],
         location: props.restaurant.location,
       };
       return props.onCreateMemoRappRestaurant(newRestaurant)
@@ -113,15 +113,15 @@ const AddReview = (props: AddReviewProps) => {
 
     addNewRestaurant(props.restaurant)
       .then((addedRestaurant: Restaurant) => {
-        props.onAddRestaurantReview(
-          addedRestaurant,
-          {
-            rating,
-            wouldReturn,
-            comments,
-            date: new Date(),
-            userName: props.user.userName,
-          });
+        // props.onAddRestaurantReview(
+        //   addedRestaurant,
+        //   {
+        //     rating,
+        //     wouldReturn,
+        //     comments,
+        //     date: new Date(),
+        //     userName: props.user.userName,
+        //   });
       });
 
   };
@@ -315,8 +315,8 @@ function mapStateToProps(state: any, ownProps: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    onCreateMemoRappRestaurant: createMemoRappRestaurant,
-    onAddRestaurantReview: addRestaurantReview,
+    // onCreateMemoRappRestaurant: createMemoRappRestaurant,
+    // onAddRestaurantReview: addRestaurantReview,
   }, dispatch);
 };
 

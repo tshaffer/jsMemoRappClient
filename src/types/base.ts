@@ -24,17 +24,23 @@ export interface GeoLocation {
   coordinates: number[];
 }
 
-export interface RestaurantReview {
-  userName: string;
+export interface Distance {
+  calculated: number;
+  location: GeoLocation;
+}
+
+export interface Review {
   date: Date;
   comments: string;
   rating: number;
   wouldReturn: boolean;
 }
 
-export interface Distance {
-  calculated: number;
-  location: GeoLocation;
+
+export interface UserReviews {
+  userName: string;
+  tags: TagEntity[];
+  reviews: Review[];
 }
 
 export interface Restaurant {
@@ -42,9 +48,8 @@ export interface Restaurant {
   _id: string | null;
   name: string;
   yelpBusinessDetails: any;
-  tags: TagEntity[];
-  reviews: RestaurantReview[];
   location: GeoLocation;
+  usersReviews: UserReviews[];
   dist?: Distance;
 }
 

@@ -17,18 +17,18 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
-import { 
-  RestaurantsResponse, 
-  Restaurant 
+import {
+  RestaurantsResponse,
+  Restaurant
 } from '../types/base';
 import {
   addRestaurantToRedux,
   fetchAllRestaurantsByLocation,
   setSelectedRestaurantInRedux,
 } from '../controllers';
-import { 
-  getRestaurants, 
-  getSelectedRestaurant 
+import {
+  getRestaurants,
+  getSelectedRestaurant
 } from '../selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -118,8 +118,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                 _id: null,
                 name: yelpRestaurant.name,
                 yelpBusinessDetails: yelpRestaurant,
-                tags: [],
-                reviews: [],
+                usersReviews: [],
                 location: {
                   type: 'Point',
                   coordinates: yelpRestaurant.coordinates as any,
