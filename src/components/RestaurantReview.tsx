@@ -244,7 +244,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                   null
                   :
                   <div>
-                    <Link component={RouterLink} to={'/addReview/' + props.selectedRestaurant.name}>
+                    <Link component={RouterLink} to={'/addReview/' + props.selectedRestaurant.id}>
                       Add Review
                     </Link>
                   </div>

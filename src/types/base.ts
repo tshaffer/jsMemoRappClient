@@ -48,8 +48,8 @@ export interface Restaurant {
   _id: string | null;
   name: string;
   yelpBusinessDetails: any;
-  location: GeoLocation;
   usersReviews: UserReviews[];
+  location: GeoLocation;
   dist?: Distance;
 }
 

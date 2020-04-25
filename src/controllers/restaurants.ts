@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { cloneDeep } from 'lodash';
 import {
-  Restaurant,
+  Restaurant, TagEntity,
 } from '../types';
 
 import {
@@ -29,31 +29,35 @@ export const fetchAllRestaurantsByLocation = (latitude: number, longitude: numbe
     });
 };
 
-// export const createMemoRappRestaurant = (restaurant: Restaurant): any => {
-//   return (dispatch: any, getState: any) => {
-//     const path = serverUrl + apiUrlFragment + '/restaurant';
-//     return axios.post(
-//       path,
-//       restaurant,
-//     )
-//       .then((response) => {
-//         const addedRestaurant: Restaurant = response.data.data as Restaurant;
-//         console.log(addedRestaurant);
+export const createMemoRappRestaurant = (restaurant: Restaurant): any => {
+  return (dispatch: any, getState: any) => {
+    const path = serverUrl + apiUrlFragment + '/restaurant';
+    return axios.post(
+      path,
+      restaurant,
+    )
+      .then((response) => {
+        const addedRestaurant: Restaurant = response.data.data as Restaurant;
+        console.log(addedRestaurant);
 
-//         // update restaurant in redux with db _id
-//         dispatch(setRestaurantId(addedRestaurant));
-//         const updatedRestaurant = getRestaurantByName(getState(), addedRestaurant.name);
-//         updatedRestaurant.tags = cloneDeep(restaurant.tags);
-//         dispatch(setRestaurantTags(updatedRestaurant));
+        // update restaurant in redux with db _id
+        dispatch(setRestaurantId(addedRestaurant));
+        // const updatedRestaurant = getRestaurantByName(getState(), addedRestaurant.name);
+        // updatedRestaurant.tags = cloneDeep(restaurant.tags);
+        // dispatch(setRestaurantTags(updatedRestaurant));
 
-//         return Promise.resolve(addedRestaurant);
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//         return Promise.reject(error);
-//       });
-//   };
-// };
+        return Promise.resolve(addedRestaurant);
+      })
+      .catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  };
+};
+
+export const createUserRestaurantReview = (restaurant: Restaurant, userName: string, tags: TagEntity[]): any => {
+
+}
 
 // export const postMemoRappRestaurantReview = (restaurant: Restaurant, restaurantReview: RestaurantReview): any => {
 

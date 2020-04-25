@@ -16,20 +16,20 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 
-import { 
-  Restaurant, 
-  User, 
+import {
+  Restaurant,
+  User,
   // RestaurantReview, 
-  TagEntity 
+  TagEntity
 } from '../types';
-import { 
-  getRestaurantByName, 
-  getUser 
+import {
+  getUser,
+  getRestaurantById
 } from '../selectors';
-// import {
-//   createMemoRappRestaurant,
+import {
+  createMemoRappRestaurant, createUserRestaurantReview,
 //   addRestaurantReview,
-// } from '../controllers';
+} from '../controllers';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,10 +54,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface AddReviewProps {
-  name: string;
   restaurant: Restaurant | null;
   user: User;
   onCreateMemoRappRestaurant: (restaurant: Restaurant) => any;
+  onCreateUserRestaurantReview: (restaurant: Restaurant, userName: string, tags: TagEntity[]) => any;
   // onAddRestaurantReview: (restaurant: Restaurant, restaurantReview: RestaurantReview) => any;
 }
 
@@ -82,7 +82,7 @@ const AddReview = (props: AddReviewProps) => {
   const addNewRestaurant = (existingRestaurant: Restaurant): Promise<any> => {
 
     if (!isRestaurantInDb()) {
-      
+
       const tagEntities: TagEntity[] = tags.map((tag) => {
         return {
           value: tag,
@@ -92,9 +92,8 @@ const AddReview = (props: AddReviewProps) => {
       const newRestaurant: Restaurant = {
         id: props.restaurant.id,
         _id: null,
-        name: props.name,
+        name: props.restaurant.name,
         yelpBusinessDetails: props.restaurant.yelpBusinessDetails,
-        // tags: tagEntities,
         usersReviews: [],
         location: props.restaurant.location,
       };
@@ -106,13 +105,16 @@ const AddReview = (props: AddReviewProps) => {
         });
     }
     return Promise.resolve(existingRestaurant);
-  }
+  };
 
   const handleAddReview = (e: any) => {
     console.log('handleAddReview invoked');
 
     addNewRestaurant(props.restaurant)
       .then((addedRestaurant: Restaurant) => {
+        // props.onCreateUserRestaurantReview(
+
+        // )
         // props.onAddRestaurantReview(
         //   addedRestaurant,
         //   {
@@ -197,14 +199,11 @@ const AddReview = (props: AddReviewProps) => {
     return existingTags;
   };
 
-  const getTagsDiv = (allTagsJsx: any) => {
-    if (isRestaurantInDb()) {
-      return null;
-    }
+  const getTagsDiv = () => {
     return (
       <div>
         <span className={classes.margin}>Tags</span>
-        {allTagsJsx}
+        {getTags()}
         <Button
           variant='contained'
           className={clsx(classes.margin)}
@@ -214,18 +213,17 @@ const AddReview = (props: AddReviewProps) => {
           Add Tag
        </Button>
       </div>
-    )
+    );
   };
 
-  const allTags = getTags();
-  const tagsDiv = getTagsDiv(allTags);
+  const tagsDiv = getTagsDiv();
 
   return (
     <HashRouter>
       <div>
         <h2 className={clsx(classes.margin)}>MemoRapp</h2>
         <h3 className={clsx(classes.margin)}>Add Review</h3>
-        <h4>{props.name}</h4>
+        <h4>{props.restaurant.name}</h4>
         <form noValidate autoComplete='off' onSubmit={onFormSubmit}>
 
           <div className={classes.quarterWidth}>
@@ -307,15 +305,15 @@ const AddReview = (props: AddReviewProps) => {
 
 function mapStateToProps(state: any, ownProps: any) {
   return {
-    name: ownProps.match.params.name,
-    restaurant: getRestaurantByName(state, ownProps.match.params.name),
+    restaurant: getRestaurantById(state, ownProps.match.params.id),
     user: getUser(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    // onCreateMemoRappRestaurant: createMemoRappRestaurant,
+    onCreateMemoRappRestaurant: createMemoRappRestaurant,
+    onCreateUserRestaurantReview: createUserRestaurantReview,
     // onAddRestaurantReview: addRestaurantReview,
   }, dispatch);
 };
