@@ -1,17 +1,16 @@
 import axios from 'axios';
-import { cloneDeep } from 'lodash';
+import { isString } from 'lodash';
 import {
-  Restaurant, TagEntity,
+  Restaurant,
 } from '../types';
 
 import {
   addRestaurant,
-  // addRestaurantReviewToRedux,
+  addRestaurantReviewToRedux,
   setRestaurantId,
   setSelectedRestaurant,
   setRestaurantTags,
 } from '../models';
-import { getRestaurantByName } from '../selectors';
 
 const serverUrl = 'http://localhost:8000';
 const apiUrlFragment = '/api/v1/';
@@ -55,16 +54,7 @@ export const createMemoRappRestaurant = (restaurant: Restaurant): any => {
   };
 };
 
-// identifiers required
-//    restaurant id
-//    user name
-// data required
-//    tags: string[];
-//    date: Date;
-//    comments: string;
-//    rating: number;
-//    wouldReturn: boolean;
-export const addReview = (
+export const postMemoRappRestaurantReview = (
   restaurantDbId: string,
   userName: string,
   tags: string[],
@@ -72,7 +62,14 @@ export const addReview = (
   rating: number,
   wouldReturn: boolean,
   comments: string,
-): any => {
+): Promise<any> => {
+
+  const trimmedTags: string[] = [];
+  for (const tag of tags) {
+    if (isString(tag) && tag.length > 0) {
+      trimmedTags.push(tag.trim());
+    }
+  }
 
   const path = serverUrl + apiUrlFragment + 'restaurantReview';
   const reviewBody: any = {
@@ -97,32 +94,40 @@ export const addReview = (
   });
 };
 
-// export const postMemoRappRestaurantReview = (restaurant: Restaurant, restaurantReview: RestaurantReview): any => {
+export const addReview = (
+  restaurantDbId: string,
+  userName: string,
+  tags: string[],
+  date: Date,
+  rating: number,
+  wouldReturn: boolean,
+  comments: string,
+): any => {
 
-//   const path = serverUrl + apiUrlFragment + '/restaurantReview/' + restaurant._id;
+  return (dispatch: any) => {
+    const promise = postMemoRappRestaurantReview(
+      restaurantDbId,
+      userName,
+      tags,
+      date,
+      rating,
+      wouldReturn,
+      comments,
+    );
+    promise.then((response: any) => {
+      dispatch(addRestaurantReviewToRedux(
+        restaurantDbId,
+        userName,
+        tags,
+        date,
+        rating,
+        wouldReturn,
+        comments,  
+      ));
+    });
+  };
+};
 
-//   return axios.post(
-//     path,
-//     restaurantReview,
-//   ).then((response) => {
-//     console.log(response);
-//     return Promise.resolve();
-//   }).catch((error) => {
-//     console.log(error);
-//     return Promise.reject(error);
-//   });
-// };
-
-// export const addRestaurantReview = (restaurant: Restaurant, restaurantReview: RestaurantReview): any => {
-
-//   return (dispatch: any) => {
-
-//     return postMemoRappRestaurantReview(restaurant, restaurantReview)
-//       .then(() => {
-//         dispatch(addRestaurantReviewToRedux(restaurant, restaurantReview));
-//       });
-//   };
-// };
 
 export const addRestaurantToRedux = (
   restaurant: Restaurant,

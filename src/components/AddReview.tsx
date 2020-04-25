@@ -27,7 +27,8 @@ import {
   getRestaurantById
 } from '../selectors';
 import {
-  createMemoRappRestaurant, addReview,
+  createMemoRappRestaurant,
+  addReview,
 } from '../controllers';
 
 const useStyles = makeStyles((theme) => ({
@@ -132,26 +133,8 @@ const AddReview = (props: AddReviewProps) => {
           rating,
           wouldReturn,
           comments,
-        ).then( () => {
-          console.log('return from onAddReview promise');
-        }).catch( (err: any) => {
-          console.log('err: ', err);
-        });
-
-        // props.onAddReview(
-
-        // )
-        // props.onAddRestaurantReview(
-        //   addedRestaurant,
-        //   {
-        //     rating,
-        //     wouldReturn,
-        //     comments,
-        //     date: new Date(),
-        //     userName: props.user.userName,
-        //   });
+        );
       });
-
   };
 
   const handleWouldReturnChecked = (event: any) => {
