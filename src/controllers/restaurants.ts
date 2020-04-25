@@ -55,9 +55,47 @@ export const createMemoRappRestaurant = (restaurant: Restaurant): any => {
   };
 };
 
-export const createUserRestaurantReview = (restaurant: Restaurant, userName: string, tags: TagEntity[]): any => {
+// identifiers required
+//    restaurant id
+//    user name
+// data required
+//    tags: string[];
+//    date: Date;
+//    comments: string;
+//    rating: number;
+//    wouldReturn: boolean;
+export const addReview = (
+  restaurantDbId: string,
+  userName: string,
+  tags: string[],
+  date: Date,
+  rating: number,
+  wouldReturn: boolean,
+  comments: string,
+): any => {
 
-}
+  const path = serverUrl + apiUrlFragment + 'restaurantReview';
+  const reviewBody: any = {
+    restaurantDbId,
+    userName,
+    tags,
+    date,
+    rating,
+    wouldReturn,
+    comments
+  };
+
+  return axios.post(
+    path,
+    reviewBody,
+  ).then((response) => {
+    console.log(response);
+    return Promise.resolve();
+  }).catch((error) => {
+    console.log(error);
+    return Promise.reject(error);
+  });
+};
 
 // export const postMemoRappRestaurantReview = (restaurant: Restaurant, restaurantReview: RestaurantReview): any => {
 
@@ -97,5 +135,5 @@ export const addRestaurantToRedux = (
 export const setSelectedRestaurantInRedux = (restaurant: Restaurant): any => {
   return (dispatch: any) => {
     dispatch(setSelectedRestaurant(restaurant));
-  }
-}
+  };
+};
