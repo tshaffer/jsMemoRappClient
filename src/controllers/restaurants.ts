@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { isString } from 'lodash';
 import {
-  Restaurant,
+  Restaurant, TagEntity,
 } from '../types';
 
 import {
@@ -57,19 +57,13 @@ export const createMemoRappRestaurant = (restaurant: Restaurant): any => {
 export const postMemoRappRestaurantReview = (
   restaurantDbId: string,
   userName: string,
-  tags: string[],
+  tags: TagEntity[],
   date: Date,
   rating: number,
   wouldReturn: boolean,
   comments: string,
 ): Promise<any> => {
 
-  const trimmedTags: string[] = [];
-  for (const tag of tags) {
-    if (isString(tag) && tag.length > 0) {
-      trimmedTags.push(tag.trim());
-    }
-  }
 
   const path = serverUrl + apiUrlFragment + 'restaurantReview';
   const reviewBody: any = {
@@ -105,10 +99,22 @@ export const addReview = (
 ): any => {
 
   return (dispatch: any) => {
+
+    const tagEntities: TagEntity[] = [];
+    for (const tag of tags) {
+      if (isString(tag) && tag.length > 0) {
+        tagEntities.push(
+          {
+            value: tag.trim(),
+          }
+        );
+      }
+    }
+  
     const promise = postMemoRappRestaurantReview(
       restaurantDbId,
       userName,
-      tags,
+      tagEntities,
       date,
       rating,
       wouldReturn,
@@ -118,7 +124,7 @@ export const addReview = (
       dispatch(addRestaurantReviewToRedux(
         restaurantDbId,
         userName,
-        tags,
+        tagEntities,
         date,
         rating,
         wouldReturn,

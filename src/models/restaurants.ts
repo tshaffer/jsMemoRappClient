@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { MemoRappModelBaseAction } from './baseAction';
-import { RestaurantsState, Restaurant } from '../types/base';
+import { RestaurantsState, Restaurant, UserReviews, TagEntity, Review } from '../types/base';
 
 // ------------------------------------
 // Constants
@@ -28,7 +28,7 @@ export const addRestaurant = (
 export const addRestaurantReviewToRedux = (
   restaurantDbId: string,
   userName: string,
-  tags: string[],
+  tags: TagEntity[],
   date: Date,
   rating: number,
   wouldReturn: boolean,
@@ -91,7 +91,7 @@ export const restaurantsReducer = (
       };
     }
     case ADD_RESTAURANT_REVIEW: {
-      // debugger;
+      debugger;
       const newState = cloneDeep(state) as RestaurantsState;
       // const restaurants: Restaurant[] = newState.restaurants;
       // for (const restaurant of restaurants) {
@@ -100,6 +100,26 @@ export const restaurantsReducer = (
       //     restaurantReviews.push(action.payload.review);
       //   }
       // }
+
+      const restaurants: Restaurant[] = newState.restaurants;
+      for (const restaurant of restaurants) {
+        if (restaurant._id === action.payload.restaurantDbId) {
+          const usersReviews: UserReviews[] = restaurant.usersReviews;
+          for (const userReviews of usersReviews) {
+            if (userReviews.userName === action.payload.userName) {
+              userReviews.tags = action.payload.tags;
+              const review: Review = {
+                date: action.payload.date,
+                comments: action.payload.comments,
+                rating: action.payload.rating,
+                wouldReturn: action.payload.wouldReturn,
+              };
+              userReviews.reviews.push(review);
+            }
+          }
+        }
+      }
+
       return newState;
     }
     case SET_SELECTED_RESTAURANT: {
