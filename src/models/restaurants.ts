@@ -91,32 +91,37 @@ export const restaurantsReducer = (
       };
     }
     case ADD_RESTAURANT_REVIEW: {
-      debugger;
+
       const newState = cloneDeep(state) as RestaurantsState;
-      // const restaurants: Restaurant[] = newState.restaurants;
-      // for (const restaurant of restaurants) {
-      //   if (restaurant.name === action.payload.restaurant.name) {
-      //     const restaurantReviews = restaurant.reviews;
-      //     restaurantReviews.push(action.payload.review);
-      //   }
-      // }
+
+      const review: Review = {
+        date: action.payload.date,
+        comments: action.payload.comments,
+        rating: action.payload.rating,
+        wouldReturn: action.payload.wouldReturn,
+      };
 
       const restaurants: Restaurant[] = newState.restaurants;
       for (const restaurant of restaurants) {
         if (restaurant._id === action.payload.restaurantDbId) {
+
           const usersReviews: UserReviews[] = restaurant.usersReviews;
           for (const userReviews of usersReviews) {
             if (userReviews.userName === action.payload.userName) {
               userReviews.tags = action.payload.tags;
-              const review: Review = {
-                date: action.payload.date,
-                comments: action.payload.comments,
-                rating: action.payload.rating,
-                wouldReturn: action.payload.wouldReturn,
-              };
               userReviews.reviews.push(review);
+              return newState;
             }
           }
+
+          // first review for userName
+          const usersReview: UserReviews = {
+            userName: action.payload.userName,
+            tags: action.payload.tags,
+            reviews: [review],
+          };
+          restaurant.usersReviews.push(usersReview);
+          return newState;
         }
       }
 
