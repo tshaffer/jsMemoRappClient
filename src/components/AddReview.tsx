@@ -29,7 +29,8 @@ import {
 } from '../types';
 import {
   getUser,
-  getRestaurantById
+  getRestaurantById,
+  getMemoRappTagValues,
 } from '../selectors';
 import {
   createMemoRappRestaurant,
@@ -65,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
 interface AddReviewProps {
   restaurant: Restaurant | null;
   user: User;
+  tags: string[];
   onCreateMemoRappRestaurant: (restaurant: Restaurant) => any;
   onAddReview: (
     restaurantDbId: string,
@@ -148,6 +150,11 @@ const AddReview = (props: AddReviewProps) => {
       });
   };
 
+  const onFormSubmit = (e: any) => {
+    e.preventDefault();
+    handleAddReview(e);
+  };
+
   const handleWouldReturnChecked = (event: any) => {
     console.log('Would return: ' + event.target.checked);
     setWouldReturn(event.target.checked);
@@ -196,35 +203,52 @@ const AddReview = (props: AddReviewProps) => {
     console.log('number of tags: ', tags.length);
   };
 
-  const onFormSubmit = (e: any) => {
-    e.preventDefault();
-    handleAddReview(e);
-  };
+  const handleTagSelected = (event: any) => {
 
-  const handleTagSelected = (e: any) => {
     console.log('handleTagSelected');
-    console.log(e.target.value);
-    setCurrentTag(e.target.value);
+    console.log(event.target.value);
+    console.log(event.target.id);
+
+    const tagValues: string[] = cloneDeep(tags);
+    const tagIndex = parseInt(event.target.id, 10);
+    tagValues[tagIndex] = event.target.value;
+    setTags(tagValues);
+
+    console.log('tagValues');
+    console.log(tagValues);
   };
 
-  const fooBurgers = () => {
-    return (
-      <FormControl className={classes.formControl}>
-        <InputLabel id='demo-simple-select-helper-label'>Age</InputLabel>
-        <Select
-          labelId='demo-simple-select-helper-label'
-          id='demo-simple-select-helper'
-          value={currentTag}
-          onChange={handleTagSelected}
-        >
-          <MenuItem value=''>
-            <em>None</em>
-          </MenuItem>
+  const getTagMenuItems = (parentIndex: string) => {
+    const tagItems: any[] = props.tags.map((tagValue: string, index: number) => {
+
+      return (
+        <MenuItem value={parentIndex.toString() + '::' + tagValue} id={parentIndex}>
+          {tagValue}
+        </MenuItem>
+      );
+    });
+    return tagItems;
+  };
+
+  /*
           <MenuItem value={10}>Ten</MenuItem>
           <MenuItem value={20}>Twenty</MenuItem>
           <MenuItem value={30}>Thirty</MenuItem>
+  */
+
+  const getTagSelect = (tag: string, index: number) => {
+    return (
+      <FormControl className={classes.formControl}>
+        <Select
+          value={tags[index]}
+          onChange={handleTagSelected}
+          id={index.toString()}
+        >
+          <MenuItem value='' id='none'>
+            <em>None</em>
+          </MenuItem>
+          {getTagMenuItems(index.toString())}
         </Select>
-        <FormHelperText>Some important helper text</FormHelperText>
       </FormControl>
     );
   };
@@ -244,7 +268,7 @@ const AddReview = (props: AddReviewProps) => {
     const existingTags = tags.map((tag, index) => {
       return (
         <div>
-          {fooBurgers()}
+          {getTagSelect(tag, index)}
         </div>
       );
     });
@@ -359,6 +383,7 @@ function mapStateToProps(state: any, ownProps: any) {
   return {
     restaurant: getRestaurantById(state, ownProps.match.params.id),
     user: getUser(state),
+    tags: getMemoRappTagValues(state),
   };
 }
 
