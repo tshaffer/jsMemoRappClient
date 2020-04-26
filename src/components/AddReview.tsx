@@ -15,6 +15,11 @@ import Input from '@material-ui/core/Input';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Select from '@material-ui/core/Select';
 
 import {
   Restaurant,
@@ -51,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
   quarterWidth: {
     width: '25%',
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 }));
 
 interface AddReviewProps {
@@ -72,6 +81,8 @@ const AddReview = (props: AddReviewProps) => {
   const classes = useStyles();
 
   const [tags, setTags] = React.useState(['']);
+  const [currentTag, setCurrentTag] = React.useState('');
+
   const [rating, setRating] = React.useState(5.0);
   const [wouldReturn, setWouldReturn] = React.useState(true);
   const [comments, setComments] = React.useState('');
@@ -88,7 +99,7 @@ const AddReview = (props: AddReviewProps) => {
   const addNewRestaurant = (existingRestaurant: Restaurant): Promise<any> => {
 
     if (!isRestaurantInDb()) {
-      
+
       // only use non empty tags.
 
       const tagEntities: TagEntity[] = tags.map((tag) => {
@@ -190,18 +201,50 @@ const AddReview = (props: AddReviewProps) => {
     handleAddReview(e);
   };
 
-  const getTags = () => {
-    console.log('invoke getTags');
-    const existingTags = tags.map((tag, index) => {
-      return (
-        <div>
-          <TextField
+  const handleTagSelected = (e: any) => {
+    console.log('handleTagSelected');
+    console.log(e.target.value);
+    setCurrentTag(e.target.value);
+  };
+
+  const fooBurgers = () => {
+    return (
+      <FormControl className={classes.formControl}>
+        <InputLabel id='demo-simple-select-helper-label'>Age</InputLabel>
+        <Select
+          labelId='demo-simple-select-helper-label'
+          id='demo-simple-select-helper'
+          value={currentTag}
+          onChange={handleTagSelected}
+        >
+          <MenuItem value=''>
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+        <FormHelperText>Some important helper text</FormHelperText>
+      </FormControl>
+    );
+  };
+
+  /*
+            <TextField
             id={index.toString()}
             key={index.toString()}
             variant='outlined'
             onChange={handleTagChanged}
             value={tag}
           />
+*/
+
+  const getTags = () => {
+    console.log('invoke getTags');
+    const existingTags = tags.map((tag, index) => {
+      return (
+        <div>
+          {fooBurgers()}
         </div>
       );
     });
