@@ -205,7 +205,7 @@ const AddReview = (props: AddReviewProps) => {
     console.log(tagValues);
   };
 
-  const getTagMenuItems = (parentIndex: string) => {
+  const getTagSelectMenuItems = (parentIndex: string) => {
     const tagItems: any[] = props.tags.map((tagValue: string) => {
       return (
         <MenuItem value={parentIndex.toString() + '::' + tagValue} id={parentIndex}>
@@ -217,22 +217,25 @@ const AddReview = (props: AddReviewProps) => {
   };
 
   const getTagSelect = (tag: string, index: number) => {
+    const selectValue = tags[index] === ''
+    ? tags[index]
+    : index.toString() + '::' + tags[index];
     return (
       <FormControl className={classes.formControl}>
         <Select
-          value={index.toString() + '::' + tags[index]}
+          value={selectValue}
           onChange={handleTagSelected}
         >
           <MenuItem value={index.toString() + '::' + ''} id='none'>
             <em>None</em>
           </MenuItem>
-          {getTagMenuItems(index.toString())}
+          {getTagSelectMenuItems(index.toString())}
         </Select>
       </FormControl>
     );
   };
 
-  const getTags = () => {
+  const getTagSelectDivs = () => {
     console.log('invoke getTags');
     const existingTags = tags.map((tag, index) => {
       return (
@@ -248,7 +251,7 @@ const AddReview = (props: AddReviewProps) => {
     return (
       <div>
         <span className={classes.margin}>Tags</span>
-        {getTags()}
+        {getTagSelectDivs()}
         <Button
           variant='contained'
           className={clsx(classes.margin)}
