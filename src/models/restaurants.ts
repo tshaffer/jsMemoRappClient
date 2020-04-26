@@ -25,6 +25,16 @@ export const addRestaurant = (
   };
 };
 
+interface RestaurantReviewPayload {
+  restaurantDbId: string;
+  userName: string;
+  tags: TagEntity[];
+  date: Date;
+  rating: number;
+  wouldReturn: boolean;
+  comments: string;
+}
+
 export const addRestaurantReviewToRedux = (
   restaurantDbId: string,
   userName: string,
@@ -67,7 +77,8 @@ export const setRestaurantTags = (restaurant: Restaurant) => {
     type: SET_RESTAURANT_TAGS,
     payload: restaurant,
   };
-}
+};
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -79,11 +90,11 @@ const initialState: RestaurantsState = {
 
 export const restaurantsReducer = (
   state: RestaurantsState = initialState,
-  action: MemoRappModelBaseAction<any>
+  action: MemoRappModelBaseAction<Restaurant & RestaurantReviewPayload>
 ): RestaurantsState => {
   switch (action.type) {
     case ADD_RESTAURANT: {
-      const newRestaurants = cloneDeep(state.restaurants);
+      const newRestaurants = cloneDeep(state.restaurants) as Restaurant[];
       newRestaurants.push(action.payload);
       return {
         ...state,
@@ -94,21 +105,22 @@ export const restaurantsReducer = (
 
       const newState = cloneDeep(state) as RestaurantsState;
 
+      const { restaurantDbId, tags, userName, date, comments, rating, wouldReturn } = action.payload;
       const review: Review = {
-        date: action.payload.date,
-        comments: action.payload.comments,
-        rating: action.payload.rating,
-        wouldReturn: action.payload.wouldReturn,
+        date,
+        comments,
+        rating,
+        wouldReturn,
       };
 
       const restaurants: Restaurant[] = newState.restaurants;
       for (const restaurant of restaurants) {
-        if (restaurant._id === action.payload.restaurantDbId) {
+        if (restaurant._id === restaurantDbId) {
 
           const usersReviews: UserReviews[] = restaurant.usersReviews;
           for (const userReviews of usersReviews) {
-            if (userReviews.userName === action.payload.userName) {
-              userReviews.tags = action.payload.tags;
+            if (userReviews.userName === userName) {
+              userReviews.tags = tags;
               userReviews.reviews.push(review);
               return newState;
             }
@@ -116,8 +128,8 @@ export const restaurantsReducer = (
 
           // first review for userName
           const usersReview: UserReviews = {
-            userName: action.payload.userName,
-            tags: action.payload.tags,
+            userName,
+            tags,
             reviews: [review],
           };
           restaurant.usersReviews.push(usersReview);
@@ -143,16 +155,6 @@ export const restaurantsReducer = (
       }
       return newState;
     }
-    // case SET_RESTAURANT_TAGS: {
-    //   const newState = cloneDeep(state) as RestaurantsState;
-    //   const restaurants: Restaurant[] = newState.restaurants;
-    //   for (const restaurant of restaurants) {
-    //     if (restaurant._id === action.payload._id) {
-    //       restaurant.tags = cloneDeep(action.payload.tags);
-    //     }
-    //   }
-    //   return newState;
-    // }
     default:
       return state;
   }
