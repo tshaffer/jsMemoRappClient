@@ -181,20 +181,6 @@ const AddReview = (props: AddReviewProps) => {
     setRating(value as number);
   };
 
-  const handleTagChanged = (event: any) => {
-    console.log('handleTagChange, value & id are:');
-    console.log(event.target.value);
-    console.log(event.target.id);
-
-    const tagValues: string[] = cloneDeep(tags);
-    const tagIndex = parseInt(event.target.id, 10);
-    tagValues[tagIndex] = event.target.value;
-    setTags(tagValues);
-
-    console.log('tagValues');
-    console.log(tagValues);
-  };
-
   const handleAddTag = (event: any) => {
     console.log('Add new tag');
     const tagValues: string[] = cloneDeep(tags);
@@ -207,11 +193,12 @@ const AddReview = (props: AddReviewProps) => {
 
     console.log('handleTagSelected');
     console.log(event.target.value);
-    console.log(event.target.id);
 
+    const selectedTagParts: string[] = event.target.value.split('::');
+    const tagIndex = parseInt(selectedTagParts[0], 10);
+    const tagValue = selectedTagParts[1];
     const tagValues: string[] = cloneDeep(tags);
-    const tagIndex = parseInt(event.target.id, 10);
-    tagValues[tagIndex] = event.target.value;
+    tagValues[tagIndex] = tagValue;
     setTags(tagValues);
 
     console.log('tagValues');
@@ -219,8 +206,7 @@ const AddReview = (props: AddReviewProps) => {
   };
 
   const getTagMenuItems = (parentIndex: string) => {
-    const tagItems: any[] = props.tags.map((tagValue: string, index: number) => {
-
+    const tagItems: any[] = props.tags.map((tagValue: string) => {
       return (
         <MenuItem value={parentIndex.toString() + '::' + tagValue} id={parentIndex}>
           {tagValue}
@@ -230,21 +216,14 @@ const AddReview = (props: AddReviewProps) => {
     return tagItems;
   };
 
-  /*
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-  */
-
   const getTagSelect = (tag: string, index: number) => {
     return (
       <FormControl className={classes.formControl}>
         <Select
-          value={tags[index]}
+          value={index.toString() + '::' + tags[index]}
           onChange={handleTagSelected}
-          id={index.toString()}
         >
-          <MenuItem value='' id='none'>
+          <MenuItem value={index.toString() + '::' + ''} id='none'>
             <em>None</em>
           </MenuItem>
           {getTagMenuItems(index.toString())}
@@ -252,16 +231,6 @@ const AddReview = (props: AddReviewProps) => {
       </FormControl>
     );
   };
-
-  /*
-            <TextField
-            id={index.toString()}
-            key={index.toString()}
-            variant='outlined'
-            onChange={handleTagChanged}
-            value={tag}
-          />
-*/
 
   const getTags = () => {
     console.log('invoke getTags');
