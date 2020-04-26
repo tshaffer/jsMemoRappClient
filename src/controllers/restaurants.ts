@@ -9,7 +9,6 @@ import {
   addRestaurantReviewToRedux,
   setRestaurantId,
   setSelectedRestaurant,
-  setRestaurantTags,
 } from '../models';
 
 const serverUrl = 'http://localhost:8000';

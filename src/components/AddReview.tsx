@@ -16,15 +16,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import IconButton from '@material-ui//core/IconButton';
 
 import {
   Restaurant,
   User,
-  // RestaurantReview, 
   TagEntity
 } from '../types';
 import {
@@ -38,18 +38,8 @@ import {
 } from '../controllers';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
   margin: {
     margin: theme.spacing(1),
-  },
-  withoutLabel: {
-    marginTop: theme.spacing(3),
-  },
-  textField: {
-    width: '25ch',
   },
   input: {
     width: 42,
@@ -59,8 +49,15 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 180,
+    display: 'inline',
   },
+  inlineDiv: {
+    display: 'inline',
+  },
+  selectControl: {
+    minWidth: 96,
+  }
 }));
 
 interface AddReviewProps {
@@ -83,7 +80,6 @@ const AddReview = (props: AddReviewProps) => {
   const classes = useStyles();
 
   const [tags, setTags] = React.useState(['']);
-  const [currentTag, setCurrentTag] = React.useState('');
 
   const [rating, setRating] = React.useState(5.0);
   const [wouldReturn, setWouldReturn] = React.useState(true);
@@ -182,33 +178,33 @@ const AddReview = (props: AddReviewProps) => {
   };
 
   const handleAddTag = (event: any) => {
-    console.log('Add new tag');
     const tagValues: string[] = cloneDeep(tags);
     tagValues.push('');
     setTags(tagValues);
-    console.log('number of tags: ', tags.length);
+  };
+
+  const handleRemoveTag = (event: any) => {
+    const tagValues: string[] = cloneDeep(tags);
+    tagValues.splice(parseInt(event.currentTarget.id, 10), 1);
+    setTags(tagValues);
   };
 
   const handleTagSelected = (event: any) => {
-
-    console.log('handleTagSelected');
-    console.log(event.target.value);
-
     const selectedTagParts: string[] = event.target.value.split('::');
     const tagIndex = parseInt(selectedTagParts[0], 10);
     const tagValue = selectedTagParts[1];
     const tagValues: string[] = cloneDeep(tags);
     tagValues[tagIndex] = tagValue;
     setTags(tagValues);
-
-    console.log('tagValues');
-    console.log(tagValues);
   };
 
-  const getTagSelectMenuItems = (parentIndex: string) => {
-    const tagItems: any[] = props.tags.map((tagValue: string) => {
+  const getTagSelectMenuItems = (tagSelectIndex: string) => {
+    const tagItems: any[] = props.tags.map((tagValue: string, tagItemIndex: number) => {
       return (
-        <MenuItem value={parentIndex.toString() + '::' + tagValue} id={parentIndex}>
+        <MenuItem
+          value={tagSelectIndex.toString() + '::' + tagValue}
+          key={tagSelectIndex.toString() + '::' + tagItemIndex.toString()}
+          id={tagSelectIndex}>
           {tagValue}
         </MenuItem>
       );
@@ -216,31 +212,62 @@ const AddReview = (props: AddReviewProps) => {
     return tagItems;
   };
 
-  const getTagSelect = (tag: string, index: number) => {
-    const selectValue = tags[index] === ''
-    ? tags[index]
-    : index.toString() + '::' + tags[index];
+  const getIconButton = (tagSelectIndex: number, numTags: number) => {
+    if (tagSelectIndex < (numTags - 1)) {
+      return (
+        <IconButton
+          id={tagSelectIndex.toString()}
+          onClick={handleRemoveTag}>
+          <RemoveCircleOutlineIcon />
+        </IconButton>
+      );
+    }
+    else {
+      return (
+        <div className={classes.inlineDiv}>
+          <IconButton
+            id={tagSelectIndex.toString()}
+            onClick={handleAddTag}>
+            <AddCircleOutlineIcon />
+          </IconButton>
+          <IconButton
+            id={tagSelectIndex.toString()}
+            onClick={handleRemoveTag}>
+            <RemoveCircleOutlineIcon />
+          </IconButton>
+        </div>
+      );
+    }
+  };
+
+  const getTagSelect = (tagSelectIndex: number, numTags: number) => {
+    const selectValue = tags[tagSelectIndex] === ''
+      ? ''
+      : tagSelectIndex.toString() + '::' + tags[tagSelectIndex];
     return (
-      <FormControl className={classes.formControl}>
-        <Select
+      <FormControl className={classes.formControl} key={'formControl' + tagSelectIndex.toString()}>
+        <Select className={classes.selectControl}
           value={selectValue}
           onChange={handleTagSelected}
+          key={'select' + tagSelectIndex.toString()}
         >
-          <MenuItem value={index.toString() + '::' + ''} id='none'>
+          <MenuItem value={tagSelectIndex.toString() + '::' + ''} key={tagSelectIndex.toString() + 'none'} id='none'>
             <em>None</em>
           </MenuItem>
-          {getTagSelectMenuItems(index.toString())}
+          {getTagSelectMenuItems(tagSelectIndex.toString())}
         </Select>
+        {getIconButton(tagSelectIndex, numTags)}
+
       </FormControl>
     );
   };
 
   const getTagSelectDivs = () => {
     console.log('invoke getTags');
-    const existingTags = tags.map((tag, index) => {
+    const existingTags = tags.map((_, index) => {
       return (
-        <div>
-          {getTagSelect(tag, index)}
+        <div key={'tagSelectDiv' + index.toString()}>
+          {getTagSelect(index, tags.length)}
         </div>
       );
     });
@@ -252,14 +279,6 @@ const AddReview = (props: AddReviewProps) => {
       <div>
         <span className={classes.margin}>Tags</span>
         {getTagSelectDivs()}
-        <Button
-          variant='contained'
-          className={clsx(classes.margin)}
-          onClick={handleAddTag}
-          type='button'
-        >
-          Add Tag
-       </Button>
       </div>
     );
   };
