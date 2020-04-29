@@ -69,10 +69,10 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const classes = useStyles();
 
-  const [restaurant, setRestaurant] = React.useState('');
-  const [restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
-  const [longitude, setLongitude] = React.useState(-122.115733);
-  const [latitude, setLatitude] = React.useState(37.380557);
+  const [_restaurant, setRestaurant] = React.useState('');
+  const [_restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
+  const [_longitude, setLongitude] = React.useState(-122.115733);
+  const [_latitude, setLatitude] = React.useState(37.380557);
 
   const { onAddRestaurant } = props;
 
@@ -97,9 +97,9 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const handleFindRestaurant = () => {
 
-    if (restaurantLocation === 'specifyLocation') {
+    if (_restaurantLocation === 'specifyLocation') {
 
-      fetchAllRestaurantsByLocation(latitude, longitude)
+      fetchAllRestaurantsByLocation(_latitude, _longitude)
         .then((restaurantsResponse: RestaurantsResponse) => {
 
           if (restaurantsResponse.success) {
@@ -165,7 +165,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
           <div>Location of restaurant</div>
           <div>
             <Radio
-              checked={restaurantLocation === 'currentLocation'}
+              checked={_restaurantLocation === 'currentLocation'}
               onChange={handleChange}
               value='currentLocation'
               name='currentLocationRadioButton'
@@ -174,7 +174,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
           </div>
           <div>
             <Radio
-              checked={restaurantLocation === 'specifyLocation'}
+              checked={_restaurantLocation === 'specifyLocation'}
               onChange={handleChange}
               value='specifyLocation'
               name='specifyLocationRadioButton'
@@ -182,7 +182,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
             Specify Location
           </div>
           <div className={classes.margin}>
-            {(restaurantLocation === 'currentLocation')
+            {(_restaurantLocation === 'currentLocation')
               ?
               null
               :
@@ -233,7 +233,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                   <Select
                     labelId='demo-simple-select-label'
                     id='demo-simple-select'
-                    value={restaurant}
+                    value={_restaurant}
                     onChange={handleSelectRestaurant}
                   >
                     {restaurantMenuItems}

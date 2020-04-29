@@ -89,9 +89,9 @@ const SignIn = (props: LoginProps) => {
 
   const classes = useStyles();
 
-  const [userNameState, setUserName] = useState('ted');
-  const [passwordState, setPassword] = useState('letTedIn');
-  const [showPassword, setShowPassword] = useState(true);
+  const [_userNameState, setUserName] = useState('ted');
+  const [_passwordState, setPassword] = useState('letTedIn');
+  const [_showPassword, setShowPassword] = useState(true);
 
   const { onLoadTags, onSetUser } = props;
 
@@ -102,7 +102,7 @@ const SignIn = (props: LoginProps) => {
   });
 
   const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+    setShowPassword(!_showPassword);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -111,10 +111,10 @@ const SignIn = (props: LoginProps) => {
 
   const handleSignIn = (e: any) => {
 
-    console.log(userNameState);
-    console.log(passwordState);
+    console.log(_userNameState);
+    console.log(_passwordState);
 
-    validateUser(userNameState, passwordState)
+    validateUser(_userNameState, _passwordState)
       .then((user: User) => {
         console.log('validation successful: ', user);
         onSetUser(user);
@@ -166,8 +166,8 @@ const SignIn = (props: LoginProps) => {
             <InputLabel htmlFor='standard-adornment-password' className={classes.padding}>Password *</InputLabel>
             <OutlinedInput
               id='standard-adornment-password'
-              type={showPassword ? 'text' : 'password'}
-              value={passwordState} 
+              type={_showPassword ? 'text' : 'password'}
+              value={_passwordState} 
               onChange={handlePasswordChange}
               required
               fullWidth
@@ -180,7 +180,7 @@ const SignIn = (props: LoginProps) => {
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
                   >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {_showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               }

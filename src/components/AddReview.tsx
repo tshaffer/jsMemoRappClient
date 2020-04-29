@@ -79,11 +79,11 @@ const AddReview = (props: AddReviewProps) => {
 
   const classes = useStyles();
 
-  const [tags, setTags] = React.useState(['']);
+  const [_tags, setTags] = React.useState(['']);
 
-  const [rating, setRating] = React.useState(5.0);
-  const [wouldReturn, setWouldReturn] = React.useState(true);
-  const [comments, setComments] = React.useState('');
+  const [_rating, setRating] = React.useState(5.0);
+  const [_wouldReturn, setWouldReturn] = React.useState(true);
+  const [_comments, setComments] = React.useState('');
 
   const isRestaurantInDb = (): boolean => {
     console.log('isNewRestaurant: ');
@@ -100,7 +100,7 @@ const AddReview = (props: AddReviewProps) => {
 
       // only use non empty tags.
 
-      const tagEntities: TagEntity[] = tags.map((tag) => {
+      const tagEntities: TagEntity[] = _tags.map((tag) => {
         return {
           value: tag,
         };
@@ -137,11 +137,11 @@ const AddReview = (props: AddReviewProps) => {
         props.onAddReview(
           restaurantDbId,
           userName,
-          tags,
+          _tags,
           new Date(),
-          rating,
-          wouldReturn,
-          comments,
+          _rating,
+          _wouldReturn,
+          _comments,
         );
       });
   };
@@ -166,9 +166,9 @@ const AddReview = (props: AddReviewProps) => {
   };
 
   const handleBlur = () => {
-    if (rating < 0) {
+    if (_rating < 0) {
       setRating(0);
-    } else if (rating > 10) {
+    } else if (_rating > 10) {
       setRating(10);
     }
   };
@@ -178,13 +178,13 @@ const AddReview = (props: AddReviewProps) => {
   };
 
   const handleAddTag = (event: any) => {
-    const tagValues: string[] = cloneDeep(tags);
+    const tagValues: string[] = cloneDeep(_tags);
     tagValues.push('');
     setTags(tagValues);
   };
 
   const handleRemoveTag = (event: any) => {
-    const tagValues: string[] = cloneDeep(tags);
+    const tagValues: string[] = cloneDeep(_tags);
     tagValues.splice(parseInt(event.currentTarget.id, 10), 1);
     setTags(tagValues);
   };
@@ -193,7 +193,7 @@ const AddReview = (props: AddReviewProps) => {
     const selectedTagParts: string[] = event.target.value.split('::');
     const tagIndex = parseInt(selectedTagParts[0], 10);
     const tagValue = selectedTagParts[1];
-    const tagValues: string[] = cloneDeep(tags);
+    const tagValues: string[] = cloneDeep(_tags);
     tagValues[tagIndex] = tagValue;
     setTags(tagValues);
   };
@@ -241,9 +241,9 @@ const AddReview = (props: AddReviewProps) => {
   };
 
   const getTagSelect = (tagSelectIndex: number, numTags: number) => {
-    const selectValue = tags[tagSelectIndex] === ''
+    const selectValue = _tags[tagSelectIndex] === ''
       ? ''
-      : tagSelectIndex.toString() + '::' + tags[tagSelectIndex];
+      : tagSelectIndex.toString() + '::' + _tags[tagSelectIndex];
     return (
       <FormControl className={classes.formControl} key={'formControl' + tagSelectIndex.toString()}>
         <Select className={classes.selectControl}
@@ -264,10 +264,10 @@ const AddReview = (props: AddReviewProps) => {
 
   const getTagSelectDivs = () => {
     console.log('invoke getTags');
-    const existingTags = tags.map((_, index) => {
+    const existingTags = _tags.map((_, index) => {
       return (
         <div key={'tagSelectDiv' + index.toString()}>
-          {getTagSelect(index, tags.length)}
+          {getTagSelect(index, _tags.length)}
         </div>
       );
     });
@@ -304,7 +304,7 @@ const AddReview = (props: AddReviewProps) => {
               <Grid item>
                 <Input
                   className={classes.input}
-                  value={rating}
+                  value={_rating}
                   margin='dense'
                   onChange={handleRatingChange}
                   onBlur={handleBlur}
@@ -319,7 +319,7 @@ const AddReview = (props: AddReviewProps) => {
               </Grid>
               <Grid item xs>
                 <Slider
-                  value={rating}
+                  value={_rating}
                   min={0}
                   max={10}
                   step={.1}
@@ -335,7 +335,7 @@ const AddReview = (props: AddReviewProps) => {
                 control={
                   <Checkbox
                     color='primary'
-                    value={wouldReturn}
+                    value={_wouldReturn}
                   />}
                 label='Would return'
                 labelPlacement='end'
