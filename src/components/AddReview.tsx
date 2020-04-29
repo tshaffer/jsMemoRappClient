@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import { cloneDeep, isNil } from 'lodash';
 
 import * as React from 'react';
+import { useState, useEffect } from 'react';
+
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -25,7 +27,8 @@ import IconButton from '@material-ui//core/IconButton';
 import {
   Restaurant,
   User,
-  TagEntity
+  TagEntity,
+  UserReviews
 } from '../types';
 import {
   getUser,
@@ -63,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 interface AddReviewProps {
   restaurant: Restaurant | null;
   user: User;
-  tags: string[];
+  allMemoRappTags: string[];
   onCreateMemoRappRestaurant: (restaurant: Restaurant) => any;
   onAddReview: (
     restaurantDbId: string,
@@ -79,11 +82,25 @@ const AddReview = (props: AddReviewProps) => {
 
   const classes = useStyles();
 
-  const [_tags, setTags] = React.useState(['']);
+  const [_tags, setTags] = useState(['']);
 
-  const [_rating, setRating] = React.useState(5.0);
-  const [_wouldReturn, setWouldReturn] = React.useState(true);
-  const [_comments, setComments] = React.useState('');
+  const [_rating, setRating] = useState(5.0);
+  const [_wouldReturn, setWouldReturn] = useState(true);
+  const [_comments, setComments] = useState('');
+
+  useEffect(() => {
+    const restaurant: Restaurant = props.restaurant;
+    const usersReviews: UserReviews[] = restaurant.usersReviews;
+    for (const usersReview of usersReviews) {
+      if (usersReview.userName === props.user.userName) {
+        const usersReviewTags: TagEntity[] = usersReview.tags;
+        const tagValues: string[] = usersReviewTags.map((tagEntity: TagEntity) => {
+          return tagEntity.value;
+        });
+        setTags(tagValues);
+      }
+    }
+  });
 
   const isRestaurantInDb = (): boolean => {
     console.log('isNewRestaurant: ');
@@ -199,7 +216,7 @@ const AddReview = (props: AddReviewProps) => {
   };
 
   const getTagSelectMenuItems = (tagSelectIndex: string) => {
-    const tagItems: any[] = props.tags.map((tagValue: string, tagItemIndex: number) => {
+    const tagItems: any[] = props.allMemoRappTags.map((tagValue: string, tagItemIndex: number) => {
       return (
         <MenuItem
           value={tagSelectIndex.toString() + '::' + tagValue}
@@ -374,7 +391,7 @@ function mapStateToProps(state: any, ownProps: any) {
   return {
     restaurant: getRestaurantById(state, ownProps.match.params.id),
     user: getUser(state),
-    tags: getMemoRappTagValues(state),
+    allMemoRappTags: getMemoRappTagValues(state),
   };
 }
 
