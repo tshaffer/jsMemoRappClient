@@ -1,6 +1,7 @@
 import { isNil } from 'lodash';
 
 import * as React from 'react';
+import { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -16,6 +17,10 @@ import TextField from '@material-ui/core/TextField';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { getMemoRappTags } from '../selectors';
 import { TagEntity } from '../types';
+
+import {
+  searchForRestaurants
+} from '../controllers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,25 +43,30 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface RestaurantFinderProps {
   tags: TagEntity[];
+  onSearchForRestaurants: () => any;
 }
 
 const RestaurantFinder = (props: RestaurantFinderProps) => {
 
   const classes = useStyles();
 
-  const flibbet = (event: object, value: any, reason: string) => {
-    console.log('flibbet');
-    console.log(event);
-    console.log(value); // array of values
-    console.log(reason);
+  const [_location, setLocation] = useState('Current Location');
+  const [_tags, setTags] = useState([]);
+
+  const handleTagsChanged = (event: object, value: any, reason: string) => {
+    console.log('handleTagsChanged:');
+    console.log(value);
+    setTags(value);
   };
 
-  const getTagOptions = () => {
-    return props.tags;
+  const handleLocationChanged = (event: any) => {
+    console.log('Location: ');
+    console.log(event.target.value);
+    setLocation(event.target.value);
   };
 
-  const getTags = () => {
-    const tagOptions = getTagOptions();
+  const renderTags = () => {
+    const tagOptions = props.tags;
     return (
       <div>
         <Autocomplete
@@ -72,22 +82,32 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
               placeholder='Tag'
             />
           )}
-          onChange={flibbet}
+          onChange={handleTagsChanged}
         />
       </div>
     );
   };
 
-  const getLocation = () => {
+  const renderLocation = () => {
     return (
       <div className={classes.textField}>
         <TextField
           id='location'
           label='Location'
           defaultValue='Current Location'
-      />
+          onChange={handleLocationChanged}
+          />
       </div>
     );
+  };
+
+  const handleSearch = () => {
+    // props.onSearchForRestaurants();
+    console.log('handleSearch');
+    console.log('Tags: ');
+    console.log(_tags);
+    console.log('Location:');
+    console.log(_location);
   };
 
   return (
@@ -96,9 +116,19 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
         <h2>MemoRapp</h2>
         <h3>RestaurantFinder</h3>
         <div className={classes.quarterWidth}>
-          {getTags()}
-          {getLocation()}
+          {renderTags()}
+          {renderLocation()}
         </div>
+        <Button
+            type='button'
+            fullWidth
+            variant='contained'
+            color='primary'
+            onClick={handleSearch}
+          >
+            Search
+          </Button>
+
       </div>
     </HashRouter>
   );
@@ -112,6 +142,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onSearchForRestaurants: searchForRestaurants,
   }, dispatch);
 };
 
