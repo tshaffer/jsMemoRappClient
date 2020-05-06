@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { isString } from 'lodash';
 import {
-  Restaurant, TagEntity,
+  Restaurant, TagEntity, GeoLocationSpec,
 } from '../types';
 
 import {
@@ -109,7 +109,7 @@ export const addReview = (
         );
       }
     }
-  
+
     const promise = postMemoRappRestaurantReview(
       restaurantDbId,
       userName,
@@ -127,7 +127,7 @@ export const addReview = (
         date,
         rating,
         wouldReturn,
-        comments,  
+        comments,
       ));
     });
   };
@@ -145,5 +145,31 @@ export const addRestaurantToRedux = (
 export const setSelectedRestaurantInRedux = (restaurant: Restaurant): any => {
   return (dispatch: any) => {
     dispatch(setSelectedRestaurant(restaurant));
+  };
+};
+
+export const searchForRestaurants = (userName: string, location: GeoLocationSpec, tags: string[]): any => {
+
+  return (dispatch: any) => {
+
+    const path = serverUrl + apiUrlFragment + 'restaurantsSearch';
+    const reviewBody: any = {
+      userName,
+      location,
+      tags
+    };
+
+    return axios.post(
+      path,
+      reviewBody,
+    ).then((response) => {
+      console.log(response);
+      console.log(response.data.memoRappRestaurants);
+      console.log(response.data.yelpRestaurantData);
+      return Promise.resolve();
+    }).catch((error) => {
+      console.log(error);
+      return Promise.reject(error);
+    });
   };
 };

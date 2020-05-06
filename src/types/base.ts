@@ -24,6 +24,11 @@ export interface GeoLocation {
   coordinates: number[];
 }
 
+export interface GeoLocationSpec {
+  coordinates: number[];
+  maxDistance: number;
+}
+
 export interface Distance {
   calculated: number;
   location: GeoLocation;

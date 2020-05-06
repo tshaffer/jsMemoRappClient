@@ -15,8 +15,11 @@ import TextField from '@material-ui/core/TextField';
 
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { getMemoRappTags } from '../selectors';
-import { TagEntity } from '../types';
+import { 
+  getMemoRappTags,
+  getUser,
+} from '../selectors';
+import { TagEntity, User, GeoLocationSpec } from '../types';
 
 import {
   searchForRestaurants
@@ -43,7 +46,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export interface RestaurantFinderProps {
   tags: TagEntity[];
-  onSearchForRestaurants: () => any;
+  user: User;
+  onSearchForRestaurants: (userName: string, locationSpec: GeoLocationSpec, tags: string[]) => any;
 }
 
 const RestaurantFinder = (props: RestaurantFinderProps) => {
@@ -102,7 +106,14 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
   };
 
   const handleSearch = () => {
-    // props.onSearchForRestaurants();
+    const geoLocationSpec: GeoLocationSpec = {
+      coordinates: [-122.115733, 37.380557],
+      maxDistance: 1500,
+    };
+    const tags: string[] = _tags.map((tagEntity: TagEntity) => {
+      return tagEntity.value;
+    });
+    props.onSearchForRestaurants(props.user.userName, geoLocationSpec, tags);
     console.log('handleSearch');
     console.log('Tags: ');
     console.log(_tags);
@@ -137,6 +148,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
 function mapStateToProps(state: any) {
   return {
     tags: getMemoRappTags(state),
+    user: getUser(state),
   };
 }
 
