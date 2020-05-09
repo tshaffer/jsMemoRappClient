@@ -30,6 +30,7 @@ import {
   getRestaurants,
   getSelectedRestaurant
 } from '../selectors';
+import { UserConfiguration } from '../config/config';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,8 +72,8 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const [_restaurant, setRestaurant] = React.useState('');
   const [_restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
-  const [_longitude, setLongitude] = React.useState(-122.115733);
-  const [_latitude, setLatitude] = React.useState(37.380557);
+  const [_longitude, setLongitude] = React.useState(UserConfiguration.currentLocation.longitude);
+  const [_latitude, setLatitude] = React.useState(UserConfiguration.currentLocation.latitude);
 
   const { onAddRestaurant } = props;
 

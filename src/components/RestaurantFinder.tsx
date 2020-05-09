@@ -20,6 +20,7 @@ import {
   getUser,
 } from '../selectors';
 import { TagEntity, User, GeoLocationSpec } from '../types';
+import { UserConfiguration } from '../config/config';
 
 import {
   searchForRestaurants
@@ -107,7 +108,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
 
   const handleSearch = () => {
     const geoLocationSpec: GeoLocationSpec = {
-      coordinates: [-122.115733, 37.380557],
+      coordinates: [UserConfiguration.currentLocation.longitude, UserConfiguration.currentLocation.latitude],
       maxDistance: 1500,
     };
     const tags: string[] = _tags.map((tagEntity: TagEntity) => {
@@ -119,6 +120,10 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     console.log(_tags);
     console.log('Location:');
     console.log(_location);
+
+    const hashHistory = createHashHistory();
+    hashHistory.push('/restaurantResults');
+
   };
 
   return (
