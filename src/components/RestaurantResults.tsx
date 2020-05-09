@@ -3,9 +3,14 @@ import { isNil } from 'lodash';
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
+
+import FilterListIcon from '@material-ui/icons/FilterList';
+import IconButton from '@material-ui/core/IconButton';
 
 import { Restaurant } from '../types';
 import { getRestaurants } from '../selectors';
+import Tooltip from '@material-ui/core/Tooltip';
 
 export interface RestaurantResultsProps {
   id: string;
@@ -15,13 +20,24 @@ export interface RestaurantResultsProps {
 
 const RestaurantResults = (props: RestaurantResultsProps) => {
 
+  const handleFilterResults = (event: any) => {
+    console.log('navigate to filterSearchResults');
+  };
+
+
   return (
-
-    <div>
-      <div>Pizza</div>
-      <div>{props.id}</div>
-    </div>
-
+    <HashRouter>
+      <div>
+        <h2>MemoRapp</h2>
+        <h3>Search Results</h3>
+        <Tooltip title='Filter'>
+          <IconButton
+            onClick={handleFilterResults}>
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+      </div>
+    </HashRouter>
   );
 
 };
