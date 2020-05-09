@@ -15,7 +15,7 @@ export interface User {
 }
 
 export interface RestaurantSearchResults {
-  memoRappRestaurants: any[];
+  memoRappRestaurants: Restaurant[];
   yelpRestaurants: YelpRestaurant[];
 }
 

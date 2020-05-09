@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { isNil, isEmpty } from 'lodash';
 
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
@@ -9,11 +9,12 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { Restaurant, RestaurantSearchResults } from '../types';
+import { Restaurant, RestaurantSearchResults, RestaurantSearch } from '../types';
 import {
   getSearchTags,
   getSearchResults,
 } from '../selectors';
+import { render } from 'build/bundle';
 
 
 export interface RestaurantResultsProps {
@@ -43,9 +44,27 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     );
   };
 
-  const renderMemoRappRestaunts = () => {
+  const renderMemoRappRestaurant = (memoRappRestaurant: Restaurant) => {
     return (
-      <div>MemoRappRestaurants</div>
+      <div>
+        Name: {memoRappRestaurant.name}
+      </div>
+    );
+  }
+
+  const renderMemoRappRestaurants = () => {
+    
+    if (isNil(props.searchResults) || isEmpty(props.searchResults)) {
+      return  null;
+    }
+
+    return (
+      <div>
+        <div>MemoRappRestaurants</div>
+        {(props.searchResults as RestaurantSearchResults).memoRappRestaurants.map((memoRappRestaurant) => {
+          return renderMemoRappRestaurant(memoRappRestaurant);
+        })}
+      </div>
     );
   };
 
@@ -58,7 +77,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
   const renderRestaurants = () => {
     return (
       <div>
-        {renderMemoRappRestaunts()}
+        {renderMemoRappRestaurants()}
         {renderYelpRestaurants()}
       </div>
 
