@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { MemoRappModelBaseAction } from './baseAction';
-import { RestaurantsState, Restaurant, UserReviews, TagEntity, Review } from '../types/base';
+import { RestaurantsState, Restaurant, UserReviews, TagEntity, Review, RestaurantSearchResults } from '../types/base';
 
 // ------------------------------------
 // Constants
@@ -11,6 +11,7 @@ export const ADD_RESTAURANT_REVIEW = 'ADD_RESTAURANT_REVIEW';
 export const SET_SELECTED_RESTAURANT = 'SET_SELECTED_RESTAURANT';
 export const SET_RESTAURANT_ID = 'SET_RESTAURANT_ID';
 export const SET_RESTAURANT_TAGS = 'SET_RESTAURANT_TAGS';
+export const SET_RESTAURANT_RESULTS = 'SET_RESTAURANT_RESULTS';
 
 // ------------------------------------
 // Actions
@@ -79,6 +80,16 @@ export const setRestaurantTags = (restaurant: Restaurant) => {
   };
 };
 
+export const setRestaurantSearchResults = (memoRappRestaurants: any[], yelpRestaurants: any[]) => {
+  return {
+    type: SET_RESTAURANT_RESULTS,
+    payload: {
+      memoRappRestaurants,
+      yelpRestaurants,
+    }
+  };
+};
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -86,11 +97,12 @@ export const setRestaurantTags = (restaurant: Restaurant) => {
 const initialState: RestaurantsState = {
   selectedRestaurant: null,
   restaurants: [],
+  restaurantSearchResults: {},
 };
 
 export const restaurantsReducer = (
   state: RestaurantsState = initialState,
-  action: MemoRappModelBaseAction<Restaurant & RestaurantReviewPayload>
+  action: MemoRappModelBaseAction<Restaurant & RestaurantReviewPayload & RestaurantSearchResults>
 ): RestaurantsState => {
   switch (action.type) {
     case ADD_RESTAURANT: {
@@ -154,6 +166,12 @@ export const restaurantsReducer = (
         }
       }
       return newState;
+    }
+    case SET_RESTAURANT_RESULTS: {
+      return {
+        ...state,
+        restaurantSearchResults: action.payload,
+      };
     }
     default:
       return state;

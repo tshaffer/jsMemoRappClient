@@ -122,7 +122,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     console.log(_location);
 
     const hashHistory = createHashHistory();
-    hashHistory.push('/restaurantResults');
+    hashHistory.push('/restaurantResults/' + 'sausage');
 
   };
 

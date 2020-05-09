@@ -10,9 +10,15 @@ export interface User {
   email: string;
 }
 
+export interface RestaurantSearchResults {
+  memoRappRestaurants: any[];
+  yelpRestaurants: any[];
+}
+
 export interface RestaurantsState {
   selectedRestaurant: Restaurant;
   restaurants: Restaurant[];
+  restaurantSearchResults: RestaurantSearchResults | {};
 }
 
 export interface TagEntity {

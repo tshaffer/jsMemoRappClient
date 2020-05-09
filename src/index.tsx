@@ -30,7 +30,7 @@ ReactDOM.render(
         <Route exact path='/' component={SignIn} />
         <Route exact path='/home' component={Home} />
         <Route exact path='/restaurantFinder' component={RestaurantFinder} />
-        <Route exact path='/restaurantResults' component={RestaurantResults} />
+        <Route exact path='/restaurantResults/:id' component={RestaurantResults} />
         <Route exact path='/restaurantReview' component={RestaurantReview} />
         <Route exact path='/addReview/:id' component={AddReview} />
       </Switch>
