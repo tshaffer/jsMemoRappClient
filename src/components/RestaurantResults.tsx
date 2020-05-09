@@ -9,13 +9,26 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { Restaurant, RestaurantSearchResults, RestaurantSearch, Review } from '../types';
+import { Restaurant, RestaurantSearchResults, Review } from '../types';
 import {
   getSearchTags,
   getSearchResults,
 } from '../selectors';
-import { render } from 'build/bundle';
 
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    indent0: {
+      marginLeft: '16px',
+    },
+    indent1: {
+      marginLeft: '32px',
+    },
+    indent2: {
+      marginLeft: '64px',
+    }
+  }),
+);
 
 export interface RestaurantResultsProps {
   id: string;
@@ -25,6 +38,8 @@ export interface RestaurantResultsProps {
 
 const RestaurantResults = (props: RestaurantResultsProps) => {
 
+  const classes = useStyles();
+
   const handleFilterResults = (event: any) => {
     console.log('navigate to filterSearchResults');
   };
@@ -32,11 +47,11 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
   const renderSearchTags = () => {
     return (
       <div>
-        Search Tags:
+        <h4>Search Tags</h4>
         {
           props.searchTags.map((searchTag: string) => {
             return (
-              <div>{searchTag}</div>
+              <div className={classes.indent0}>{searchTag}</div>
             );
           })
         }
@@ -51,7 +66,12 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
         <br/>
         Rating: {review.rating}
         <br/>
-        Would return: {review.wouldReturn}
+        Would return: 
+        {
+          review.wouldReturn
+          ? ' Yes'
+          : ' No'
+        }
         <br/>
         Comments: {review.comments}
         <br/>
@@ -60,18 +80,29 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
   };
 
   const renderMemoRappRestaurant = (memoRappRestaurant: Restaurant) => {
+
+    let distance: number;
+    let distanceLabel: string;
+    if (!isNil(memoRappRestaurant.dist)) {
+      distanceLabel = ' feet';
+      distance = memoRappRestaurant.dist.calculated * 3.28084;
+      if (distance > (5280 / 2)) {
+        distanceLabel = ' miles';
+        distance = distance / 5280;
+      }
+    }
+
     return (
-      <div key={memoRappRestaurant.name}>
-        Name: {memoRappRestaurant.name}
+      <div className={classes.indent0} key={memoRappRestaurant.name}>
+        <span>Name: {memoRappRestaurant.name}</span>
         <br />
         {!isNil(memoRappRestaurant.dist)
-          ? memoRappRestaurant.dist.calculated
+          ? distance.toFixed(1) + distanceLabel
           : null}
         <br />
         {memoRappRestaurant.usersReviews[0].reviews.map( (review: Review, index: number) => {
           return renderMemoRappReview(review, index);
         })}
-
       </div>
     );
   }
@@ -84,7 +115,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
     return (
       <div>
-        <div>MemoRappRestaurants</div>
+        <h4>MemoRapp Restaurants</h4>
         {(props.searchResults as RestaurantSearchResults).memoRappRestaurants.map((memoRappRestaurant) => {
           return renderMemoRappRestaurant(memoRappRestaurant);
         })}
