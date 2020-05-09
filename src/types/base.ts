@@ -4,6 +4,10 @@ export interface MemoRappModelState {
   user: User;
 }
 
+export interface TagEntity {
+  value: string;
+}
+
 export interface User {
   userName: string;
   password: string;
@@ -15,14 +19,15 @@ export interface RestaurantSearchResults {
   yelpRestaurants: YelpRestaurant[];
 }
 
+export interface RestaurantSearch {
+  tags: string[];
+  results: RestaurantSearchResults | {};
+
+}
 export interface RestaurantsState {
   selectedRestaurant: Restaurant;
   restaurants: Restaurant[];
-  restaurantSearchResults: RestaurantSearchResults | {};
-}
-
-export interface TagEntity {
-  value: string;
+  search: RestaurantSearch;
 }
 
 export interface GeoLocation {

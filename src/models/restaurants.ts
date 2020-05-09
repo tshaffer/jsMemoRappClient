@@ -11,7 +11,8 @@ export const ADD_RESTAURANT_REVIEW = 'ADD_RESTAURANT_REVIEW';
 export const SET_SELECTED_RESTAURANT = 'SET_SELECTED_RESTAURANT';
 export const SET_RESTAURANT_ID = 'SET_RESTAURANT_ID';
 export const SET_RESTAURANT_TAGS = 'SET_RESTAURANT_TAGS';
-export const SET_RESTAURANT_RESULTS = 'SET_RESTAURANT_RESULTS';
+export const SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS';
+export const SET_SEARCH_TAGS = 'SET_SEARCH_TAGS';
 
 // ------------------------------------
 // Actions
@@ -80,9 +81,16 @@ export const setRestaurantTags = (restaurant: Restaurant) => {
   };
 };
 
-export const setRestaurantSearchResults = (memoRappRestaurants: any[], yelpRestaurants: YelpRestaurant[]) => {
+export const setSearchTags = (tags: string[]) => {
   return {
-    type: SET_RESTAURANT_RESULTS,
+    type: SET_SEARCH_TAGS,
+    payload: tags,
+  };
+};
+
+export const setSearchResults = (memoRappRestaurants: any[], yelpRestaurants: YelpRestaurant[]) => {
+  return {
+    type: SET_SEARCH_RESULTS,
     payload: {
       memoRappRestaurants,
       yelpRestaurants,
@@ -97,12 +105,15 @@ export const setRestaurantSearchResults = (memoRappRestaurants: any[], yelpResta
 const initialState: RestaurantsState = {
   selectedRestaurant: null,
   restaurants: [],
-  restaurantSearchResults: {},
+  search: {
+    tags: [],
+    results: {},
+  },
 };
 
 export const restaurantsReducer = (
   state: RestaurantsState = initialState,
-  action: MemoRappModelBaseAction<Restaurant & RestaurantReviewPayload & RestaurantSearchResults>
+  action: MemoRappModelBaseAction<Restaurant & RestaurantReviewPayload & RestaurantSearchResults & any[]>
 ): RestaurantsState => {
   switch (action.type) {
     case ADD_RESTAURANT: {
@@ -167,10 +178,22 @@ export const restaurantsReducer = (
       }
       return newState;
     }
-    case SET_RESTAURANT_RESULTS: {
+    case SET_SEARCH_RESULTS: {
       return {
         ...state,
-        restaurantSearchResults: action.payload,
+        search: {
+          ...state.search,
+          results: action.payload,
+        },
+      };
+    }
+    case SET_SEARCH_TAGS: {
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          tags: action.payload,
+        }
       };
     }
     default:

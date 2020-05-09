@@ -9,7 +9,7 @@ import {
   addRestaurantReviewToRedux,
   setRestaurantId,
   setSelectedRestaurant,
-  setRestaurantSearchResults,
+  setSearchResults,
 } from '../models';
 
 const serverUrl = 'http://localhost:8000';
@@ -169,7 +169,7 @@ export const searchForRestaurants = (userName: string, location: GeoLocationSpec
       console.log(response);
       console.log(responseData.memoRappRestaurants);
       console.log(responseData.yelpRestaurants);
-      dispatch(setRestaurantSearchResults(
+      dispatch(setSearchResults(
         responseData.memoRappRestaurants,
         responseData.yelpRestaurants
       ));

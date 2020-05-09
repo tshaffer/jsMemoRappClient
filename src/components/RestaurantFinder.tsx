@@ -1,4 +1,3 @@
-import { isNil } from 'lodash';
 
 import * as React from 'react';
 import { useState } from 'react';
@@ -8,7 +7,6 @@ import { connect } from 'react-redux';
 import { createHashHistory } from 'history';
 
 import { HashRouter } from 'react-router-dom';
-import { Link as RouterLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -21,6 +19,10 @@ import {
 } from '../selectors';
 import { TagEntity, User, GeoLocationSpec } from '../types';
 import { UserConfiguration } from '../config/config';
+
+import {
+  setSearchTags,
+} from '../models';
 
 import {
   searchForRestaurants
@@ -48,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export interface RestaurantFinderProps {
   tags: TagEntity[];
   user: User;
+  onSetSearchTags: (tags: string[]) => any;
   onSearchForRestaurants: (userName: string, locationSpec: GeoLocationSpec, tags: string[]) => any;
 }
 
@@ -114,6 +117,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     const tags: string[] = _tags.map((tagEntity: TagEntity) => {
       return tagEntity.value;
     });
+    props.onSetSearchTags(tags);
     props.onSearchForRestaurants(props.user.userName, geoLocationSpec, tags);
     console.log('handleSearch');
     console.log('Tags: ');
@@ -159,6 +163,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onSetSearchTags: setSearchTags,
     onSearchForRestaurants: searchForRestaurants,
   }, dispatch);
 };

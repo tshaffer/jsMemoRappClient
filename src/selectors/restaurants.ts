@@ -27,3 +27,7 @@ export const getRestaurantById = (state: MemoRappModelState, id: string): Restau
   }
   return null;
 };
+
+export const getSearchTags = (state: MemoRappModelState): string[] => {
+  return state.restaurantsState.search.tags;
+};

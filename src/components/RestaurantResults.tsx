@@ -7,16 +7,20 @@ import { HashRouter } from 'react-router-dom';
 
 import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { Restaurant } from '../types';
-import { getRestaurants } from '../selectors';
-import Tooltip from '@material-ui/core/Tooltip';
+import {
+  getRestaurants,
+  getSearchTags,
+} from '../selectors';
+
 
 export interface RestaurantResultsProps {
   id: string;
   restaurants: Restaurant[];
+  searchTags: string[];
 }
-
 
 const RestaurantResults = (props: RestaurantResultsProps) => {
 
@@ -24,6 +28,20 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     console.log('navigate to filterSearchResults');
   };
 
+  const renderSearchTags = () => {
+    return (
+      <div>
+        Search Tags:
+        {
+          props.searchTags.map( (searchTag: string) => {
+            return (
+              <div>{searchTag}</div>
+            );
+          })
+        }
+      </div>
+    );
+  };
 
   return (
     <HashRouter>
@@ -36,6 +54,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+        {renderSearchTags()}
       </div>
     </HashRouter>
   );
@@ -46,6 +65,7 @@ function mapStateToProps(state: any, ownProps: any) {
   return {
     id: ownProps.match.params.id,
     restaurants: getRestaurants(state),
+    searchTags: getSearchTags(state),
   };
 }
 
