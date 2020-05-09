@@ -122,13 +122,13 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
                 usersReviews: [],
                 location: {
                   type: 'Point',
-                  coordinates: yelpRestaurant.coordinates as any,
+                  coordinates: [yelpRestaurant.coordinates.longitude, yelpRestaurant.coordinates.latitude],
                 },
                 dist: {
                   calculated: yelpRestaurant.distance,
                   location: {
                     type: 'Point',
-                    coordinates: yelpRestaurant.coordinates as any,
+                    coordinates: [yelpRestaurant.coordinates.longitude, yelpRestaurant.coordinates.latitude],
                   }
                 },
               };

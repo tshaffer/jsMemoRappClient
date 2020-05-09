@@ -12,7 +12,7 @@ export interface User {
 
 export interface RestaurantSearchResults {
   memoRappRestaurants: any[];
-  yelpRestaurants: any[];
+  yelpRestaurants: YelpRestaurant[];
 }
 
 export interface RestaurantsState {
@@ -55,21 +55,43 @@ export interface UserReviews {
 }
 
 export interface Restaurant {
-  id: string;
-  _id: string | null;
+  id: string;                   // not in search results - why?
+  _id: string | null;           // not in search results - why?
   name: string;
-  yelpBusinessDetails: any;
+  yelpBusinessDetails: YelpRestaurant;
   usersReviews: UserReviews[];
   location: GeoLocation;
   dist?: Distance;
 }
 
+export interface YelpRestaurantCategory {
+  alias: string;
+  title: string;
+}
+
+export interface LatLongPoint {
+  latitude: number;
+  longitude: number;
+}
+
 export interface YelpRestaurant {
   id: string;
   name: string;
+  image_url: string;
+  is_closed: boolean;
+  review_count: number;
+  categories: YelpRestaurantCategory[];
+  rating: number;
+  coordinates: LatLongPoint;
+  transactions: string[];
+  price: string;
+  location: {
+    // address1, address2, address3, city, zip_code, country, state
+    display_address: string[];
+  };
+  phone: string;
+  display_phone: string;
   distance: number;
-  coordinates: GeoLocation; // doesn't include type
-  // many others that I will add as needed
 }
 
 export interface RestaurantsResponse {

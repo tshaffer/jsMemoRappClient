@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { isString } from 'lodash';
 import {
-  Restaurant, TagEntity, GeoLocationSpec,
+  Restaurant, TagEntity, GeoLocationSpec, RestaurantsResponse,
 } from '../types';
 
 import {
@@ -164,12 +164,14 @@ export const searchForRestaurants = (userName: string, location: GeoLocationSpec
       path,
       reviewBody,
     ).then((response) => {
+      const responseData: RestaurantsResponse = response.data;
+
       console.log(response);
-      console.log(response.data.memoRappRestaurants);
-      console.log(response.data.yelpRestaurantData);
+      console.log(responseData.memoRappRestaurants);
+      console.log(responseData.yelpRestaurants);
       dispatch(setRestaurantSearchResults(
-        response.data.memoRappRestaurants,
-        response.data.yelpRestaurantData
+        responseData.memoRappRestaurants,
+        responseData.yelpRestaurants
       ));
       return Promise.resolve();
     }).catch((error) => {

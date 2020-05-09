@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { MemoRappModelBaseAction } from './baseAction';
-import { RestaurantsState, Restaurant, UserReviews, TagEntity, Review, RestaurantSearchResults } from '../types/base';
+import { RestaurantsState, Restaurant, UserReviews, TagEntity, Review, RestaurantSearchResults, YelpRestaurant } from '../types/base';
 
 // ------------------------------------
 // Constants
@@ -80,7 +80,7 @@ export const setRestaurantTags = (restaurant: Restaurant) => {
   };
 };
 
-export const setRestaurantSearchResults = (memoRappRestaurants: any[], yelpRestaurants: any[]) => {
+export const setRestaurantSearchResults = (memoRappRestaurants: any[], yelpRestaurants: YelpRestaurant[]) => {
   return {
     type: SET_RESTAURANT_RESULTS,
     payload: {
