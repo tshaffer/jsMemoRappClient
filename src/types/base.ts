@@ -22,8 +22,8 @@ export interface RestaurantSearchResults {
 export interface RestaurantSearch {
   tags: string[];
   results: RestaurantSearchResults | {};
-
 }
+
 export interface RestaurantsState {
   selectedRestaurant: Restaurant;
   restaurants: Restaurant[];

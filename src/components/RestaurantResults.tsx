@@ -9,17 +9,17 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { Restaurant } from '../types';
+import { Restaurant, RestaurantSearchResults } from '../types';
 import {
-  getRestaurants,
   getSearchTags,
+  getSearchResults,
 } from '../selectors';
 
 
 export interface RestaurantResultsProps {
   id: string;
-  restaurants: Restaurant[];
   searchTags: string[];
+  searchResults: RestaurantSearchResults | {};
 }
 
 const RestaurantResults = (props: RestaurantResultsProps) => {
@@ -33,7 +33,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
       <div>
         Search Tags:
         {
-          props.searchTags.map( (searchTag: string) => {
+          props.searchTags.map((searchTag: string) => {
             return (
               <div>{searchTag}</div>
             );
@@ -41,6 +41,28 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
         }
       </div>
     );
+  };
+
+  const renderMemoRappRestaunts = () => {
+    return (
+      <div>MemoRappRestaurants</div>
+    );
+  };
+
+  const renderYelpRestaurants = () => {
+    return (
+      <div>YelpRestaurants</div>
+    );
+  };
+
+  const renderRestaurants = () => {
+    return (
+      <div>
+        {renderMemoRappRestaunts()}
+        {renderYelpRestaurants()}
+      </div>
+
+    )
   };
 
   return (
@@ -55,6 +77,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
           </IconButton>
         </Tooltip>
         {renderSearchTags()}
+        {renderRestaurants()}
       </div>
     </HashRouter>
   );
@@ -64,8 +87,8 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 function mapStateToProps(state: any, ownProps: any) {
   return {
     id: ownProps.match.params.id,
-    restaurants: getRestaurants(state),
     searchTags: getSearchTags(state),
+    searchResults: getSearchResults(state),
   };
 }
 

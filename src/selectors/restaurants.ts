@@ -1,4 +1,4 @@
-import { MemoRappModelState, Restaurant } from '../types';
+import { MemoRappModelState, Restaurant, RestaurantSearchResults } from '../types';
 
 export const getRestaurants = (state: MemoRappModelState): Restaurant[] => {
   return state.restaurantsState.restaurants;
@@ -30,4 +30,8 @@ export const getRestaurantById = (state: MemoRappModelState, id: string): Restau
 
 export const getSearchTags = (state: MemoRappModelState): string[] => {
   return state.restaurantsState.search.tags;
+};
+
+export const getSearchResults = (state: MemoRappModelState): RestaurantSearchResults | {} => {
+  return state.restaurantsState.search.results;
 };
