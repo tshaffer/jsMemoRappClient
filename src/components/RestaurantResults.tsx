@@ -9,7 +9,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { Restaurant, RestaurantSearchResults, RestaurantSearch } from '../types';
+import { Restaurant, RestaurantSearchResults, RestaurantSearch, Review } from '../types';
 import {
   getSearchTags,
   getSearchResults,
@@ -44,18 +44,42 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     );
   };
 
+  const renderMemoRappReview = (review: Review, index: number) => {
+    return (
+      <div key={index}>
+        Date: {review.date}
+        <br/>
+        Rating: {review.rating}
+        <br/>
+        Would return: {review.wouldReturn}
+        <br/>
+        Comments: {review.comments}
+        <br/>
+      </div>
+    );
+  };
+
   const renderMemoRappRestaurant = (memoRappRestaurant: Restaurant) => {
     return (
-      <div>
+      <div key={memoRappRestaurant.name}>
         Name: {memoRappRestaurant.name}
+        <br />
+        {!isNil(memoRappRestaurant.dist)
+          ? memoRappRestaurant.dist.calculated
+          : null}
+        <br />
+        {memoRappRestaurant.usersReviews[0].reviews.map( (review: Review, index: number) => {
+          return renderMemoRappReview(review, index);
+        })}
+
       </div>
     );
   }
 
   const renderMemoRappRestaurants = () => {
-    
+
     if (isNil(props.searchResults) || isEmpty(props.searchResults)) {
-      return  null;
+      return null;
     }
 
     return (
