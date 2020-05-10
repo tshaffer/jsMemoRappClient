@@ -9,6 +9,12 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import { Restaurant, RestaurantSearchResults, Review } from '../types';
 import {
   getSearchTags,
@@ -18,6 +24,10 @@ import {
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    heading: {
+      fontSize: theme.typography.pxToRem(15),
+      fontWeight: theme.typography.fontWeightRegular,
+    },
     indent0: {
       marginLeft: '16px',
     },
@@ -121,15 +131,24 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
           <div>
             Average rating: {getAverageRating(memoRappRestaurant)}
           </div>
-          <br/>
-          <span>Reviews</span>
-          {memoRappRestaurant.usersReviews[0].reviews.map((review: Review, index: number) => {
-            return renderMemoRappReview(review, index);
-          })}
+          <br />
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls='panel1a-content'
+              id='panel1a-header'>
+              <Typography className={classes.heading}>Reviews</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              {memoRappRestaurant.usersReviews[0].reviews.map((review: Review, index: number) => {
+                return renderMemoRappReview(review, index);
+              })}
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
         </div>
       </div>
     );
-  }
+  };
 
   const renderMemoRappRestaurants = () => {
 
