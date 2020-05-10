@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: theme.typography.pxToRem(15),
       fontWeight: theme.typography.fontWeightRegular,
     },
+    block: {
+      display: 'block',
+    },
     indent0: {
       marginLeft: '16px',
     },
@@ -71,7 +74,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
   const renderMemoRappReview = (review: Review, index: number) => {
     return (
-      <div className={classes.indent2} key={index}>
+      <div key={index}>
         <br />
         Date: {(new Date(review.date)).toDateString()}
         <br />
@@ -139,7 +142,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
               id='panel1a-header'>
               <Typography className={classes.heading}>Reviews</Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
+            <ExpansionPanelDetails className={classes.block}>
               {memoRappRestaurant.usersReviews[0].reviews.map((review: Review, index: number) => {
                 return renderMemoRappReview(review, index);
               })}
