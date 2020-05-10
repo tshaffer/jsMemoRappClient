@@ -61,20 +61,21 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
   const renderMemoRappReview = (review: Review, index: number) => {
     return (
-      <div key={index}>
-        Date: {review.date}
-        <br/>
+      <div className={classes.indent2} key={index}>
+        <br />
+        Date: {(new Date(review.date)).toDateString()}
+        <br />
         Rating: {review.rating}
-        <br/>
-        Would return: 
+        <br />
+        Would return:
         {
           review.wouldReturn
-          ? ' Yes'
-          : ' No'
+            ? ' Yes'
+            : ' No'
         }
-        <br/>
+        <br />
         Comments: {review.comments}
-        <br/>
+        <br />
       </div>
     );
   };
@@ -84,25 +85,27 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     let distance: number;
     let distanceLabel: string;
     if (!isNil(memoRappRestaurant.dist)) {
-      distanceLabel = ' feet';
+      distanceLabel = ' feet away';
       distance = memoRappRestaurant.dist.calculated * 3.28084;
       if (distance > (5280 / 2)) {
-        distanceLabel = ' miles';
+        distanceLabel = ' miles away';
         distance = distance / 5280;
       }
     }
 
     return (
       <div className={classes.indent0} key={memoRappRestaurant.name}>
-        <span>Name: {memoRappRestaurant.name}</span>
-        <br />
-        {!isNil(memoRappRestaurant.dist)
-          ? distance.toFixed(1) + distanceLabel
-          : null}
-        <br />
-        {memoRappRestaurant.usersReviews[0].reviews.map( (review: Review, index: number) => {
-          return renderMemoRappReview(review, index);
-        })}
+        <h5>{memoRappRestaurant.name}</h5>
+        <div className={classes.indent1}>
+          {!isNil(memoRappRestaurant.dist)
+            ? distance.toFixed(1) + distanceLabel
+            : null}
+          <br />
+          <span>Reviews</span>
+          {memoRappRestaurant.usersReviews[0].reviews.map((review: Review, index: number) => {
+            return renderMemoRappReview(review, index);
+          })}
+        </div>
       </div>
     );
   }
