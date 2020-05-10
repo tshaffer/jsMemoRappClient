@@ -80,27 +80,48 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     );
   };
 
-  const renderMemoRappRestaurant = (memoRappRestaurant: Restaurant) => {
+  const getAverageRating = (memoRappRestaurant: Restaurant): string => {
+    let ratingSum = 0;
+    const numReviews = memoRappRestaurant.usersReviews[0].reviews.length;
+    if (numReviews > 0) {
+      for (const review of memoRappRestaurant.usersReviews[0].reviews) {
+        ratingSum += review.rating;
+      }
+      return (ratingSum / numReviews).toFixed(1);
+    }
+    return '';
+  };
 
-    let distance: number;
-    let distanceLabel: string;
+  const renderDistance = (memoRappRestaurant: Restaurant): any => {
+
+    // TEDTODO - not always 'current location'
     if (!isNil(memoRappRestaurant.dist)) {
-      distanceLabel = ' feet away';
-      distance = memoRappRestaurant.dist.calculated * 3.28084;
+      let distanceLabel = ' feet away';
+      let distance = memoRappRestaurant.dist.calculated * 3.28084;  // meters to feet
       if (distance > (5280 / 2)) {
         distanceLabel = ' miles away';
         distance = distance / 5280;
       }
+      return (
+        'Located ' + distance.toFixed(1) + distanceLabel + ' away from your current location'
+      );
+    } else {
+      return null;
     }
+  };
+
+  const renderMemoRappRestaurant = (memoRappRestaurant: Restaurant) => {
 
     return (
       <div className={classes.indent0} key={memoRappRestaurant.name}>
         <h5>{memoRappRestaurant.name}</h5>
         <div className={classes.indent1}>
-          {!isNil(memoRappRestaurant.dist)
-            ? distance.toFixed(1) + distanceLabel
-            : null}
+          {renderDistance(memoRappRestaurant)}
           <br />
+          <div>
+            Average rating: {getAverageRating(memoRappRestaurant)}
+          </div>
+          <br/>
           <span>Reviews</span>
           {memoRappRestaurant.usersReviews[0].reviews.map((review: Review, index: number) => {
             return renderMemoRappReview(review, index);
