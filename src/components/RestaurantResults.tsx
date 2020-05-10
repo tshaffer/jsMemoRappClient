@@ -15,7 +15,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { Restaurant, RestaurantSearchResults, Review } from '../types';
+import { Restaurant, RestaurantSearchResults, Review, YelpRestaurant } from '../types';
 import {
   getSearchTags,
   getSearchResults,
@@ -105,19 +105,26 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     return '';
   };
 
+  const renderDistanceInMeters = (distanceInMeters: number): any => {
+    if (isNil(distanceInMeters)) {
+      return null;
+    }
+    let distanceLabel = ' feet away';
+    let distance = distanceInMeters * 3.28084;  // meters to feet
+    if (distance > (5280 / 2)) {
+      distanceLabel = ' miles away';
+      distance = distance / 5280;
+    }
+    // TEDTODO - not always 'current location'
+    return (
+      'Located ' + distance.toFixed(1) + distanceLabel + ' away from your current location'
+    );
+  };
+
   const renderDistance = (memoRappRestaurant: Restaurant): any => {
 
-    // TEDTODO - not always 'current location'
     if (!isNil(memoRappRestaurant.dist)) {
-      let distanceLabel = ' feet away';
-      let distance = memoRappRestaurant.dist.calculated * 3.28084;  // meters to feet
-      if (distance > (5280 / 2)) {
-        distanceLabel = ' miles away';
-        distance = distance / 5280;
-      }
-      return (
-        'Located ' + distance.toFixed(1) + distanceLabel + ' away from your current location'
-      );
+      return renderDistanceInMeters(memoRappRestaurant.dist.calculated);
     } else {
       return null;
     }
@@ -169,9 +176,38 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     );
   };
 
-  const renderYelpRestaurants = () => {
+  // rating: number
+  // distance: in meters
+  // address: location.display_address string[]
+  // price: string
+  const renderYelpRestaurant = (yelpRestaurant: YelpRestaurant) => {
     return (
-      <div>YelpRestaurants</div>
+      <div className={classes.indent0} key={yelpRestaurant.name}>
+        <h5>{yelpRestaurant.name}</h5>
+        <div className={classes.indent1}>
+          <p>Rating: {yelpRestaurant.rating}</p>
+          {renderDistanceInMeters(yelpRestaurant.distance)}
+          <p>{yelpRestaurant.location.display_address[0]}</p>
+          <p>{yelpRestaurant.location.display_address[1]}</p>
+          <p>Price: {yelpRestaurant.price}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const renderYelpRestaurants = () => {
+
+    if (isNil(props.searchResults) || isEmpty(props.searchResults)) {
+      return null;
+    }
+
+    return (
+      <div>
+        <h4>Yelp Restaurants</h4>
+        {(props.searchResults as RestaurantSearchResults).yelpRestaurants.map((yelpRestaurant) => {
+          return renderYelpRestaurant(yelpRestaurant);
+        })}
+      </div>
     );
   };
 
