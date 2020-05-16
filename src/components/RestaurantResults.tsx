@@ -39,7 +39,16 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: '32px',
     },
     indent2: {
+      float: 'left',
       marginLeft: '64px',
+    },
+    indent3: {
+      float: 'left',
+      marginLeft: '128px',
+    },
+    dayOfWeek: {
+      float: 'left',
+      minWidth: '64px',
     }
   }),
 );
@@ -155,8 +164,6 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
   const getTimeOfDayLabel = (timeOfDay: string): string => {
 
-    console.log('timeOfDay label: ' + timeOfDay);
-    
     let hoursOffset = 0;
     let hoursLabel = '';
     let minutesLabel = '';
@@ -185,8 +192,6 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
   const renderOpenHoursEntry = (previousDayIndex: number, yelpOpenHoursEntry: YelpOpenHours, index: number) => {
 
-    console.log(yelpOpenHoursEntry);
-
     const currentDayIndex = yelpOpenHoursEntry.day;
 
     const dayOfWeekLabel = getDayOfWeekLabel(currentDayIndex);
@@ -201,7 +206,8 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
       info = 'same day as last, second set of hours';
       return (
         <div>
-          <span>{openingTime} - {closingTime}</span>
+          <br />
+          <span className={classes.indent3}>{openingTime} - {closingTime}</span>
         </div>
       );
     }
@@ -210,8 +216,9 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
       info = 'new day - display day of week';
       return (
         <div>
-          <span>{dayOfWeekLabel}</span>
-          <span>{openingTime} - {closingTime}</span>
+          <br />
+          <span className={classes.dayOfWeek}>{dayOfWeekLabel}</span>
+          <span className={classes.indent2}>{openingTime} - {closingTime}</span>
         </div>
       );
     }
@@ -220,14 +227,11 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
       info = 'closed on Monday, and maybe other days as well';
       return (
         <div>
-          <div>
-            <span>Mon</span>
-            <span>Closed</span>
-          </div>
-          <div>
-            <span>Tue</span>
-            <span>{openingTime} - {closingTime}</span>
-          </div>
+          <span className={classes.dayOfWeek}>Mon</span>
+          <span className={classes.indent2}>Closed</span>
+          <br />
+          <span className={classes.dayOfWeek}>Tue</span>
+          <span className={classes.indent2}>{openingTime} - {closingTime}</span>
         </div>
       );
     }
@@ -283,7 +287,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
     return (
       <div>
-        Hours for {memoRappRestaurant.name}
+        Hours
         {renderOpenHours(yelpOpenHours)}
       </div>
     )
