@@ -20,6 +20,7 @@
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/utils": "https://registry.npmjs.org/@material-ui/utils/-/utils-4.7.1.tgz",
     "axios": "^0.19.2",
+    "fuse.js": "^6.0.0",
     "history": "^4.10.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
