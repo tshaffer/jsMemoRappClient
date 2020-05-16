@@ -1,13 +1,16 @@
+import { isEmpty } from 'lodash';
+
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
+import Fuse from 'fuse.js';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import {
-  RestaurantSearchResults
+  RestaurantSearchResults, UserReviews
 } from '../types';
 
 import {
@@ -29,9 +32,37 @@ const FilterRestaurantResults = (props: FilterRestaurantResultsProps) => {
   const handlePerformSearch = () => {
     console.log('perform search using search term:');
     console.log(_searchTerm);
+
+    if (!isEmpty(props.searchResults)) {
+      const memoRappRestaurants = (props.searchResults as RestaurantSearchResults).memoRappRestaurants;
+
+      const list: any[] = [];
+      for (const memoRappRestaurant of memoRappRestaurants) {
+        const userReviews: UserReviews = memoRappRestaurant.usersReviews[0];
+        for (const userReview of userReviews.reviews) {
+          list.push({
+            comments: userReview.comments
+          });
+        }
+      }
+
+      const options = {
+        includeScore: true,
+        // Search in `author` and in `tags` array
+        keys: ['comments']
+      };
+      const fuse = new Fuse(list, options);
+
+      const result = fuse.search(_searchTerm);
+      console.log('fuzzy search results');
+      console.log(result);
+    }
   };
 
+  console.log(props.searchResults);
+
   return (
+
     <HashRouter>
       <div>
         <h2>MemoRapp</h2>
