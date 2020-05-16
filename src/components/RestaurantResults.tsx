@@ -155,6 +155,8 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
   const getTimeOfDayLabel = (timeOfDay: string): string => {
 
+    console.log('timeOfDay label: ' + timeOfDay);
+    
     let hoursOffset = 0;
     let hoursLabel = '';
     let minutesLabel = '';
@@ -174,25 +176,11 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
       hoursOffset = militaryHoursOffset;
       amPmLabel = 'AM';
     }
-    // const minutes = militaryTime - (militaryHoursOffset * 60);
 
     hoursLabel = hoursOffset.toString();
-    // minutesLabel = minutes.toString();
     minutesLabel = timeOfDay.substring(2);
 
     return (hoursOffset + ':' + minutesLabel + ' ' + amPmLabel);
-    // const totalMinutesOffset = parseInt(timeOfDay, 10);
-    // // const hoursOffset = totalMinutesOffset / 60;
-    // const minutesOffset = totalMinutesOffset - (hoursOffset * 60);
-    // if (hoursOffset < 1) {
-    //   // do nothing
-    //   hoursLabel = '  ';
-    // }
-    // else {
-    //   hoursLabel = hoursOffset.toString();
-    // }
-    // const minutesLabel = minutesOffset.toString();
-    // return (hoursLabel + ':' + minutesLabel);
   };
 
   const renderOpenHoursEntry = (previousDayIndex: number, yelpOpenHoursEntry: YelpOpenHours, index: number) => {
