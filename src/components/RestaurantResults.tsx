@@ -4,6 +4,7 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
+import { createHashHistory } from 'history';
 
 import FilterListIcon from '@material-ui/icons/FilterList';
 import IconButton from '@material-ui/core/IconButton';
@@ -55,6 +56,9 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
   const handleFilterResults = (event: any) => {
     console.log('navigate to filterSearchResults');
+
+    const hashHistory = createHashHistory();
+    hashHistory.push('/filterRestaurantResults');
   };
 
   const renderSearchTags = () => {

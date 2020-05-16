@@ -127,7 +127,6 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
 
     const hashHistory = createHashHistory();
     hashHistory.push('/restaurantResults');
-
   };
 
   return (

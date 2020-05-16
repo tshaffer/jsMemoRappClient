@@ -16,6 +16,7 @@ import RestaurantFinder from './components/RestaurantFinder';
 import RestaurantReview from './components/RestaurantReview';
 import AddReview from './components/AddReview';
 import RestaurantResults from './components/RestaurantResults';
+import FilterRestaurantResults from './components/FilterRestaurantResults';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
@@ -31,6 +32,7 @@ ReactDOM.render(
         <Route exact path='/home' component={Home} />
         <Route exact path='/restaurantFinder' component={RestaurantFinder} />
         <Route exact path='/restaurantResults' component={RestaurantResults} />
+        <Route exact path='/filterRestaurantResults' component={FilterRestaurantResults} />
         <Route exact path='/restaurantReview' component={RestaurantReview} />
         <Route exact path='/addReview/:id' component={AddReview} />
       </Switch>
