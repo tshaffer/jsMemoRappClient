@@ -222,7 +222,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
         {renderYelpRestaurants()}
       </div>
 
-    )
+    );
   };
 
   return (
