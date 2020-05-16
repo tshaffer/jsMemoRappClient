@@ -16,7 +16,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { Restaurant, RestaurantSearchResults, Review, YelpRestaurant } from '../types';
+import { Restaurant, RestaurantSearchResults, Review, YelpRestaurant, YelpHours, YelpOpenHours } from '../types';
 import {
   getSearchTags,
   getSearchResults,
@@ -134,6 +134,173 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     }
   };
 
+  const getDayOfWeekLabel = (dayIndex: number): string => {
+    switch (dayIndex) {
+      case 0:
+        return 'Mon';
+      case 1:
+        return 'Tue';
+      case 2:
+        return 'Wed';
+      case 3:
+        return 'Thu';
+      case 4:
+        return 'Fri';
+      case 5:
+        return 'Sat';
+      default:
+        return 'Sun';
+    }
+  };
+
+  const getTimeOfDayLabel = (timeOfDay: string): string => {
+
+    let hoursOffset = 0;
+    let hoursLabel = '';
+    let minutesLabel = '';
+    let amPmLabel = 'PM';
+
+    const militaryTime = parseInt(timeOfDay, 10);
+    const militaryHoursOffset = Math.trunc(militaryTime / 100);
+    if (militaryHoursOffset > 12) {
+      hoursOffset = militaryHoursOffset - 12;
+      amPmLabel = 'PM';
+    }
+    else if (militaryHoursOffset === 12) {
+      hoursOffset = 12;
+      amPmLabel = 'PM';
+    }
+    else {
+      hoursOffset = militaryHoursOffset;
+      amPmLabel = 'AM';
+    }
+    // const minutes = militaryTime - (militaryHoursOffset * 60);
+
+    hoursLabel = hoursOffset.toString();
+    // minutesLabel = minutes.toString();
+    minutesLabel = timeOfDay.substring(2);
+
+    return (hoursOffset + ':' + minutesLabel + ' ' + amPmLabel);
+    // const totalMinutesOffset = parseInt(timeOfDay, 10);
+    // // const hoursOffset = totalMinutesOffset / 60;
+    // const minutesOffset = totalMinutesOffset - (hoursOffset * 60);
+    // if (hoursOffset < 1) {
+    //   // do nothing
+    //   hoursLabel = '  ';
+    // }
+    // else {
+    //   hoursLabel = hoursOffset.toString();
+    // }
+    // const minutesLabel = minutesOffset.toString();
+    // return (hoursLabel + ':' + minutesLabel);
+  };
+
+  const renderOpenHoursEntry = (previousDayIndex: number, yelpOpenHoursEntry: YelpOpenHours, index: number) => {
+
+    console.log(yelpOpenHoursEntry);
+
+    const currentDayIndex = yelpOpenHoursEntry.day;
+
+    const dayOfWeekLabel = getDayOfWeekLabel(currentDayIndex);
+    const openingTime = getTimeOfDayLabel(yelpOpenHoursEntry.start);
+    const closingTime = getTimeOfDayLabel(yelpOpenHoursEntry.end);
+
+    let info = '';
+
+    if (currentDayIndex === previousDayIndex) {
+      // same day as last, second set of hours
+      // don't display day of week
+      info = 'same day as last, second set of hours';
+      return (
+        <div>
+          <span>{openingTime} - {closingTime}</span>
+        </div>
+      );
+    }
+    else if (currentDayIndex === (previousDayIndex + 1)) {
+      // next day, display day of week
+      info = 'new day - display day of week';
+      return (
+        <div>
+          <span>{dayOfWeekLabel}</span>
+          <span>{openingTime} - {closingTime}</span>
+        </div>
+      );
+    }
+    else if (previousDayIndex < 0 && currentDayIndex > 0) {
+      // display Closed for one or more days of the week, starting at Monday
+      info = 'closed on Monday, and maybe other days as well';
+      return (
+        <div>
+          <div>
+            <span>Mon</span>
+            <span>Closed</span>
+          </div>
+          <div>
+            <span>Tue</span>
+            <span>{openingTime} - {closingTime}</span>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {yelpOpenHoursEntry.day.toString() + ' '}
+        {dayOfWeekLabel + ' '}
+        {info}
+      </div>
+    );
+  };
+
+  const renderOpenHours = (yelpOpenHours: YelpOpenHours[]) => {
+
+    let previousDayIndex = -1;
+
+    return (
+      <div>
+        {yelpOpenHours.map((yelpOpenHoursEntry: YelpOpenHours, index: number) => {
+          const jsx = renderOpenHoursEntry(previousDayIndex, yelpOpenHoursEntry, index);
+          previousDayIndex = yelpOpenHoursEntry.day;
+          return jsx;
+        })}
+      </div>
+    );
+  };
+
+  const renderHours = (memoRappRestaurant: Restaurant): any => {
+
+    let yelpOpenHours: YelpOpenHours[] = [];
+    const yelpHoursArray: YelpHours[] = memoRappRestaurant.yelpBusinessDetails.hours;
+    if (yelpHoursArray.length === 1) {
+      const yelpHours: YelpHours = yelpHoursArray[0];
+      yelpOpenHours = yelpHours.open;
+      yelpOpenHours.sort((a, b) => {
+        if (a.day < b.day) {
+          return -1;
+        } else if (a.day > b.day) {
+          return 1;
+        } else if (parseInt(a.start, 10) < parseInt(b.start, 10)) {
+          return -1;
+        }
+        return 1;
+      });
+
+      console.log(yelpOpenHours);
+    }
+
+    if (yelpOpenHours.length === 0) {
+      return null;
+    }
+
+    return (
+      <div>
+        Hours for {memoRappRestaurant.name}
+        {renderOpenHours(yelpOpenHours)}
+      </div>
+    )
+  };
+
   const renderMemoRappRestaurant = (memoRappRestaurant: Restaurant) => {
 
     return (
@@ -145,6 +312,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
           <div>
             Average rating: {getAverageRating(memoRappRestaurant)}
           </div>
+          {renderHours(memoRappRestaurant)}
           <br />
           <ExpansionPanel>
             <ExpansionPanelSummary

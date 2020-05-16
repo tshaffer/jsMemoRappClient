@@ -97,6 +97,20 @@ export interface YelpRestaurant {
   phone: string;
   display_phone: string;
   distance: number;
+  hours: YelpHours[];
+}
+
+export interface YelpHours {
+  open: YelpOpenHours[];
+  hours_type: string;
+  is_open_now: boolean;
+}
+
+export interface YelpOpenHours {
+  day: number;
+  start: string;
+  end: string;
+  is_overnight: boolean;
 }
 
 export interface RestaurantsResponse {
