@@ -41,14 +41,16 @@ const FilterRestaurantResults = (props: FilterRestaurantResultsProps) => {
         const userReviews: UserReviews = memoRappRestaurant.usersReviews[0];
         for (const userReview of userReviews.reviews) {
           list.push({
-            comments: userReview.comments
+            memoRappRestaurant,
+            userReview,
+            comments: userReview.comments,
           });
         }
       }
 
       const options = {
         includeScore: true,
-        // Search in `author` and in `tags` array
+        includeMatches: true,
         keys: ['comments']
       };
       const fuse = new Fuse(list, options);
