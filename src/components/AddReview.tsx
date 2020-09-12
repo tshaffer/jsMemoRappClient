@@ -98,10 +98,15 @@ const AddReview = (props: AddReviewProps) => {
   const [_useEffectInvoked, setUseEffectInvoked] = useState(false);
 
   useEffect(() => {
+
     // TEDTODO - is _useEffectInvoked cleared when component is unmounted?
     // TEDTODO - is this the proper approach to achieve what I'm looking for here? i.e., to make
     // TEDTODO - this function analogous to componentDidMount?
     if (!_useEffectInvoked) {
+
+      // alert('AddReview:1');
+      console.log('useEffect invoked: _useEffectInvoked = false');
+
       setUseEffectInvoked(true);
       const restaurant: Restaurant = props.restaurant;
       const usersReviews: UserReviews[] = restaurant.usersReviews;
@@ -319,6 +324,11 @@ const AddReview = (props: AddReviewProps) => {
 
   console.log('AddReview: invoked');
 
+  /*
+            <form noValidate autoComplete='off' onSubmit={onFormSubmit}>
+
+              <div className={classes.quarterWidth}>
+  */
   return (
     <HashRouter>
       <div>
@@ -329,7 +339,7 @@ const AddReview = (props: AddReviewProps) => {
           <div style={{ gridColumnEnd: 'span 12' }}>
             <form noValidate autoComplete='off' onSubmit={onFormSubmit}>
 
-              <div className={classes.quarterWidth}>
+              <div>
 
                 {tagsDiv}
 
