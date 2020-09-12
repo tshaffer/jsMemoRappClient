@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField';
 
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { 
+import {
   getMemoRappTags,
   getUser,
 } from '../selectors';
@@ -29,20 +29,37 @@ import {
 } from '../controllers';
 
 const useStyles = makeStyles((theme: Theme) =>
+  // pre grid styles, some unused
   createStyles({
     root: {
       width: '100%',
     },
-    paper: {
-      width: '100%',
-      marginBottom: theme.spacing(2),
-    },
+    // paper: {
+    //   width: '100%',
+    //   marginBottom: theme.spacing(2),
+    // },
     quarterWidth: {
       width: '25%',
     },
     textField: {
       marginTop: '16px',
       width: '50ch',
+    },
+    // grid styles added, some unused
+    container: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(12, 1fr)',
+      gridGap: theme.spacing(3),
+    },
+    paper: {
+      padding: theme.spacing(1),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      whiteSpace: 'nowrap',
+      marginBottom: theme.spacing(1),
+    },
+    divider: {
+      margin: theme.spacing(2, 0),
     },
   }),
 );
@@ -104,7 +121,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
           label='Location'
           defaultValue='Current Location'
           onChange={handleLocationChanged}
-          />
+        />
       </div>
     );
   };
@@ -134,19 +151,24 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
       <div>
         <h2>MemoRapp</h2>
         <h3>RestaurantFinder</h3>
-        <div className={classes.quarterWidth}>
-          {renderTags()}
-          {renderLocation()}
-        </div>
-        <Button
-            type='button'
-            fullWidth
-            variant='contained'
-            color='primary'
-            onClick={handleSearch}
-          >
-            Search
+
+        <div className={classes.container}>
+          <div style={{ gridColumnEnd: 'span 12' }}>
+            <div>
+              {renderTags()}
+              {renderLocation()}
+            </div>
+            <Button
+              type='button'
+              fullWidth
+              variant='contained'
+              color='primary'
+              onClick={handleSearch}
+            >
+              Search
           </Button>
+          </div>
+        </div>
 
       </div>
     </HashRouter>
