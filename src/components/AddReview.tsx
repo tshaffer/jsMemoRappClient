@@ -95,16 +95,24 @@ const AddReview = (props: AddReviewProps) => {
   const [_wouldReturn, setWouldReturn] = useState(true);
   const [_comments, setComments] = useState('');
 
+  const [_useEffectInvoked, setUseEffectInvoked] = useState(false);
+
   useEffect(() => {
-    const restaurant: Restaurant = props.restaurant;
-    const usersReviews: UserReviews[] = restaurant.usersReviews;
-    for (const usersReview of usersReviews) {
-      if (usersReview.userName === props.user.userName) {
-        const usersReviewTags: TagEntity[] = usersReview.tags;
-        const tagValues: string[] = usersReviewTags.map((tagEntity: TagEntity) => {
-          return tagEntity.value;
-        });
-        setTags(tagValues);
+    // TEDTODO - is _useEffectInvoked cleared when component is unmounted?
+    // TEDTODO - is this the proper approach to achieve what I'm looking for here? i.e., to make
+    // TEDTODO - this function analogous to componentDidMount?
+    if (!_useEffectInvoked) {
+      setUseEffectInvoked(true);
+      const restaurant: Restaurant = props.restaurant;
+      const usersReviews: UserReviews[] = restaurant.usersReviews;
+      for (const usersReview of usersReviews) {
+        if (usersReview.userName === props.user.userName) {
+          const usersReviewTags: TagEntity[] = usersReview.tags;
+          const tagValues: string[] = usersReviewTags.map((tagEntity: TagEntity) => {
+            return tagEntity.value;
+          });
+          setTags(tagValues);
+        }
       }
     }
   });
@@ -389,7 +397,7 @@ const AddReview = (props: AddReviewProps) => {
                   className={clsx(classes.margin)}
                 >
                   Add Review
-            </Button>
+              </Button>
               </div>
 
             </form>
