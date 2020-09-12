@@ -41,6 +41,13 @@ import {
 } from '../controllers';
 
 const useStyles = makeStyles((theme) => ({
+
+  container: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridGap: theme.spacing(3),
+  },
+
   margin: {
     margin: theme.spacing(1),
   },
@@ -302,86 +309,92 @@ const AddReview = (props: AddReviewProps) => {
 
   const tagsDiv = getTagsDiv();
 
+  console.log('AddReview: invoked');
+
   return (
     <HashRouter>
       <div>
-        <h2 className={clsx(classes.margin)}>MemoRapp</h2>
-        <h3 className={clsx(classes.margin)}>Add Review</h3>
+        <h2>MemoRapp</h2>
+        <h3>Add Review</h3>
         <h4>{props.restaurant.name}</h4>
-        <form noValidate autoComplete='off' onSubmit={onFormSubmit}>
+        <div className={classes.container}>
+          <div style={{ gridColumnEnd: 'span 12' }}>
+            <form noValidate autoComplete='off' onSubmit={onFormSubmit}>
 
-          <div className={classes.quarterWidth}>
+              <div className={classes.quarterWidth}>
 
-            {tagsDiv}
+                {tagsDiv}
 
-            <Grid container spacing={2} alignItems='center'>
-              <Grid item>
-                <span className={classes.margin}>Rating</span>
-              </Grid>
-              <Grid item>
-                <Input
-                  className={classes.input}
-                  value={_rating}
-                  margin='dense'
-                  onChange={handleRatingChange}
-                  onBlur={handleBlur}
-                  inputProps={{
-                    'step': .1,
-                    'min': 0,
-                    'max': 10,
-                    'type': 'number',
-                    'aria-labelledby': 'input-slider',
-                  }}
+                <Grid container spacing={2} alignItems='center'>
+                  <Grid item>
+                    <span className={classes.margin}>Rating</span>
+                  </Grid>
+                  <Grid item>
+                    <Input
+                      className={classes.input}
+                      value={_rating}
+                      margin='dense'
+                      onChange={handleRatingChange}
+                      onBlur={handleBlur}
+                      inputProps={{
+                        'step': .1,
+                        'min': 0,
+                        'max': 10,
+                        'type': 'number',
+                        'aria-labelledby': 'input-slider',
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs>
+                    <Slider
+                      value={_rating}
+                      min={0}
+                      max={10}
+                      step={.1}
+                      onChange={handleSliderChange}
+                      aria-labelledby='input-slider'
+                    />
+                  </Grid>
+                </Grid>
+
+                <div>
+                  <FormControlLabel
+                    value='end'
+                    control={
+                      <Checkbox
+                        color='primary'
+                        value={_wouldReturn}
+                      />}
+                    label='Would return'
+                    labelPlacement='end'
+                    onChange={handleWouldReturnChecked}
+                  />
+                </div>
+
+                <TextField
+                  id='outlined-multiline-static'
+                  label='Comments'
+                  multiline
+                  rows='4'
+                  variant='outlined'
+                  onChange={handleCommentsChanged}
                 />
-              </Grid>
-              <Grid item xs>
-                <Slider
-                  value={_rating}
-                  min={0}
-                  max={10}
-                  step={.1}
-                  onChange={handleSliderChange}
-                  aria-labelledby='input-slider'
-                />
-              </Grid>
-            </Grid>
 
-            <div>
-              <FormControlLabel
-                value='end'
-                control={
-                  <Checkbox
-                    color='primary'
-                    value={_wouldReturn}
-                  />}
-                label='Would return'
-                labelPlacement='end'
-                onChange={handleWouldReturnChecked}
-              />
-            </div>
+              </div>
 
-            <TextField
-              id='outlined-multiline-static'
-              label='Comments'
-              multiline
-              rows='4'
-              variant='outlined'
-              onChange={handleCommentsChanged}
-            />
-
-          </div>
-
-          <div>
-            <Button
-              type='submit'
-              variant='contained'
-              className={clsx(classes.margin)}
-            >
-              Add Review
+              <div>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  className={clsx(classes.margin)}
+                >
+                  Add Review
             </Button>
-          </div>
+              </div>
 
-        </form>
+            </form>
+          </div>
+        </div>
       </div>
     </HashRouter>
   );
