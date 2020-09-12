@@ -17,11 +17,35 @@ import {
   getSearchResults,
 } from '../selectors';
 
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    // grid styles added, some unused
+    container: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(12, 1fr)',
+      gridGap: theme.spacing(3),
+    },
+    paper: {
+      padding: theme.spacing(1),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      whiteSpace: 'nowrap',
+      marginBottom: theme.spacing(1),
+    },
+    divider: {
+      margin: theme.spacing(2, 0),
+    },
+  }),
+);
+
 export interface FilterRestaurantResultsProps {
   searchResults: RestaurantSearchResults | {};
 }
 
 const FilterRestaurantResults = (props: FilterRestaurantResultsProps) => {
+
+  const classes = useStyles();
 
   const [_searchTerm, setSearchTerm] = React.useState('');
 
@@ -69,26 +93,30 @@ const FilterRestaurantResults = (props: FilterRestaurantResultsProps) => {
       <div>
         <h2>MemoRapp</h2>
         <h3>Filter Results</h3>
-        <div>
-          <TextField
-            variant='outlined'
-            margin='normal'
-            id='searchCriteria'
-            label='Search'
-            name='search'
-            autoComplete='search'
-            onChange={handleSearchTermChange}
-          />
-        </div>
-        <Button
-          type='button'
-          fullWidth
-          variant='contained'
-          color='primary'
-          onClick={handlePerformSearch}
-        >
-          Search
+        <div className={classes.container}>
+          <div style={{ gridColumnEnd: 'span 12' }}>
+            <div>
+              <TextField
+                variant='outlined'
+                margin='normal'
+                id='searchCriteria'
+                label='Search'
+                name='search'
+                autoComplete='search'
+                onChange={handleSearchTermChange}
+              />
+            </div>
+            <Button
+              type='button'
+              fullWidth
+              variant='contained'
+              color='primary'
+              onClick={handlePerformSearch}
+            >
+              Search
         </Button>
+          </div>
+        </div>
       </div>
     </HashRouter>
   );

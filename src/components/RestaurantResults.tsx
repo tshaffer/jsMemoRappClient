@@ -25,6 +25,7 @@ import {
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    // pre grid styles, some unused
     heading: {
       fontSize: theme.typography.pxToRem(15),
       fontWeight: theme.typography.fontWeightRegular,
@@ -49,7 +50,23 @@ const useStyles = makeStyles((theme: Theme) =>
     dayOfWeek: {
       float: 'left',
       minWidth: '64px',
-    }
+    },
+    // grid styles added, some unused
+    container: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(12, 1fr)',
+      gridGap: theme.spacing(3),
+    },
+    paper: {
+      padding: theme.spacing(1),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      whiteSpace: 'nowrap',
+      marginBottom: theme.spacing(1),
+    },
+    divider: {
+      margin: theme.spacing(2, 0),
+    },
   }),
 );
 
@@ -390,14 +407,18 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
       <div>
         <h2>MemoRapp</h2>
         <h3>Search Results</h3>
-        <Tooltip title='Filter'>
-          <IconButton
-            onClick={handleFilterResults}>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-        {renderSearchTags()}
-        {renderRestaurants()}
+        <div className={classes.container}>
+          <div style={{ gridColumnEnd: 'span 12' }}>
+            <Tooltip title='Filter'>
+              <IconButton
+                onClick={handleFilterResults}>
+                <FilterListIcon />
+              </IconButton>
+            </Tooltip>
+            {renderSearchTags()}
+            {renderRestaurants()}
+          </div>
+        </div>
       </div>
     </HashRouter>
   );

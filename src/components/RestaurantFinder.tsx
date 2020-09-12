@@ -29,8 +29,8 @@ import {
 } from '../controllers';
 
 const useStyles = makeStyles((theme: Theme) =>
-  // pre grid styles, some unused
   createStyles({
+    // pre grid styles, some unused
     root: {
       width: '100%',
     },
