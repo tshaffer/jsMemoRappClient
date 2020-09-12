@@ -275,9 +275,13 @@
 
 // export default connect(mapStateToProps, mapDispatchToProps)(RestaurantReview);
 
+import { isNil } from 'lodash';
+
 import * as React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -311,6 +315,28 @@ import {
 import { UserConfiguration } from '../config/config';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  margin: {
+    marginLeft: '42px',
+  },
+  topMargin: {
+    marginTop: '16px',
+  },
+  quarterWidth: {
+    width: '25%',
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    marginTop: '16px',
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
   container: {
     display: 'grid',
     gridTemplateColumns: 'repeat(12, 1fr)',
@@ -356,6 +382,13 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const handleLatitudeChange = (e: any) => {
     setLatitude(e.target.value);
+  };
+
+  const handleSelectRestaurant = (e: any) => {
+    console.log('handleSelectRestaurant');
+    console.log(e.target.value);
+    setRestaurant(e.target.value);
+    props.onSetSelectedRestaurant(e.target.value);
   };
 
   const handleFindRestaurant = () => {
@@ -406,6 +439,15 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
         });
     }
   };
+
+  const getRestaurantMenuItems = () => {
+    return props.restaurants.map((restaurantItem) => {
+      const name = restaurantItem.name;
+      return <MenuItem value={restaurantItem as any} key={name}>{name}</MenuItem>;
+    });
+  };
+
+  const restaurantMenuItems: any[] = getRestaurantMenuItems();
 
   return (
 
@@ -478,6 +520,36 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
             Find Restaurant
           </Button>
         </div>
+        <div style={{ gridColumnEnd: 'span 12' }}>
+          {(props.restaurants.length === 0)
+            ?
+            null
+            :
+            <div>
+              <FormControl className={classes.formControl}>
+                <InputLabel id='demo-simple-select-label'>Restaurants</InputLabel>
+                <Select
+                  labelId='demo-simple-select-label'
+                  id='demo-simple-select'
+                  value={_restaurant}
+                  onChange={handleSelectRestaurant}
+                >
+                  {restaurantMenuItems}
+                </Select>
+              </FormControl>
+              {(isNil(props.selectedRestaurant))
+                ?
+                null
+                :
+                <div>
+                  <Link component={RouterLink} to={'/addReview/' + props.selectedRestaurant.id}>
+                    Add Review
+                    </Link>
+                </div>
+              }
+            </div>
+          }
+        </div>
         <div style={{ gridColumnEnd: 'span 8' }}>
           <Paper className={classes.paper}>xs=8</Paper>
         </div>
@@ -487,9 +559,23 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
         <div style={{ gridColumnEnd: 'span 12' }}>
           <Paper className={classes.paper}>xs=12</Paper>
         </div>
-      </div>
+      </div >
     </HashRouter >
   );
 };
 
-export default connect(null)(RestaurantReview);
+function mapStateToProps(state: any) {
+  return {
+    selectedRestaurant: getSelectedRestaurant(state),
+    restaurants: getRestaurants(state),
+  };
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return bindActionCreators({
+    onAddRestaurant: addRestaurantToRedux,
+    onSetSelectedRestaurant: setSelectedRestaurantInRedux,
+  }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RestaurantReview);
