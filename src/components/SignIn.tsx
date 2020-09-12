@@ -1,3 +1,5 @@
+// https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
+
 import * as React from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
