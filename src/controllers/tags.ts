@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { addTag } from '../models/tags';
+import { serverUrl } from '../index';
 
 // const serverUrl = 'http://localhost:8000';
-const serverUrl = 'http://192.168.0.106:8000';
+// const serverUrl = 'http://192.168.0.106:8000';
 const apiUrlFragment = '/api/v1/';
 
 export const loadTags = (): any => {

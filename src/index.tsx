@@ -18,6 +18,8 @@ import AddReview from './components/AddReview';
 import RestaurantResults from './components/RestaurantResults';
 import FilterRestaurantResults from './components/FilterRestaurantResults';
 
+export const serverUrl = 'http://192.168.0.105:8000';
+
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   rootReducer, /* preloadedState, */ composeEnhancers(
