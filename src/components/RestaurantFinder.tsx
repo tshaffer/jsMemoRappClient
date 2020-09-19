@@ -7,13 +7,14 @@ import { connect } from 'react-redux';
 import { createHashHistory } from 'history';
 
 import { HashRouter } from 'react-router-dom';
+
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
 
+import SearchSpec from './SearchSpec';
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
   getMemoRappTags,
   getUser,
@@ -91,29 +92,24 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     setTags(value);
   };
 
-  const handleLocationChanged = (event: any) => {
-    console.log('Location: ');
-    console.log(event.target.value);
-    setLocation(event.target.value);
-  };
-
-  const handleSearchByChanged = (event: any) => {
+  const handleSearchByChanged = (searchBy: string) => {
     console.log('SearchBy: ');
-    console.log(event.target.value);
-    setSearchBy(event.target.value);
+    console.log(searchBy);
+    setSearchBy(searchBy);
   };
 
-  const handleSearchTermChanged = (event: any) => {
+  const handleSearchTermChanged = (term: string) => {
     console.log('SearchTerm: ');
-    console.log(event.target.value);
-    setSearchTerm(event.target.value);
+    console.log(term);
+    setSearchTerm(term);
   };
 
-  const handleSearchLocationChanged = (event: any) => {
+  const handleSearchLocationChanged = (location: string) => {
     console.log('SearchLocation: ');
-    console.log(event.target.value);
-    setSearchLocation(event.target.value);
+    console.log(location);
+    setSearchLocation(location);
   };
+
   const renderTags = () => {
     const tagOptions = props.tags;
     return (
@@ -140,59 +136,11 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
   const renderSearch = () => {
     return (
       <div>
-        <div>Search Term</div>
-
-        <div className={classes.container}>
-          <div style={{ gridColumnEnd: 'span 12' }}>
-            <Radio
-              checked={_searchBy === 'currentLocation'}
-              onChange={handleSearchByChanged}
-              value='currentLocation'
-              name='currentLocationRadioButton'
-            />
-            Current Location
-          </div>
-          <div style={{ gridColumnEnd: 'span 12' }}>
-            <Radio
-              checked={_searchBy === 'specifyLocation'}
-              onChange={handleSearchByChanged}
-              value='specifyLocation'
-              name='specifyLocationRadioButton'
-            />
-            Specify Location
-          </div>
-          <div style={{ gridColumnEnd: 'span 12' }}>
-            {(_searchBy === 'currentLocation')
-              ?
-              null
-              :
-              <div>
-                <div>
-                  <TextField
-                    variant='outlined'
-                    margin='normal'
-                    id='searchTerm'
-                    label='Enter search term - optional'
-                    name='searchTerm'
-                    autoComplete='searchTerm'
-                    onChange={handleSearchTermChanged}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    variant='outlined'
-                    margin='normal'
-                    id='searchTerm'
-                    label='Enter location'
-                    name='searchLocation'
-                    autoComplete='searchLocation'
-                    onChange={handleSearchLocationChanged}
-                  />
-                </div>
-              </div>
-            }
-          </div>
-        </div>
+        <SearchSpec
+          onUpdateSearchBy={handleSearchByChanged}
+          onUpdateSearchLocation={handleSearchLocationChanged}
+          onUpdateSearchTerm={handleSearchTermChanged}
+        />
       </div>
     );
   };
@@ -232,7 +180,6 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
 
       const hashHistory = createHashHistory();
       hashHistory.push('/restaurantResults');
-
     }
   };
 
