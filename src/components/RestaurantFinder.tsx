@@ -10,6 +10,7 @@ import { HashRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import Radio from '@material-ui/core/Radio';
 
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -75,6 +76,10 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
 
   const classes = useStyles();
 
+  const [_searchBy, setSearchBy] = React.useState('currentLocation');
+  const [_searchTerm, setSearchTerm] = React.useState('');
+  const [_searchLocation, setSearchLocation] = React.useState('');
+
   const [_location, setLocation] = useState('Current Location');
   const [_tags, setTags] = useState([]);
 
@@ -90,6 +95,23 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     setLocation(event.target.value);
   };
 
+  const handleSearchByChanged = (event: any) => {
+    console.log('SearchBy: ');
+    console.log(event.target.value);
+    setSearchBy(event.target.value);
+  };
+
+  const handleSearchTermChanged = (event: any) => {
+    console.log('SearchTerm: ');
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchLocationChanged = (event: any) => {
+    console.log('SearchLocation: ');
+    console.log(event.target.value);
+    setSearchLocation(event.target.value);
+  };
   const renderTags = () => {
     const tagOptions = props.tags;
     return (
@@ -126,6 +148,66 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     );
   };
 
+  const renderSearch = () => {
+    return (
+      <div>
+        <div>Search Term</div>
+
+        <div className={classes.container}>
+          <div style={{ gridColumnEnd: 'span 12' }}>
+            <Radio
+              checked={_searchBy === 'currentLocation'}
+              onChange={handleSearchByChanged}
+              value='currentLocation'
+              name='currentLocationRadioButton'
+            />
+            Current Location
+          </div>
+          <div style={{ gridColumnEnd: 'span 12' }}>
+            <Radio
+              checked={_searchBy === 'specifyLocation'}
+              onChange={handleSearchByChanged}
+              value='specifyLocation'
+              name='specifyLocationRadioButton'
+            />
+            Specify Location
+          </div>
+          <div style={{ gridColumnEnd: 'span 12' }}>
+            {(_searchBy === 'currentLocation')
+              ?
+              null
+              :
+              <div>
+                <div>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    id='searchTerm'
+                    label='Enter search term - optional'
+                    name='searchTerm'
+                    autoComplete='searchTerm'
+                    onChange={handleSearchTermChanged}
+                  />
+                </div>
+                <div>
+                  <TextField
+                    variant='outlined'
+                    margin='normal'
+                    id='searchTerm'
+                    label='Enter location'
+                    name='searchLocation'
+                    autoComplete='searchLocation'
+                    onChange={handleSearchLocationChanged}
+                  />
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const handleSearch = () => {
     const geoLocationSpec: GeoLocationSpec = {
       coordinates: [UserConfiguration.currentLocation.longitude, UserConfiguration.currentLocation.latitude],
@@ -150,13 +232,13 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     <HashRouter>
       <div>
         <h2>MemoRapp</h2>
-        <h3>RestaurantFinder</h3>
+        <h3>Find Restaurant</h3>
 
         <div className={classes.container}>
           <div style={{ gridColumnEnd: 'span 12' }}>
             <div>
               {renderTags()}
-              {renderLocation()}
+              {renderSearch()}
             </div>
             <Button
               type='button'
