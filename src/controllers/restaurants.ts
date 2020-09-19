@@ -151,14 +151,47 @@ export const setSelectedRestaurantInRedux = (restaurant: Restaurant): any => {
   };
 };
 
-export const searchForRestaurants = (userName: string, location: GeoLocationSpec, tags: string[]): any => {
+export const searchForRestaurantsByGeolocation = (userName: string, location: GeoLocationSpec, tags: string[]): any => {
 
   return (dispatch: any) => {
 
-    const path = serverUrl + apiUrlFragment + 'restaurantsSearch';
+    const path = serverUrl + apiUrlFragment + 'restaurantsSearchByGeolocation';
     const reviewBody: any = {
       userName,
       location,
+      tags
+    };
+
+    return axios.post(
+      path,
+      reviewBody,
+    ).then((response) => {
+      const responseData: RestaurantsResponse = response.data;
+
+      console.log(response);
+      console.log(responseData.memoRappRestaurants);
+      console.log(responseData.yelpRestaurants);
+      dispatch(setSearchResults(
+        responseData.memoRappRestaurants,
+        responseData.yelpRestaurants
+      ));
+      return Promise.resolve();
+    }).catch((error) => {
+      console.log(error);
+      return Promise.reject(error);
+    });
+  };
+};
+
+export const searchForRestaurantsBySearchTerm = (userName: string, location: string, term: string, tags: string[]): any => {
+
+  return (dispatch: any) => {
+
+    const path = serverUrl + apiUrlFragment + 'restaurantsSearchBySearchTerm';
+    const reviewBody: any = {
+      userName,
+      location,
+      term,
       tags
     };
 

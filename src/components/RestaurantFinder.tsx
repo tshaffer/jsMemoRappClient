@@ -26,7 +26,8 @@ import {
 } from '../models';
 
 import {
-  searchForRestaurants
+  searchForRestaurantsByGeolocation,
+  searchForRestaurantsBySearchTerm,
 } from '../controllers';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,7 +70,8 @@ export interface RestaurantFinderProps {
   tags: TagEntity[];
   user: User;
   onSetSearchTags: (tags: string[]) => any;
-  onSearchForRestaurants: (userName: string, locationSpec: GeoLocationSpec, tags: string[]) => any;
+  onSearchForRestaurantsByGeoLocation: (userName: string, locationSpec: GeoLocationSpec, tags: string[]) => any;
+  onSearchForRestaurantsBySearchTerm: (userName: string, location: string, term: string, tags: string[]) => any;
 }
 
 const RestaurantFinder = (props: RestaurantFinderProps) => {
@@ -130,19 +132,6 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
             />
           )}
           onChange={handleTagsChanged}
-        />
-      </div>
-    );
-  };
-
-  const renderLocation = () => {
-    return (
-      <div className={classes.textField}>
-        <TextField
-          id='location'
-          label='Location'
-          defaultValue='Current Location'
-          onChange={handleLocationChanged}
         />
       </div>
     );
@@ -209,23 +198,42 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
   };
 
   const handleSearch = () => {
-    const geoLocationSpec: GeoLocationSpec = {
-      coordinates: [UserConfiguration.currentLocation.longitude, UserConfiguration.currentLocation.latitude],
-      maxDistance: 1500,
-    };
-    const tags: string[] = _tags.map((tagEntity: TagEntity) => {
-      return tagEntity.value;
-    });
-    props.onSetSearchTags(tags);
-    props.onSearchForRestaurants(props.user.userName, geoLocationSpec, tags);
-    console.log('handleSearch');
-    console.log('Tags: ');
-    console.log(_tags);
-    console.log('Location:');
-    console.log(_location);
+    if (_searchBy === 'currentLocation') {
+      const geoLocationSpec: GeoLocationSpec = {
+        coordinates: [UserConfiguration.currentLocation.longitude, UserConfiguration.currentLocation.latitude],
+        maxDistance: 1500,
+      };
+      const tags: string[] = _tags.map((tagEntity: TagEntity) => {
+        return tagEntity.value;
+      });
+      props.onSetSearchTags(tags);
+      props.onSearchForRestaurantsByGeoLocation(props.user.userName, geoLocationSpec, tags);
+      console.log('onSearchForRestaurantsByGeoLocation');
+      console.log('Tags: ');
+      console.log(_tags);
+      console.log('Location:');
+      console.log(_location);
 
-    const hashHistory = createHashHistory();
-    hashHistory.push('/restaurantResults');
+      const hashHistory = createHashHistory();
+      hashHistory.push('/restaurantResults');
+    } else {
+      const tags: string[] = _tags.map((tagEntity: TagEntity) => {
+        return tagEntity.value;
+      });
+      props.onSetSearchTags(tags);
+      props.onSearchForRestaurantsBySearchTerm(props.user.userName, _searchLocation, _searchTerm, tags);
+      console.log('onSearchForRestaurantsBySearchTerm');
+      console.log('Tags: ');
+      console.log(_tags);
+      console.log('Search Location:');
+      console.log(_searchLocation);
+      console.log('Search Term:');
+      console.log(_searchTerm);
+
+      const hashHistory = createHashHistory();
+      hashHistory.push('/restaurantResults');
+
+    }
   };
 
   return (
@@ -267,7 +275,8 @@ function mapStateToProps(state: any) {
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
     onSetSearchTags: setSearchTags,
-    onSearchForRestaurants: searchForRestaurants,
+    onSearchForRestaurantsByGeoLocation: searchForRestaurantsByGeolocation,
+    onSearchForRestaurantsBySearchTerm: searchForRestaurantsBySearchTerm,
   }, dispatch);
 };
 
