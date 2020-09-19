@@ -7,18 +7,14 @@ import { HashRouter } from 'react-router-dom';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
 import { Link } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+
+import SearchSpec from './SearchSpec';
 
 import {
   RestaurantsResponse,
@@ -27,6 +23,7 @@ import {
 import {
   addRestaurantToRedux,
   fetchAllRestaurantsByLocation,
+  fetchAllRestaurantsBySearchTerm,
   setSelectedRestaurantInRedux,
 } from '../controllers';
 import {
@@ -88,24 +85,39 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const classes = useStyles();
 
+  const [_searchBy, setSearchBy] = React.useState('currentLocation');
+  const [_searchTerm, setSearchTerm] = React.useState('');
+  const [_searchLocation, setSearchLocation] = React.useState('');
+
   const [_restaurant, setRestaurant] = React.useState('');
-  const [_restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
+  // const [_restaurantLocation, setRestaurantLocation] = React.useState('specifyLocation');
   const [_longitude, setLongitude] = React.useState(UserConfiguration.currentLocation.longitude);
   const [_latitude, setLatitude] = React.useState(UserConfiguration.currentLocation.latitude);
 
   const { onAddRestaurant } = props;
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRestaurantLocation(event.target.value);
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setRestaurantLocation(event.target.value);
+  // };
+
+  const handleSearchByChanged = (searchBy: string) => {
+    console.log('SearchBy: ');
+    console.log(searchBy);
+    setSearchBy(searchBy);
   };
 
-  const handleLongitudeChange = (e: any) => {
-    setLongitude(e.target.value);
+  const handleSearchTermChanged = (term: string) => {
+    console.log('SearchTerm: ');
+    console.log(term);
+    setSearchTerm(term);
   };
 
-  const handleLatitudeChange = (e: any) => {
-    setLatitude(e.target.value);
+  const handleSearchLocationChanged = (location: string) => {
+    console.log('SearchLocation: ');
+    console.log(location);
+    setSearchLocation(location);
   };
+
 
   const handleSelectRestaurant = (e: any) => {
     console.log('handleSelectRestaurant');
@@ -116,9 +128,52 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const handleFindRestaurant = () => {
 
-    if (_restaurantLocation === 'specifyLocation') {
+    if (_searchBy === 'currentLocation') {
 
       fetchAllRestaurantsByLocation(_latitude, _longitude)
+        .then((restaurantsResponse: RestaurantsResponse) => {
+
+          if (restaurantsResponse.success) {
+            const addedRestaurantNames: string[] = [];
+
+            // add memoRappRestaurants
+            for (const memoRappRestaurant of restaurantsResponse.memoRappRestaurants) {
+              const name = memoRappRestaurant.name;
+              onAddRestaurant(memoRappRestaurant);
+              addedRestaurantNames.push(name);
+            }
+            // add yelpRestaurants
+            for (const yelpRestaurant of restaurantsResponse.yelpRestaurants) {
+              const memoRappRestaurant: Restaurant = {
+                id: yelpRestaurant.id,
+                _id: null,
+                name: yelpRestaurant.name,
+                yelpBusinessDetails: yelpRestaurant,
+                usersReviews: [],
+                location: {
+                  type: 'Point',
+                  coordinates: [yelpRestaurant.coordinates.longitude, yelpRestaurant.coordinates.latitude],
+                },
+                dist: {
+                  calculated: yelpRestaurant.distance,
+                  location: {
+                    type: 'Point',
+                    coordinates: [yelpRestaurant.coordinates.longitude, yelpRestaurant.coordinates.latitude],
+                  }
+                },
+              };
+              const name = yelpRestaurant.name;
+              if (addedRestaurantNames.indexOf(name) < 0) {
+                onAddRestaurant(memoRappRestaurant);
+                addedRestaurantNames.push(name);
+              }
+            }
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
+    } else {
+      fetchAllRestaurantsBySearchTerm(_searchLocation, _searchTerm)
         .then((restaurantsResponse: RestaurantsResponse) => {
 
           if (restaurantsResponse.success) {
@@ -172,15 +227,7 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
   const restaurantMenuItems: any[] = getRestaurantMenuItems();
 
-  return (
-
-    <HashRouter>
-
-      <div>
-        <h2>MemoRapp</h2>
-        <h3>Add Restaurant Review</h3>
-        <div>Location of restaurant</div>
-
+  /*
         <div className={classes.container}>
           <div style={{ gridColumnEnd: 'span 12' }}>
             <Radio
@@ -232,6 +279,30 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
             }
           </div>
         </div>
+  */
+
+  const renderSearch = () => {
+    return (
+      <div>
+        <SearchSpec
+          onUpdateSearchBy={handleSearchByChanged}
+          onUpdateSearchLocation={handleSearchLocationChanged}
+          onUpdateSearchTerm={handleSearchTermChanged}
+        />
+      </div>
+    );
+  };
+
+  return (
+
+    <HashRouter>
+
+      <div>
+        <h2>MemoRapp</h2>
+        <h3>Add Restaurant Review</h3>
+        <div>Location of restaurant</div>
+        {renderSearch()}
+
         <div style={{ gridColumnEnd: 'span 12' }}>
           <Button
             type='button'

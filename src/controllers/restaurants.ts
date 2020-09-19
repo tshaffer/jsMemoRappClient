@@ -18,7 +18,7 @@ const apiUrlFragment = '/api/v1/';
 import { serverUrl } from '../index';
 
 export const fetchAllRestaurantsByLocation = (latitude: number, longitude: number): Promise<any> => {
-  const path = serverUrl + apiUrlFragment + '/restaurantsByLocation?latitude=' + latitude.toString() + '&longitude=' + longitude.toString();
+  const path = serverUrl + apiUrlFragment + '/restaurantsByGeoLocation?latitude=' + latitude.toString() + '&longitude=' + longitude.toString();
   return axios.get(path)
     .then((response) => {
       const restaurants: any[] = response.data as any[];
@@ -30,6 +30,21 @@ export const fetchAllRestaurantsByLocation = (latitude: number, longitude: numbe
     });
 };
 
+export const fetchAllRestaurantsBySearchTerm = (location: string, term: string): Promise<any> => {
+  let path = serverUrl + apiUrlFragment + '/restaurantsBySearchTerm?location=' + location;
+  if (isString(term) && term.length > 0) {
+    path = path + '&term=' + term;
+  }
+  return axios.get(path)
+    .then((response) => {
+      const restaurants: any[] = response.data as any[];
+      console.log(restaurants);
+      return Promise.resolve(restaurants);
+    }).catch((err: Error) => {
+      console.log(err);
+      return Promise.reject(err);
+    });
+};
 export const createMemoRappRestaurant = (restaurant: Restaurant): any => {
   return (dispatch: any, getState: any) => {
     const path = serverUrl + apiUrlFragment + '/restaurant';
@@ -135,7 +150,6 @@ export const addReview = (
     });
   };
 };
-
 
 export const addRestaurantToRedux = (
   restaurant: Restaurant,
