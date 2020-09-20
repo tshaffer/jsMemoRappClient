@@ -6,6 +6,7 @@ import { RestaurantsState, Restaurant, UserReviews, TagEntity, Review, Restauran
 // Constants
 // ------------------------------------
 
+export const CLEAR_RESTAURANTS = 'CLEAR_RESTAURANTS';
 export const ADD_RESTAURANT = 'ADD_RESTAURANT';
 export const ADD_RESTAURANT_REVIEW = 'ADD_RESTAURANT_REVIEW';
 export const SET_SELECTED_RESTAURANT = 'SET_SELECTED_RESTAURANT';
@@ -17,6 +18,13 @@ export const SET_SEARCH_TAGS = 'SET_SEARCH_TAGS';
 // ------------------------------------
 // Actions
 // ------------------------------------
+
+export const clearRestaurants = () => {
+  return {
+    type: CLEAR_RESTAURANTS,
+  };
+};
+
 
 export const addRestaurant = (
   restaurant: Restaurant,
@@ -116,6 +124,12 @@ export const restaurantsReducer = (
   action: MemoRappModelBaseAction<Restaurant & RestaurantReviewPayload & RestaurantSearchResults & any[]>
 ): RestaurantsState => {
   switch (action.type) {
+    case CLEAR_RESTAURANTS: {
+      return {
+        ...state,
+        restaurants: [],
+      };
+    }
     case ADD_RESTAURANT: {
       const newRestaurants = cloneDeep(state.restaurants) as Restaurant[];
       newRestaurants.push(action.payload);

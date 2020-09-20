@@ -22,6 +22,7 @@ import {
 } from '../types/base';
 import {
   addRestaurantToRedux,
+  clearRestaurantsFromRedux,
   fetchAllRestaurantsByLocation,
   fetchAllRestaurantsBySearchTerm,
   setSelectedRestaurantInRedux,
@@ -76,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface RestaurantReviewProps {
   restaurants: Restaurant[];
+  onClearRestaurants: () => any;
   onAddRestaurant: (restaurant: Restaurant) => any;
   onSetSelectedRestaurant: (selectedRestaurant: Restaurant) => any;
   selectedRestaurant: Restaurant;
@@ -127,6 +129,9 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
   };
 
   const handleFindRestaurant = () => {
+
+    // clear prior results
+    props.onClearRestaurants();
 
     if (_searchBy === 'currentLocation') {
 
@@ -358,6 +363,7 @@ function mapStateToProps(state: any) {
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
+    onClearRestaurants: clearRestaurantsFromRedux,
     onAddRestaurant: addRestaurantToRedux,
     onSetSelectedRestaurant: setSelectedRestaurantInRedux,
   }, dispatch);

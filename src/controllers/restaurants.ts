@@ -10,10 +10,9 @@ import {
   setRestaurantId,
   setSelectedRestaurant,
   setSearchResults,
+  clearRestaurants,
 } from '../models';
 
-// const serverUrl = 'http://localhost:8000';
-// const serverUrl = 'http://192.168.0.106:8000';
 const apiUrlFragment = '/api/v1/';
 import { serverUrl } from '../index';
 
@@ -148,6 +147,12 @@ export const addReview = (
         comments,
       ));
     });
+  };
+};
+
+export const clearRestaurantsFromRedux = () => {
+  return (dispatch: any) => {
+    dispatch(clearRestaurants());
   };
 };
 
