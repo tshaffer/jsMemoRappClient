@@ -1,5 +1,7 @@
 // https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
 
+import { isNil } from 'lodash';
+
 import * as React from 'react';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -91,17 +93,48 @@ const SignIn = (props: LoginProps) => {
 
   const classes = useStyles();
 
-  const [_userNameState, setUserName] = useState('ted');
-  const [_passwordState, setPassword] = useState('letTedIn');
+  const [_isInitialized, setIsInitialized] = useState(false);
+  // const [_userNameState, setUserName] = useState('ted');
+  // const [_passwordState, setPassword] = useState('letTedIn');
+  const [_userNameState, setUserName] = useState('');
+  const [_passwordState, setPassword] = useState('');
   const [_showPassword, setShowPassword] = useState(true);
+  const [_rememberMe, setRememberMe] = useState(false);
 
   const { onLoadTags, onSetUser } = props;
 
+  if (!_isInitialized) {
+    if (!isNil(localStorage.rememberMe)) {
+      setRememberMe(localStorage.rememberMe);
+      if (!localStorage.rememberMe) {
+        setUserName('');
+        setPassword('');
+      } else {
+        setUserName(localStorage.userName);
+        setPassword(localStorage.password);
+      }
+    }
+    setIsInitialized(true);
+  }
+
   console.log('pizza69');
 
+  // if (localStorage.checkbox) {
+  //   console.log('localStorage.checkbox === true');
+  //   if (localStorage.checkbox !== '') {
+  //     console.log('localStorage.checkbox !== ""');
+  //   }
+  //   else {
+  //     console.log('localStorage.checkbox === ""');
+  //   }
+  // } else {
+  //   console.log('localStorage.checkbox === false');
+  // }
+
   useEffect(() => {
+    console.log('useEffect');
     onLoadTags();
-  });
+  }, []);
 
   const handleClickShowPassword = () => {
     setShowPassword(!_showPassword);
@@ -109,6 +142,28 @@ const SignIn = (props: LoginProps) => {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const handleUserNameChange = (e: any) => {
+    setUserName(e.target.value);
+    if (_rememberMe) {
+      localStorage.userName = e.target.value;
+    }
+  };
+
+  const handlePasswordChange = (e: any) => {
+    setPassword(e.target.value);
+    if (_rememberMe) {
+      localStorage.password = e.target.value;
+    }
+  };
+
+  const handleRememberMeChecked = (event: any) => {
+    console.log('Remember me: ' + event.target.checked);
+    setRememberMe(event.target.checked);
+    localStorage.rememberMe = event.target.checked;
+    localStorage.userName = localStorage.rememberMe ? _userNameState : '';
+    localStorage.password = localStorage.rememberMe ? _passwordState : '';
   };
 
   const handleSignIn = (e: any) => {
@@ -119,6 +174,9 @@ const SignIn = (props: LoginProps) => {
     validateUser(_userNameState, _passwordState)
       .then((user: User) => {
         console.log('validation successful: ', user);
+        localStorage.rememberMe = _rememberMe;
+        localStorage.userName = _rememberMe ? _userNameState : '';
+        localStorage.password = _rememberMe ? _passwordState : '';
         onSetUser(user);
         const hashHistory = createHashHistory();
         hashHistory.push('/home');
@@ -127,18 +185,12 @@ const SignIn = (props: LoginProps) => {
       });
   };
 
-  const handleUserNameChange = (e: any) => {
-    setUserName(e.target.value);
-  };
-
-  const handlePasswordChange = (e: any) => {
-    setPassword(e.target.value);
-  };
-
   const onFormSubmit = (e: any) => {
     e.preventDefault();
     handleSignIn(e);
   };
+
+  console.log('render');
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -156,6 +208,7 @@ const SignIn = (props: LoginProps) => {
             margin='normal'
             required
             fullWidth
+            value={_userNameState}
             id='userName'
             label='User Name'
             name='userName'
@@ -163,13 +216,13 @@ const SignIn = (props: LoginProps) => {
             autoFocus
             onChange={handleUserNameChange}
           />
-          
+
           <FormControl className={'MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl'}>
             <InputLabel htmlFor='standard-adornment-password' className={classes.padding}>Password *</InputLabel>
             <OutlinedInput
               id='standard-adornment-password'
               type={_showPassword ? 'text' : 'password'}
-              value={_passwordState} 
+              value={_passwordState}
               onChange={handlePasswordChange}
               required
               fullWidth
@@ -189,8 +242,16 @@ const SignIn = (props: LoginProps) => {
             />
           </FormControl>
           <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
+            control={
+              <Checkbox
+                checked={_rememberMe}
+                value='remember'
+                color='primary'
+                onChange={handleRememberMeChecked}
+              />
+            }
             label='Remember me'
+
           />
           <Button
             type='submit'
