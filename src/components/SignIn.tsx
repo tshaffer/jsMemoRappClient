@@ -1,6 +1,6 @@
 // https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in/SignIn.js
 
-import { isNil } from 'lodash';
+import { isNil, isString } from 'lodash';
 
 import * as React from 'react';
 
@@ -190,6 +190,16 @@ const SignIn = (props: LoginProps) => {
     handleSignIn(e);
   };
 
+  const getRememberMeValue = (): boolean => {
+    if (isString(_rememberMe)) {
+      if (_rememberMe.toString() === 'true') {
+        return true;
+      }
+      return false;
+    }
+    return _rememberMe;
+  };
+
   console.log('render');
 
   return (
@@ -216,7 +226,6 @@ const SignIn = (props: LoginProps) => {
             autoFocus
             onChange={handleUserNameChange}
           />
-
           <FormControl className={'MuiInputBase-root MuiOutlinedInput-root MuiInputBase-fullWidth MuiInputBase-formControl'}>
             <InputLabel htmlFor='standard-adornment-password' className={classes.padding}>Password *</InputLabel>
             <OutlinedInput
@@ -244,14 +253,13 @@ const SignIn = (props: LoginProps) => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={_rememberMe}
+                checked={getRememberMeValue()}
                 value='remember'
                 color='primary'
                 onChange={handleRememberMeChecked}
               />
             }
             label='Remember me'
-
           />
           <Button
             type='submit'
