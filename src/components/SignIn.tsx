@@ -104,10 +104,10 @@ const SignIn = (props: LoginProps) => {
   const { onLoadTags, onSetUser } = props;
 
   if (!_isInitialized) {
-    if (!isNil(localStorage.rememberMe)) {  // TEDTODO - stored as string, not bool
-      setRememberMe(localStorage.rememberMe === 'true' ? true : false);
-      // setRememberMe(localStorage.rememberMe);
-      if (!localStorage.rememberMe) {
+    if (isString(localStorage.rememberMe)) {
+      const rememberMe: boolean = localStorage.rememberMe === 'true';
+      setRememberMe(rememberMe);
+      if (!rememberMe) {
         setUserName('');
         setPassword('');
       } else {
@@ -162,9 +162,9 @@ const SignIn = (props: LoginProps) => {
   const handleRememberMeChecked = (event: any) => {
     console.log('Remember me: ' + event.target.checked);
     setRememberMe(event.target.checked);
-    localStorage.rememberMe = event.target.checked;   // TEDTODO - stored as string, not bool
-    localStorage.userName = localStorage.rememberMe ? _userNameState : '';
-    localStorage.password = localStorage.rememberMe ? _passwordState : '';
+    localStorage.rememberMe = event.target.checked ? 'true' : 'false';
+    localStorage.userName = event.target.checked ? _userNameState : '';
+    localStorage.password = event.target.checked ? _passwordState : '';
   };
 
   const handleSignIn = (e: any) => {
@@ -175,7 +175,7 @@ const SignIn = (props: LoginProps) => {
     validateUser(_userNameState, _passwordState)
       .then((user: User) => {
         console.log('validation successful: ', user);
-        localStorage.rememberMe = _rememberMe; // TEDTODO - stored as string, not bool
+        localStorage.rememberMe = _rememberMe ? 'true' : 'false';
         localStorage.userName = _rememberMe ? _userNameState : '';
         localStorage.password = _rememberMe ? _passwordState : '';
         onSetUser(user);
