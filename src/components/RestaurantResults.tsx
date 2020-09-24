@@ -402,6 +402,15 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
     );
   };
 
+  /*
+            <Tooltip title='Filter'>
+              <IconButton
+                onClick={handleFilterResults}>
+                <FilterListIcon />
+              </IconButton>
+            </Tooltip>
+  */
+
   return (
     <HashRouter>
       <div>
@@ -409,12 +418,6 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
         <h3>Search Results</h3>
         <div className={classes.container}>
           <div style={{ gridColumnEnd: 'span 12' }}>
-            <Tooltip title='Filter'>
-              <IconButton
-                onClick={handleFilterResults}>
-                <FilterListIcon />
-              </IconButton>
-            </Tooltip>
             {renderSearchTags()}
             {renderRestaurants()}
           </div>
