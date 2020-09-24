@@ -85,6 +85,44 @@ const SearchSpec = (props: SearchSpecPropsFromParent) => {
     props.onUpdateSearchLocation(event.target.value);
   };
 
+  const getNullSearchTerm = () => {
+    return null;
+  }
+
+  const getSearchTerm = () => {
+    return (
+      <div>
+        <TextField
+          variant='outlined'
+          margin='normal'
+          id='searchTerm'
+          label='Enter search term - optional'
+          name='searchTerm'
+          autoComplete='searchTerm'
+          onChange={handleSearchTermChanged}
+        />
+      </div>
+    )
+  };
+
+  const getSpecifyLocation = () => {
+    return (
+      <div>
+        {getNullSearchTerm()}
+        <div>
+          <TextField
+            variant='outlined'
+            margin='normal'
+            id='searchTerm'
+            label='Enter location'
+            name='searchLocation'
+            autoComplete='searchLocation'
+            onChange={handleSearchLocationChanged}
+          />
+        </div>
+      </div>
+    );
+  }
   return (
 
     <div>
@@ -114,30 +152,7 @@ const SearchSpec = (props: SearchSpecPropsFromParent) => {
             ?
             null
             :
-            <div>
-              <div>
-                <TextField
-                  variant='outlined'
-                  margin='normal'
-                  id='searchTerm'
-                  label='Enter search term - optional'
-                  name='searchTerm'
-                  autoComplete='searchTerm'
-                  onChange={handleSearchTermChanged}
-                />
-              </div>
-              <div>
-                <TextField
-                  variant='outlined'
-                  margin='normal'
-                  id='searchTerm'
-                  label='Enter location'
-                  name='searchLocation'
-                  autoComplete='searchLocation'
-                  onChange={handleSearchLocationChanged}
-                />
-              </div>
-            </div>
+            getSpecifyLocation()
           }
         </div>
       </div>
