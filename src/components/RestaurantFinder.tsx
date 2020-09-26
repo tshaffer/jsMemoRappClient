@@ -12,6 +12,9 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
 
 import SearchSpec from './SearchSpec';
 
@@ -34,9 +37,9 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     // pre grid styles, some unused
-    root: {
-      width: '100%',
-    },
+    // root: {
+    //   width: '100%',
+    // },
     // paper: {
     //   width: '100%',
     //   marginBottom: theme.spacing(2),
@@ -50,16 +53,23 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     // grid styles added, some unused
     // gridGap: theme.spacing(1),
-    container: {
+    findContainer: {
       display: 'grid',
       gridTemplateColumns: 'repeat(12, 1fr)',
+      minWidth: '375px',
     },
+    // paper: {
+    //   padding: theme.spacing(1),
+    //   textAlign: 'center',
+    //   color: theme.palette.text.secondary,
+    //   whiteSpace: 'nowrap',
+    //   marginBottom: theme.spacing(1),
+    // },
     paper: {
-      padding: theme.spacing(1),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-      whiteSpace: 'nowrap',
-      marginBottom: theme.spacing(1),
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
     divider: {
       margin: theme.spacing(2, 0),
@@ -153,7 +163,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
   }
 
   function success(position) {
-    const latitude  = position.coords.latitude;
+    const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
     const geoLocationSpec: GeoLocationSpec = {
@@ -184,7 +194,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
         console.log('getCurrentPosition');
         navigator.geolocation.getCurrentPosition(success, error);
       }
-    
+
       // const geoLocationSpec: GeoLocationSpec = {
       //   coordinates: [UserConfiguration.currentLocation.longitude, UserConfiguration.currentLocation.latitude],
       //   maxDistance: 1500,
@@ -224,29 +234,34 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
 
   return (
     <HashRouter>
-      <div>
-        <h2>MemoRapp</h2>
-        <h4 className={classes.subTitle}>Find Restaurant</h4>
-
-        <div className={classes.container}>
-          <div style={{ gridColumnEnd: 'span 12' }}>
-            <div>
-              {renderTags()}
-              {renderSearch()}
-            </div>
-            <Button
-              type='button'
-              fullWidth
-              variant='contained'
-              color='primary'
-              onClick={handleSearch}
-            >
-              Search
+      <Container maxWidth='xs'>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component='h1' variant='h5'>
+            MemoRapp
+          </Typography>
+          <Typography>
+            Find Restaurant
+          </Typography>
+          <div className={classes.findContainer}>
+            <div style={{ gridColumnEnd: 'span 12' }}>
+              <div>
+                {renderTags()}
+                {renderSearch()}
+              </div>
+              <Button
+                type='button'
+                fullWidth
+                variant='contained'
+                color='primary'
+                onClick={handleSearch}
+              >
+                Search
           </Button>
+            </div>
           </div>
         </div>
-
-      </div>
+      </Container>
     </HashRouter>
   );
 };

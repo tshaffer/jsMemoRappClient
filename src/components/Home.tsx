@@ -57,7 +57,7 @@ const Home = (props: HomeProps) => {
 
   return (
     <HashRouter>
-      <Container component='main' maxWidth='xs'>
+      <Container maxWidth='xs'>
         <CssBaseline />
         <div className={classes.paper}>
           <Typography component='h1' variant='h5'>
