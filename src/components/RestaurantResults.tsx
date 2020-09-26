@@ -15,6 +15,8 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { Restaurant, RestaurantSearchResults, Review, YelpRestaurant, YelpHours, YelpOpenHours } from '../types';
 import {
@@ -56,6 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'grid',
       gridTemplateColumns: 'repeat(12, 1fr)',
       // gridGap: theme.spacing(3),
+      textAlign: 'left',
     },
     paper: {
       padding: theme.spacing(1),
@@ -413,16 +416,23 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
   return (
     <HashRouter>
-      <div>
-        <h2>MemoRapp</h2>
-        <h3>Search Results</h3>
-        <div className={classes.container}>
-          <div style={{ gridColumnEnd: 'span 12' }}>
-            {renderSearchTags()}
-            {renderRestaurants()}
+      <Container maxWidth='xs'>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component='h1' variant='h5'>
+            MemoRapp
+          </Typography>
+          <Typography style={{ textAlign: 'left' }}>
+            All Results
+          </Typography>
+          <div className={classes.container}>
+            <div style={{ gridColumnEnd: 'span 12' }}>
+              {renderSearchTags()}
+              {renderRestaurants()}
+            </div>
           </div>
         </div>
-      </div>
+      </Container>
     </HashRouter>
   );
 
