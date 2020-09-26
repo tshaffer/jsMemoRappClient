@@ -49,10 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '50ch',
     },
     // grid styles added, some unused
+    // gridGap: theme.spacing(1),
     container: {
       display: 'grid',
       gridTemplateColumns: 'repeat(12, 1fr)',
-      gridGap: theme.spacing(3),
     },
     paper: {
       padding: theme.spacing(1),
@@ -64,6 +64,9 @@ const useStyles = makeStyles((theme: Theme) =>
     divider: {
       margin: theme.spacing(2, 0),
     },
+    subTitle: {
+      marginBottom: '0px',
+    }
   }),
 );
 
@@ -145,25 +148,61 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     );
   };
 
+  function error() {
+    alert('Unable to retrieve your location');
+  }
+
+  function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    const geoLocationSpec: GeoLocationSpec = {
+      coordinates: [longitude, latitude],
+      maxDistance: 1500,
+    };
+    const tags: string[] = _tags.map((tagEntity: TagEntity) => {
+      return tagEntity.value;
+    });
+    props.onSetSearchTags(tags);
+    props.onSearchForRestaurantsByGeoLocation(props.user.userName, geoLocationSpec, tags);
+    console.log('onSearchForRestaurantsByGeoLocation');
+    console.log('Tags: ');
+    console.log(_tags);
+    console.log('Location:');
+    console.log(_location);
+
+    const hashHistory = createHashHistory();
+    hashHistory.push('/restaurantResults');
+  }
+
   const handleSearch = () => {
     if (_searchBy === 'currentLocation') {
-      const geoLocationSpec: GeoLocationSpec = {
-        coordinates: [UserConfiguration.currentLocation.longitude, UserConfiguration.currentLocation.latitude],
-        maxDistance: 1500,
-      };
-      const tags: string[] = _tags.map((tagEntity: TagEntity) => {
-        return tagEntity.value;
-      });
-      props.onSetSearchTags(tags);
-      props.onSearchForRestaurantsByGeoLocation(props.user.userName, geoLocationSpec, tags);
-      console.log('onSearchForRestaurantsByGeoLocation');
-      console.log('Tags: ');
-      console.log(_tags);
-      console.log('Location:');
-      console.log(_location);
 
-      const hashHistory = createHashHistory();
-      hashHistory.push('/restaurantResults');
+      if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser');
+      } else {
+        console.log('getCurrentPosition');
+        navigator.geolocation.getCurrentPosition(success, error);
+      }
+    
+      // const geoLocationSpec: GeoLocationSpec = {
+      //   coordinates: [UserConfiguration.currentLocation.longitude, UserConfiguration.currentLocation.latitude],
+      //   maxDistance: 1500,
+      // };
+      // const tags: string[] = _tags.map((tagEntity: TagEntity) => {
+      //   return tagEntity.value;
+      // });
+      // props.onSetSearchTags(tags);
+      // props.onSearchForRestaurantsByGeoLocation(props.user.userName, geoLocationSpec, tags);
+      // console.log('onSearchForRestaurantsByGeoLocation');
+      // console.log('Tags: ');
+      // console.log(_tags);
+      // console.log('Location:');
+      // console.log(_location);
+
+      // const hashHistory = createHashHistory();
+      // hashHistory.push('/restaurantResults');
+
     } else {
       const tags: string[] = _tags.map((tagEntity: TagEntity) => {
         return tagEntity.value;
@@ -187,7 +226,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     <HashRouter>
       <div>
         <h2>MemoRapp</h2>
-        <h3>Find Restaurant</h3>
+        <h4 className={classes.subTitle}>Find Restaurant</h4>
 
         <div className={classes.container}>
           <div style={{ gridColumnEnd: 'span 12' }}>

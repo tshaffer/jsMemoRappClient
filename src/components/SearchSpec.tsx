@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       display: 'grid',
       gridTemplateColumns: 'repeat(12, 1fr)',
-      gridGap: theme.spacing(3),
+      // gridGap: theme.spacing(3),
     },
     paper: {
       padding: theme.spacing(1),
@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
     divider: {
       margin: theme.spacing(2, 0),
     },
+    searchTermTitle: {
+      marginTop: '4px',
+      marginBottom: '4px',
+    }
   }),
 );
 
@@ -122,12 +126,17 @@ const SearchSpec = (props: SearchSpecPropsFromParent) => {
         </div>
       </div>
     );
-  }
+  };
+
+  /*
+      <div className={classes.searchTermTitle}>
+        Search Term
+      </div>
+  */
+ 
   return (
 
     <div>
-      <div>Search Term</div>
-
       <div className={classes.container}>
         <div style={{ gridColumnEnd: 'span 12' }}>
           <Radio
