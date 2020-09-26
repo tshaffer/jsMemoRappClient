@@ -8,15 +8,27 @@ import Link from '@material-ui/core/Link';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
+
+/*
+    // root: {
+    //   width: '100%',
+    // },
+    // paper: {
+    //   width: '100%',
+    //   marginBottom: theme.spacing(2),
+    // },
+*/
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      width: '100%',
-    },
     paper: {
-      width: '100%',
-      marginBottom: theme.spacing(2),
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
     table: {
       minWidth: 750,
@@ -45,19 +57,20 @@ const Home = (props: HomeProps) => {
 
   return (
     <HashRouter>
-      <div>
-        <h2>MemoRapp</h2>
-      </div>
-      <div>
-      <Link component={RouterLink} to='/restaurantFinder'>
-        Find Restaurant
-      </Link>
-      </div>
-      <div>
-      <Link component={RouterLink} to='/restaurantReview'>
-        Add Review
-      </Link>
-      </div>
+      <Container component='main' maxWidth='xs'>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component='h1' variant='h5'>
+            MemoRapp
+          </Typography>
+          <Link component={RouterLink} to='/restaurantFinder'>
+            Find Restaurant
+          </Link>
+          <Link component={RouterLink} to='/restaurantReview'>
+            Add Review
+          </Link>
+        </div>
+      </Container>
     </HashRouter>
   );
 }
