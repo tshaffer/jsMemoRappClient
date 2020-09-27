@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => ({
   },
   selectControl: {
     minWidth: 96,
+  },
+  comments: {
+    width: '100%',
   }
 }));
 
@@ -390,6 +393,7 @@ const AddReview = (props: AddReviewProps) => {
                 </div>
 
                 <TextField
+                  className={clsx(classes.comments)}
                   id='outlined-multiline-static'
                   label='Comments'
                   multiline
