@@ -25,28 +25,6 @@ import {
 } from '../selectors';
 
 /*
-      [theme.breakpoints.down('xs')]: {
-        maxWidth: '400px',
-        background: 'green',
-      },
-      [theme.breakpoints.up('sm')]: {
-        maxWidth: 'sm',
-        background: 'orange',
-      },
-      [theme.breakpoints.up('md')]: {
-        maxWidth: 'md',
-        background: 'blue',
-      },
-      [theme.breakpoints.up('lg')]: {
-        maxWidth: 'lg',
-        background: 'red',
-      },
-      [theme.breakpoints.up('xl')]: {
-        maxWidth: 'xl',
-        background: 'brown',
-      },
-*/
-/*
     paper: {
       padding: theme.spacing(1),
       textAlign: 'center',
@@ -55,29 +33,27 @@ import {
       marginBottom: theme.spacing(1),
     },
 */
+/*
+        maxWidth: '400px',
+*/
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     contentContainer: {
       [theme.breakpoints.down('xs')]: {
-        maxWidth: '400px',
-        background: 'green',
+        maxWidth: 'xs',
       },
       [theme.breakpoints.up('sm')]: {
         maxWidth: 'sm',
-        background: 'orange',
       },
       [theme.breakpoints.up('md')]: {
         maxWidth: 'md',
-        background: 'blue',
       },
       [theme.breakpoints.up('lg')]: {
         maxWidth: 'lg',
-        background: 'red',
       },
       [theme.breakpoints.up('xl')]: {
         maxWidth: 'xl',
-        background: 'brown',
       },
     },
     // pre grid styles, some unused
