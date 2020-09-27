@@ -24,9 +24,62 @@ import {
   getSearchResults,
 } from '../selectors';
 
+/*
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '400px',
+        background: 'green',
+      },
+      [theme.breakpoints.up('sm')]: {
+        maxWidth: 'sm',
+        background: 'orange',
+      },
+      [theme.breakpoints.up('md')]: {
+        maxWidth: 'md',
+        background: 'blue',
+      },
+      [theme.breakpoints.up('lg')]: {
+        maxWidth: 'lg',
+        background: 'red',
+      },
+      [theme.breakpoints.up('xl')]: {
+        maxWidth: 'xl',
+        background: 'brown',
+      },
+*/
+/*
+    paper: {
+      padding: theme.spacing(1),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      whiteSpace: 'nowrap',
+      marginBottom: theme.spacing(1),
+    },
+*/
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    contentContainer: {
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '400px',
+        background: 'green',
+      },
+      [theme.breakpoints.up('sm')]: {
+        maxWidth: 'sm',
+        background: 'orange',
+      },
+      [theme.breakpoints.up('md')]: {
+        maxWidth: 'md',
+        background: 'blue',
+      },
+      [theme.breakpoints.up('lg')]: {
+        maxWidth: 'lg',
+        background: 'red',
+      },
+      [theme.breakpoints.up('xl')]: {
+        maxWidth: 'xl',
+        background: 'brown',
+      },
+    },
     // pre grid styles, some unused
     heading: {
       fontSize: theme.typography.pxToRem(15),
@@ -64,7 +117,6 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1),
       textAlign: 'center',
       color: theme.palette.text.secondary,
-      whiteSpace: 'nowrap',
       marginBottom: theme.spacing(1),
     },
     divider: {
@@ -416,7 +468,7 @@ const RestaurantResults = (props: RestaurantResultsProps) => {
 
   return (
     <HashRouter>
-      <Container maxWidth='xs'>
+      <Container className={classes.contentContainer}>
         <CssBaseline />
         <div className={classes.paper}>
           <Typography component='h1' variant='h5'>
