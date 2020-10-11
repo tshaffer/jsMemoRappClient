@@ -217,8 +217,27 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
       const tags: string[] = _tags.map((tagEntity: TagEntity) => {
         return tagEntity.value;
       });
+      // TEDTODO - figure out better place to do this.
+      const yelpCategories: string[] = _tags.map((tagEntity: TagEntity) => {
+        switch (tagEntity.value) {
+          case 'Taqueria':
+            return 'Tacos';
+          case 'Burritos':
+            return 'Mexican';
+          case 'Meatball Sandwiches':
+            return 'Meatballs';
+          case 'Pasta':
+            return 'Italian';
+          case 'Coffee':
+          case 'Pizza':
+          case 'Sandwiches':
+            return tagEntity.value;
+          default:
+            return 'Restaurants';
+        }
+      });
       props.onSetSearchTags(tags);
-      props.onSearchForRestaurantsBySearchTerm(props.user.userName, _searchLocation, _searchTerm, tags);
+      props.onSearchForRestaurantsBySearchTerm(props.user.userName, _searchLocation, _searchTerm, yelpCategories);
       console.log('onSearchForRestaurantsBySearchTerm');
       console.log('Tags: ');
       console.log(_tags);
