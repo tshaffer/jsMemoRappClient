@@ -162,7 +162,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
     alert('Unable to retrieve your location');
   }
 
-  function success(position) {
+  function getCurrentLocationCallback(position) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
@@ -192,7 +192,7 @@ const RestaurantFinder = (props: RestaurantFinderProps) => {
         alert('Geolocation is not supported by your browser');
       } else {
         console.log('getCurrentPosition');
-        navigator.geolocation.getCurrentPosition(success, error);
+        navigator.geolocation.getCurrentPosition(getCurrentLocationCallback, error);
       }
 
       // const geoLocationSpec: GeoLocationSpec = {

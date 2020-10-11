@@ -128,6 +128,61 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
     props.onSetSelectedRestaurant(e.target.value);
   };
 
+  function error() {
+    alert('Unable to retrieve your location');
+  }
+
+  function getCurrentLocationCallback(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    setLatitude(latitude);
+    setLongitude(longitude);
+
+    fetchAllRestaurantsByLocation(_latitude, _longitude)
+      .then((restaurantsResponse: RestaurantsResponse) => {
+
+        if (restaurantsResponse.success) {
+          const addedRestaurantNames: string[] = [];
+
+          // add memoRappRestaurants
+          for (const memoRappRestaurant of restaurantsResponse.memoRappRestaurants) {
+            const name = memoRappRestaurant.name;
+            onAddRestaurant(memoRappRestaurant);
+            addedRestaurantNames.push(name);
+          }
+          // add yelpRestaurants
+          for (const yelpRestaurant of restaurantsResponse.yelpRestaurants) {
+            const memoRappRestaurant: Restaurant = {
+              id: yelpRestaurant.id,
+              _id: null,
+              name: yelpRestaurant.name,
+              yelpBusinessDetails: yelpRestaurant,
+              usersReviews: [],
+              location: {
+                type: 'Point',
+                coordinates: [yelpRestaurant.coordinates.longitude, yelpRestaurant.coordinates.latitude],
+              },
+              dist: {
+                calculated: yelpRestaurant.distance,
+                location: {
+                  type: 'Point',
+                  coordinates: [yelpRestaurant.coordinates.longitude, yelpRestaurant.coordinates.latitude],
+                }
+              },
+            };
+            const name = yelpRestaurant.name;
+            if (addedRestaurantNames.indexOf(name) < 0) {
+              onAddRestaurant(memoRappRestaurant);
+              addedRestaurantNames.push(name);
+            }
+          }
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
+  }
+
   const handleFindRestaurant = () => {
 
     // clear prior results
@@ -135,48 +190,12 @@ const RestaurantReview = (props: RestaurantReviewProps) => {
 
     if (_searchBy === 'currentLocation') {
 
-      fetchAllRestaurantsByLocation(_latitude, _longitude)
-        .then((restaurantsResponse: RestaurantsResponse) => {
-
-          if (restaurantsResponse.success) {
-            const addedRestaurantNames: string[] = [];
-
-            // add memoRappRestaurants
-            for (const memoRappRestaurant of restaurantsResponse.memoRappRestaurants) {
-              const name = memoRappRestaurant.name;
-              onAddRestaurant(memoRappRestaurant);
-              addedRestaurantNames.push(name);
-            }
-            // add yelpRestaurants
-            for (const yelpRestaurant of restaurantsResponse.yelpRestaurants) {
-              const memoRappRestaurant: Restaurant = {
-                id: yelpRestaurant.id,
-                _id: null,
-                name: yelpRestaurant.name,
-                yelpBusinessDetails: yelpRestaurant,
-                usersReviews: [],
-                location: {
-                  type: 'Point',
-                  coordinates: [yelpRestaurant.coordinates.longitude, yelpRestaurant.coordinates.latitude],
-                },
-                dist: {
-                  calculated: yelpRestaurant.distance,
-                  location: {
-                    type: 'Point',
-                    coordinates: [yelpRestaurant.coordinates.longitude, yelpRestaurant.coordinates.latitude],
-                  }
-                },
-              };
-              const name = yelpRestaurant.name;
-              if (addedRestaurantNames.indexOf(name) < 0) {
-                onAddRestaurant(memoRappRestaurant);
-                addedRestaurantNames.push(name);
-              }
-            }
-          }
-        }).catch((err) => {
-          console.log(err);
-        });
+      if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser');
+      } else {
+        console.log('getCurrentPosition');
+        navigator.geolocation.getCurrentPosition(getCurrentLocationCallback, error);
+      }
     } else {
       fetchAllRestaurantsBySearchTerm(_searchLocation, _searchTerm)
         .then((restaurantsResponse: RestaurantsResponse) => {
